@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>  
+  
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="fill_parent" android:layout_height="wrap_content">  
+    <ImageView android:id="@+id/contact_photo"  
+        android:layout_width="40dip" android:layout_height="40dip" />  
+    <TextView android:id="@+id/call_name"  
+        android:layout_width="wrap_content" android:layout_height="wrap_content"  
+        android:layout_toRightOf="@+id/contact_photo"  
+        android:layout_alignParentBottom="true"  
+        android:layout_alignParentRight="true" android:singleLine="true"  
+        android:ellipsize="marquee"   
+        android:textSize="15dip"  />  
+
+    <TextView
+        android:id="@+id/call_phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/call_name"
+        android:layout_toRightOf="@+id/contact_photo"
+        android:ellipsize="marquee"
+        android:singleLine="true"
+        android:textSize="20dip" />
+    
+    <TextView android:id="@+id/call_date"  
+        android:layout_width="wrap_content" android:layout_height="wrap_content"  
+        android:layout_toRightOf="@+id/call_phone"  
+        android:singleLine="true"  
+        android:ellipsize="marquee"   
+        android:textSize="20dip" />  
+</RelativeLayout>  
