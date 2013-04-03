@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    >
+	<LinearLayout style="@style/dial_liner"
+	    >
+		<Button
+	            android:id="@+id/dial_stretchBtn"
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:text="伸缩"
+	            />			   
+	     <EditText 
+	         android:id="@+id/dial_phoneTxt"
+	         android:layout_weight="2"
+	         android:layout_height="fill_parent"
+	         android:layout_width="0dp"
+	         />   
+	     <Button
+	            android:id="@+id/dial_delBtn"
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:text="删除"
+	            />	         
+	</LinearLayout>
+	
+	<LinearLayout style="@style/dial_liner">
+	    <Button
+	            android:id="@+id/dial_1Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="1"
+	            /> 
+	    <Button
+	            android:id="@+id/dial_2Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="2"
+	            />
+	    <Button
+	            android:id="@+id/dial_3Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="3"
+	            />
+	</LinearLayout>     
+	
+	
+	<LinearLayout style="@style/dial_liner">
+	    <Button
+	            android:id="@+id/dial_4Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="4"
+	            /> 
+	    <Button
+	            android:id="@+id/dial_5Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="5"
+	            />
+	    <Button
+	            android:id="@+id/dial_6Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="6"
+	            />
+	</LinearLayout> 
+	
+	
+	<LinearLayout style="@style/dial_liner">
+	    <Button
+	            android:id="@+id/dial_7Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="7"
+	            /> 
+	    <Button
+	            android:id="@+id/dial_8Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="8"
+	            />
+	    <Button
+	            android:id="@+id/dial_9Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="9"
+	            />
+	</LinearLayout> 
+	
+	<LinearLayout style="@style/dial_liner">
+	    <Button
+	            android:id="@+id/dial_xinBtn"
+	            style="@style/dial_grid_btn"
+	            android:text="*"
+	            /> 
+	    <Button
+	            android:id="@+id/dial_0Btn"
+	            style="@style/dial_grid_btn"
+	            android:text="0"
+	            />
+	    <Button
+	            android:id="@+id/dial_jinBtn"
+	            style="@style/dial_grid_btn"
+	            android:text="#"
+	            />
+	</LinearLayout>
+	
+</LinearLayout>

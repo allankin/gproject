@@ -17,4 +17,16 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
     </style>
 
+    <style name="dial_liner">
+        <item name="android:orientation">horizontal</item> 
+        <item name="android:layout_width">fill_parent</item> 
+        <item name="android:layout_height">60dp</item> 
+    </style>
+    
+    <style name="dial_grid_btn">
+        <item name="android:layout_weight">1</item> 
+        <item name="android:layout_width">0dp</item> 
+        <item name="android:layout_height">fill_parent</item> 
+    </style>    
+    
 </resources>

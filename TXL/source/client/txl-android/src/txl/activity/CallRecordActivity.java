@@ -4,12 +4,16 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import txl.dial.DialWindow;
+
 import android.app.ListActivity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.CallLog;
+import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +43,8 @@ public class CallRecordActivity extends ListActivity
     private ArrayList<String>     mContactsNumber = new ArrayList<String>();
     private ArrayList<CallRecord> callRecordList  = new ArrayList<CallRecord>();
 
+    private  DialWindow dw;
+    
     public void onCreate(Bundle savedInstanceState)
     {
         
@@ -47,6 +53,10 @@ public class CallRecordActivity extends ListActivity
         getCallRecord();
         myAdapter = new MyListAdapter(this);
         setListAdapter(myAdapter);
+        int width = getWindowManager().getDefaultDisplay().getWidth()-15;       
+        int height = getWindowManager().getDefaultDisplay().getHeight()/2;   
+        dw = new DialWindow(this, width, height);
+        
         super.onCreate(savedInstanceState);
     }
 
@@ -75,7 +85,16 @@ public class CallRecordActivity extends ListActivity
         }
 
     }
-
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(!dw.isShowing()&&keyCode == KeyEvent.KEYCODE_MENU){
+            View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
+            dw.showAtLocation(rootView, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
+        }
+        else{
+            dw.dismiss();
+        }
+        return true;
+    }
     class MyListAdapter extends BaseAdapter
     {
 
