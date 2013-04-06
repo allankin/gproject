@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@drawable/headerbg"
+    android:layout_height="54dp"
+    android:layout_width="fill_parent"
+    >
+    
+    <Button
+	            android:id="@+id/header_slide"
+	            android:layout_width="50dp"
+	            android:layout_height="fill_parent"
+	            android:text="slide"
+	            android:layout_alignParentLeft="true"
+	            android:layout_centerVertical="true"
+	            />		
+    <TextView
+        android:id="@+id/header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="" 
+        android:textSize="25sp"
+        android:layout_centerInParent="true"	
+        />
+    
+    <Spinner
+                        android:id="@+id/message_type"
+                        style="@style/Widget.Spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawSelectorOnTop="true"
+                        android:layout_marginRight="10dp"
+                        android:layout_alignParentRight="true"
+                        android:prompt="@string/message_type" />
+
+</RelativeLayout>
+ 

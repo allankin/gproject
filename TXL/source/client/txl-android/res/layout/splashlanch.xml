@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical"
+    android:background="@drawable/synergy_welcome_480_800"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/splash_message"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:gravity="center_horizontal"
+        android:textColor="@color/black" />
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:layout_marginTop="10dp"
+        android:max="100"
+        android:maxHeight="8dp"
+        android:minHeight="8dp"
+        android:progress="0" />
+    
+</LinearLayout>
+<!-- <?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  android:layout_height="fill_parent" android:layout_width="fill_parent" android:orientation="vertical">
+<ImageView android:layout_height="fill_parent" android:layout_width="fill_parent" android:scaleType="fitCenter" android:src="@drawable/synergy_welcome_480_800"></ImageView>
+</LinearLayout>
+ -->

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab_phone"
+    android:layout_width="match_parent" 
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    
+    <RelativeLayout
+	    android:layout_height="30dp"
+	    android:layout_width="fill_parent"
+	    android:background="@color/blue"
+	    android:paddingLeft="5dp"
+	    android:paddingRight="5dp"
+	    >
+	    
+	    <TextView
+	        android:id="@+id/call_name"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="dd" 
+	        android:textSize="25sp"
+	        android:textColor="@color/white"
+	        android:layout_alignParentLeft="true"
+	        />
+		<TextView
+	        android:id="@+id/call_phone"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="15824135596" 
+	        android:textSize="25sp"
+	        android:textColor="@color/white"
+	        android:layout_toRightOf="@id/call_name"
+	        android:layout_marginLeft="20dp"
+	        />
+		<TextView
+	        android:id="@+id/call_count"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:text="23" 
+	        android:textSize="25sp"
+	        android:textColor="@color/white"
+	        android:layout_alignParentRight="true"
+	        />
+	</RelativeLayout>
+    <ListView
+        	android:id="@+id/call_list_detail" 
+        	android:layout_width="wrap_content"   
+              android:layout_height="wrap_content"   
+              >  
+    </ListView>
+</LinearLayout>
+ 

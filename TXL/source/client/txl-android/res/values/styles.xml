@@ -28,5 +28,8 @@
         <item name="android:layout_width">0dp</item> 
         <item name="android:layout_height">fill_parent</item> 
     </style>    
-    
+    <style name="Widget.Spinner" parent="android:Widget">
+	     <item name="android:background">@drawable/select_dropdown</item>
+	     <item name="android:clickable">true</item>
+	</style>
 </resources>

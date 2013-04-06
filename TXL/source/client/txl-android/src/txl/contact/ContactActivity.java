@@ -1,8 +1,9 @@
-package txl.activity;
+package txl.contact;
 
 import java.util.ArrayList;
 
-import android.app.ListActivity;
+import txl.activity.R;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -29,7 +30,7 @@ import android.widget.TextView;
  * @Date 2013-2-17 下午3:54:19
  * @Copyright: 版权由 HundSun 拥有
  */
-public class ContactActivity extends ListActivity
+public class ContactActivity extends Activity
 {
 
     private final String          TAG                       = ContactActivity.class.getSimpleName();
@@ -65,7 +66,7 @@ public class ContactActivity extends ListActivity
     /** 联系人头像 **/
     private ArrayList<Bitmap>     mContactsPhonto           = new ArrayList<Bitmap>();
 
-    ListView                      mListView                 = null;
+    ListView                      personalListView                 = null;
     MyListAdapter                 myAdapter                 = null;
 
     @Override
@@ -73,14 +74,16 @@ public class ContactActivity extends ListActivity
     {
         super.onCreate(savedInstanceState);
         mContext = this;
-        mListView = this.getListView();
+        final LayoutInflater inflater = LayoutInflater.from(this);
+        setContentView(inflater.inflate(R.layout.tab_contact, null));
+        personalListView = (ListView) this.findViewById(R.id.contact_list); 
         /** 得到手机通讯录联系人信息 **/
         getPhoneContacts();
 
         myAdapter = new MyListAdapter(this);
-        setListAdapter(myAdapter);
+        personalListView.setAdapter(myAdapter);
 
-        mListView.setOnItemClickListener(new OnItemClickListener()
+        personalListView.setOnItemClickListener(new OnItemClickListener()
         {
 
             @Override
@@ -91,6 +94,35 @@ public class ContactActivity extends ListActivity
                 startActivity(dialIntent);
             }
         });
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+         
+        
+      
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
 
     }
 
@@ -207,19 +239,18 @@ public class ContactActivity extends ListActivity
         public View getView(int position, View convertView, ViewGroup parent)
         {
             ImageView iamge = null;
-            TextView title = null;
-            TextView text = null;
+            TextView nameView = null;
+            TextView phoneView = null;
             if (convertView == null || position < mContactsNumber.size())
             {
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.contact_list, null);
-                iamge = (ImageView) convertView.findViewById(R.id.color_image);
-                title = (TextView) convertView.findViewById(R.id.color_title);
-                text = (TextView) convertView.findViewById(R.id.color_text);
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.contact_list_item, null);
+                nameView = (TextView) convertView.findViewById(R.id.contact_name);
+                phoneView = (TextView) convertView.findViewById(R.id.contact_phone);
             }
             // 绘制联系人名称
-            title.setText(mContactsName.get(position));
+            nameView.setText(mContactsName.get(position));
             // 绘制联系人号码
-            text.setText(mContactsNumber.get(position));
+            phoneView.setText(mContactsNumber.get(position));
             // 绘制联系人头像
             //iamge.setImageBitmap(mContactsPhonto.get(position));
             return convertView;

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>  
+  
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="fill_parent" android:layout_height="40dip">  
+    <!-- <ImageView android:id="@+id/contact_photo"  
+        android:layout_width="40dip" android:layout_height="40dip" />  --> 
+    <TextView android:id="@+id/sms_name"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"  
+        android:layout_alignParentLeft="true" 
+        android:singleLine="true"  
+        android:textSize="15sp"  
+        android:textIsSelectable="true"
+        android:text="刘先生"
+        />  
+
+   
+    <TextView
+        android:id="@+id/sms_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/sms_name"
+        android:layout_marginLeft="10dp"
+        android:layout_alignBottom="@+id/sms_name"
+        android:textSize="12sp" 
+        android:textIsSelectable="true"
+        android:text="(23)"
+        />
+    <TextView
+        android:id="@+id/sms_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignBottom="@+id/sms_name"
+        android:text="4/2 21:30"
+        android:textIsSelectable="true"
+        android:textSize="12sp" />
+     
+	<!-- ??? 不解，为何需要：android:layout_marginTop="20dp"  -->       
+     <TextView android:id="@+id/sms_body"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"  
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="20dp"
+        android:singleLine="true"  
+        android:textSize="15sp" 
+        android:textIsSelectable="true"
+        android:text="" 
+        />
+    
+</RelativeLayout>  

@@ -3,6 +3,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" 
+    android:id="@+id/dialLayout"
     >
 	<LinearLayout style="@style/dial_liner"
 	    >
@@ -100,6 +101,14 @@
 	            style="@style/dial_grid_btn"
 	            android:text="#"
 	            />
+	</LinearLayout>
+	
+	<LinearLayout style="@style/dial_liner">
+	    <Button android:id="@+id/dial_callBtn" 
+	        android:layout_width="fill_parent"
+	        android:layout_height="fill_parent"
+	        android:text="呼叫">
+	    </Button>
 	</LinearLayout>
 	
 </LinearLayout>

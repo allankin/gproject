@@ -4,5 +4,6 @@
     <string name="app_name">HaoMaTong</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
-
+	<string name="message_type">类别</string>
+	<string name="commdir_type">类别</string>
 </resources>
