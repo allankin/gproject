@@ -17,6 +17,7 @@
 			<module name="upgrade"></module>
 			<module name="base"></module>
 			<module name="message"></module>
+			<module name="contact"></module>
 		</moduleLog>	
 	</logConfig>
 	

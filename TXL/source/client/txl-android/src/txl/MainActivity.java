@@ -5,6 +5,7 @@ import txl.activity.R;
 import txl.activity.SiteActivity;
 import txl.call.CallRecordActivity;
 import txl.config.Config;
+import txl.contact.ContactActivity;
 import txl.message.MessageActivity;
 import txl.test.sidecom.Main;
 import android.app.TabActivity;
@@ -42,14 +43,14 @@ public class MainActivity extends TabActivity
         intent = new Intent().setClass(this, SiteActivity.class);
         setupTab("站点", intent);
         
-        intent = new Intent().setClass(this, Main.class);
+        intent = new Intent().setClass(this, ContactActivity.class);
         setupTab("联系人", intent);
         
         intent = new Intent().setClass(this, MenuActivity.class);
         setupTab("菜单", intent);
         
         
-        tabHost.setCurrentTab(0);
+        tabHost.setCurrentTab(3);
          
     }
     private void setupTab(final String tag,Intent intent) {

@@ -3,16 +3,16 @@ package txl.test.sidecom;
 import java.util.ArrayList;
 
 import txl.activity.R;
-import txl.activity.R.id;
-import txl.activity.R.layout;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
@@ -58,12 +58,13 @@ public class MyAdapter extends BaseAdapter implements SectionIndexer {
     private void setSection(LinearLayout header, String label) {  
         TextView text = new TextView(context);  
         header.setBackgroundColor(0xffaabbcc);  
-        text.setTextColor(Color.WHITE);  
+        text.setTextColor(Color.BLUE);  
         text.setText(label.substring(0, 1).toUpperCase());  
         text.setTextSize(20);  
         text.setPadding(5, 0, 0, 0);  
         text.setGravity(Gravity.CENTER_VERTICAL);  
         header.addView(text);  
+         
     }  
     public int getPositionForSection(int section) {  
         if (section == 35) {  

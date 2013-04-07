@@ -1,21 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?> 
-<LinearLayout 
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/tab_contract"
-    android:layout_width="match_parent" 
-    android:layout_height="match_parent"
-    android:orientation="vertical">
-    <include layout="@layout/contact_header" />
+<RelativeLayout  
+    xmlns:android="http://schemas.android.com/apk/res/android"  
+    android:layout_width="fill_parent"  
+    android:layout_height="fill_parent">  
+    <include layout="@layout/contact_header" 
+    	android:layout_alignParentTop="true"
+    />
+    
     <ListView
         	android:id="@+id/contact_list" 
         	android:layout_width="wrap_content"   
-              android:layout_height="wrap_content"   
+            android:layout_height="wrap_content"   
+            android:layout_marginTop="54dp"
               >  
     </ListView>
-    <txl.test.sidecom.SideBar  
+    
+    
+    
+ 
+    <txl.common.SideBar  
         android:id="@+id/sideBar"  
-        android:layout_width="25dp"  
-        android:layout_height="wrap_content"  
-        android:layout_gravity="right|center_vertical" /> 
-</LinearLayout>
+        android:layout_width="35dp"  
+        android:layout_height="wrap_content" 
+        android:layout_marginTop="54dp" 
+        android:layout_alignParentRight="true"  /> 
+</RelativeLayout>
  
