@@ -54,6 +54,8 @@
         
         
         <activity android:name="txl.test.sidecom.Main"/>
+        <activity android:name="txl.test.tree.TreeViewActivity" />
+        
         
     </application>
     
