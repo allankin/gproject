@@ -18,6 +18,7 @@
 			<module name="base"></module>
 			<module name="message"></module>
 			<module name="contact"></module>
+			<module name="setting"></module>
 		</moduleLog>	
 	</logConfig>
 	

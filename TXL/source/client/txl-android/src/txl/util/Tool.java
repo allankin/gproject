@@ -185,4 +185,17 @@ public class Tool {
     	}
     	return sb.toString();
     }
+    
+    
+    public static Message genMessage(int msg){
+    	Message message = new Message();
+    	message.what = msg;
+    	return message;
+    }
+    public static Message genMessage(int msg,String content){
+    	Message message = new Message();
+    	message.what = msg;
+    	message.obj = content;
+    	return message;
+    }
 }

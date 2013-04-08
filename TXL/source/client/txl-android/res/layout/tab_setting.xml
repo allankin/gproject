@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:id="@+id/setting_layout"
+    >
+    <include layout="@layout/header" />
+    
+
+    <ScrollView
+        android:id="@+id/setting_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TableLayout
+            android:id="@+id/tableLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <!-- 登陆   -->
+            <TableRow
+                android:id="@+id/setting_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_login" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:id="@+id/setting_login_label"
+                    android:text="@string/setting_login_label" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+            </TableRow>
+
+            
+            
+            <!-- 修改密码 -->
+            <TableRow
+                android:id="@+id/setting_modify_password"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                >
+                
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_modify" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_modify_password_label" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+            </TableRow>
+			
+            <!--  wifi网络提示 -->
+            <TableRow
+                android:id="@+id/setting_wifi_tip"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_tip" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_wifi_tip" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
+            
+           	<!-- 广告接收设置 -->
+            <TableRow
+                android:id="@+id/setting_ad_receive"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_tip" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_ad_receive" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
+            
+            <!-- 消息发送设置 -->
+            <TableRow
+                android:id="@+id/setting_message_send"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_message" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_message_send" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
+            
+            <!-- 同步号码 -->
+            <TableRow
+                android:id="@+id/setting_sync_commdir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_sync_commdir" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_sync_commdir" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
+            
+            
+            <!-- 来电过滤 -->
+            <TableRow
+                android:id="@+id/setting_incoming_filter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_incoming_filter" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_incoming_filter" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
+            
+            <!-- 拨号设置 -->
+            <TableRow
+                android:id="@+id/setting_dial_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_dial_setting" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_dial_mode" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
+            
+            </TableLayout>
+    </ScrollView>
+
+</LinearLayout>
+ 

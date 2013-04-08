@@ -7,6 +7,7 @@ import txl.call.CallRecordActivity;
 import txl.config.Config;
 import txl.contact.ContactActivity;
 import txl.message.MessageActivity;
+import txl.setting.SettingActivity;
 import txl.test.sidecom.Main;
 import txl.test.tree.TreeViewActivity;
 import android.app.TabActivity;
@@ -47,7 +48,7 @@ public class MainActivity extends TabActivity
         intent = new Intent().setClass(this, ContactActivity.class);
         setupTab("联系人", intent);
         
-        intent = new Intent().setClass(this, TreeViewActivity.class);
+        intent = new Intent().setClass(this, SettingActivity.class);
         setupTab("菜单", intent);
         
         

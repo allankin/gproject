@@ -24,7 +24,7 @@ public class Config
     private ResDir resDir;
     private static Context context;
     
-    private static String DATA_PACKAGE;
+    public static String DATA_PACKAGE;
     /*** intent传递参数名 ***/
     public static String INTENT_PARAM_DATA = "data";
     
@@ -35,7 +35,7 @@ public class Config
     {
         return resDir;
     }
-
+    
     
     public void setResDir(ResDir resDir)
     {
@@ -59,6 +59,7 @@ public class Config
     public String getApkDir(){
         return this.resDir.apkDir;
     }
+    
     public String getApkDirFileString(String fileName){
         String apkFile = null;
         if(this.resDir.apkDir !=null){

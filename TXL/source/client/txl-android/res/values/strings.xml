@@ -7,4 +7,22 @@
 	<string name="message_type">类别</string>
 	<string name="commdir_type">类别</string>
 	
+	<string name="setting_login_label">登陆</string>
+	<string name="setting_modify_password_label">修改密码</string>
+	<string name="setting_dial_mode">拨打方式</string>
+	<string name="setting_sync_commdir">同步号码</string> 
+	<string name="setting_sync_company">同步公司通讯录</string>   
+	<string name="setting_sync_share">同步共享通讯录</string>
+	<string name="setting_sync_personal">同步个人通讯录</string>
+	<string name="setting_sync_complete">完全同步</string>
+	
+	<string name="setting_incoming">来电设置</string>
+	<string name="setting_incoming_filter">号码过滤</string>
+	<string name="setting_other">其他设置</string>
+	<string name="setting_online_pushmessage">在线推送</string>
+	<string name="setting_message_send">消息发送</string>
+	<string name="setting_download_set">下载设置</string>
+	<string name="setting_wifi_tip">wifi网络提示</string>
+	<string name="setting_ad_set">广告设置</string>
+	<string name="setting_ad_receive">广告接收</string>
 </resources>

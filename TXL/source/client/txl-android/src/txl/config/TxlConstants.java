@@ -28,13 +28,15 @@ public class TxlConstants
     
     public static final int MODULE_ID_CONTACT = 0x0032;
     
+    public static final int MODULE_ID_SETTING = 0x0064;
+    
     public static final String MODULE_NAME_LOGIN = "login";
     public static final String MODULE_NAME_UPGRADE = "upgrade";
     public static final String MODULE_NAME_SPLASHSCREEN = "splashscreen";
     public static final String MODULE_NAME_BASE = "base";
     public static final String MODULE_NAME_MESSAGE = "message";
     public static final String MODULE_NAME_CONTACT = "contact";
-    
+    public static final String MODULE_NAME_SETTING = "setting";
     public static final Map<String,Integer> moduleMap;
     static{
         moduleMap = new HashMap<String,Integer>();
@@ -44,6 +46,8 @@ public class TxlConstants
         moduleMap.put(MODULE_NAME_BASE, MODULE_ID_BASE);
         moduleMap.put(MODULE_NAME_MESSAGE, MODULE_ID_MESSAGE);
         moduleMap.put(MODULE_NAME_CONTACT, MODULE_ID_CONTACT);
+        moduleMap.put(MODULE_NAME_SETTING, MODULE_ID_SETTING);
+        
     }
     public static final Map<Integer,String> moduleMap2;
     static{
@@ -54,6 +58,7 @@ public class TxlConstants
         moduleMap2.put(MODULE_ID_BASE,MODULE_NAME_BASE);
         moduleMap2.put(MODULE_ID_MESSAGE,MODULE_NAME_MESSAGE);
         moduleMap2.put(MODULE_ID_CONTACT, MODULE_NAME_CONTACT);
+        moduleMap2.put(MODULE_ID_SETTING, MODULE_NAME_SETTING);
     }
     
     public static String[] logLevels = {"","verbose","info","warn","error","off"};
@@ -70,6 +75,21 @@ public class TxlConstants
     
     public static final int CONTACT_HANDLER_HIDE_OVERLAY = 0x0001;
     public static final int CONTACT_HANDLER_OVERLAY_VISIBLE = 0x0002;
+    
+    public static final int SETTING_HANDLER_ONLINE_STATUS = 0x0003;
+    public static final int SETTING_HANDLER_LOGIN_FAIL = 0x0004;
+    
+    
+    
+    public static class Toast{
+        public static int LONG = 5000;
+        public static int SHORT = 2000;
+    }
+    
+    public static int LOADING_INTERVAL = 5000;
+    
+    public static String LOGIN_URL = "http://111.1.45.158/txlmain-manage/mobile/login.txl";
+    
     
     
 }
