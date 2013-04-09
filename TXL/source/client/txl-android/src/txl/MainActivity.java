@@ -1,15 +1,11 @@
 package txl;
 
-import txl.activity.MenuActivity;
 import txl.activity.R;
-import txl.activity.SiteActivity;
 import txl.call.CallRecordActivity;
 import txl.config.Config;
 import txl.contact.ContactActivity;
 import txl.message.MessageActivity;
 import txl.setting.SettingActivity;
-import txl.test.sidecom.Main;
-import txl.test.tree.TreeViewActivity;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -42,8 +38,6 @@ public class MainActivity extends TabActivity
         intent = new Intent().setClass(this, MessageActivity.class);
         setupTab("短信", intent);
         
-        intent = new Intent().setClass(this, SiteActivity.class);
-        setupTab("站点", intent);
         
         intent = new Intent().setClass(this, ContactActivity.class);
         setupTab("联系人", intent);

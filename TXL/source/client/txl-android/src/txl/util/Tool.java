@@ -14,9 +14,11 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.util.EntityUtils;
 
 import txl.config.Config;
+import txl.config.TxlConstants;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -76,46 +78,7 @@ public class Tool {
     }
 	
    
-    public static String httpPost(String path, Map<String, String> params, String enc){
-        if(path==null||path.length()==0)
-            return "";
-        String body = "";
-        List<NameValuePair> paramPairs = new ArrayList<NameValuePair>();
-        if(params!=null && !params.isEmpty()){
-            for(Map.Entry<String, String> entry : params.entrySet()){
-                paramPairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
-            }
-        }
-        UrlEncodedFormEntity entitydata;
-        try
-        {
-            entitydata = new UrlEncodedFormEntity(paramPairs, enc);
-            HttpPost post = new HttpPost(path);  
-            post.setEntity(entitydata);
-            DefaultHttpClient client = new DefaultHttpClient();  
-            HttpResponse response = client.execute(post);
-            
-            if(response.getStatusLine().getStatusCode()==200){
-                HttpEntity entity = response.getEntity();
-                body = EntityUtils.toString(entity, enc);    
-            }
-            
-        } catch (UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }catch (ClientProtocolException e)
-        {
-            e.printStackTrace();
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-        return body;
-    }
     
-    public static String httpPostUTF8(String path, Map<String, String> params){
-        return httpPost(path, params, "utf-8");
-    }
     
     public static boolean checkNetwork(final Activity context){
         boolean netConnected = false;

@@ -88,8 +88,13 @@ public class TxlConstants
     
     public static int LOADING_INTERVAL = 5000;
     
+    public static final int HTTP_CONNECTION_TIMEOUT = 5000;
+    public static final int HTTP_SO_TIMEOUT = 10000;
+    
     public static String LOGIN_URL = "http://111.1.45.158/txlmain-manage/mobile/login.txl";
+    public static String FIND_BACK_PASSWORD_URL = "";
     
-    
+    public static final String DB_NAME = "txl";
+    public static final int DB_VERSION = 3;
     
 }

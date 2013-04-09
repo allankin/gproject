@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:id="@+id/setting_layout"
+    >
+    <include layout="@layout/header" />
+    
+    <ScrollView
+        android:id="@+id/setting_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <TableLayout
+            android:id="@+id/tableLayout1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            
+            <TableRow
+                android:id="@+id/setting_sync_company"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_sync_commdir" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:id="@+id/setting_login_label"
+                    android:text="@string/setting_sync_company" />
+                
+                <TextView style="@style/setting_column3"/>
+                 
+                
+            </TableRow>
+            
+            
+            <TableRow
+                android:id="@+id/setting_sync_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_sync_commdir" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:id="@+id/setting_login_label"
+                    android:text="@string/setting_sync_share" />
+                
+				<LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+                	<ImageView style="@style/setting_column3"  
+                	    android:id="@+id/setting_setting_more_down_share"
+                	    android:src="@drawable/setting_more_down" 
+                	    android:layout_height="wrap_content" android:layout_width="wrap_content" />
+				</LinearLayout>
+                
+            </TableRow>
+            
+            
+     	 </TableLayout>
+	</ScrollView>
+</LinearLayout>

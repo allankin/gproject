@@ -25,6 +25,8 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.BROADCAST_STICKY" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.READ_CALL_LOG" />
+    <uses-permission android:name="android.permission.WRITE_CALL_LOG" />
     
     <application
         android:allowBackup="true"
@@ -50,8 +52,8 @@
         <activity android:name=".SmsActivity"/>
         <activity android:name=".SiteActivity"/>
         <activity android:name="txl.contact.ContactActivity"/>
-        <activity android:name="txl.activity.MenuActivity"/>
         <activity android:name="txl.setting.SettingActivity"/>
+        <activity android:name="txl.setting.SyncSettingActivity"/>
         
         <activity android:name="txl.test.sidecom.Main"/>
         <activity android:name="txl.test.tree.TreeViewActivity" />

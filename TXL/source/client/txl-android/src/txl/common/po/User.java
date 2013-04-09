@@ -7,8 +7,11 @@ import java.io.IOException;
 import java.util.Properties;
 
 import txl.config.Config;
+import txl.setting.Setting;
+import txl.setting.SettingDaoImpl;
 import txl.util.DESUtil;
 import txl.util.MD5Util;
+import android.content.Context;
 
  
 
@@ -23,13 +26,17 @@ public class User {
 	/*用户id*/
 	public long userId;
 	
+	public Setting setting;
 	
-	
-	/*登陆状态：1:成功  2：用户名密码不能为空 3：用户名不存在 4：密码不正确 5：账号被冻结 6：用户没有登陆权限 */
+	/*登陆操作返回状态：1:成功  2：用户名密码不能为空 3：用户名不存在 4：密码不正确 5：账号被冻结 6：用户没有登陆权限 */
 	public int loginStatus;
 	
 	public boolean isSave;
 	
+	/*找回密码返回状态：1：成功*/
+	public int findBackStatus;
+	/*修改密码状态：1：成功*/
+	public int modifyPasswordStatus;
 	
 	public long compId;
 	private static byte[]       rawKeyData    = "txl".getBytes();
@@ -38,6 +45,28 @@ public class User {
 	private static DESUtil      ed            = new DESUtil();
 	
 	
+	private static User user;
+	private User(){
+	}
+	/**
+	 * 单一实例
+	 * @return
+	 */
+	public static User getSingle(){
+	   if(user==null){
+	       user = new User();
+	       user.setting = new Setting();
+	   }
+	   return user;
+	}
+	
+	/**
+	 * 获取新实例
+	 * @return
+	 */
+	public static User getNew(){
+	   return new User(); 
+	}
 	public void saveUserToFS(){
 		this.encryUserInfo();
 	}
@@ -101,4 +130,16 @@ public class User {
 
         return true;
     }
+	
+	
+	public void load(Context ctx){
+		/*加载设置信息*/
+		loadSetting(ctx);
+	}
+	
+	private void loadSetting(Context ctx){
+		SettingDaoImpl.getSingle(ctx).refreshCache();
+	}
+	
+
 }

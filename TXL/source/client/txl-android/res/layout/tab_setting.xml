@@ -64,7 +64,16 @@
                 <TextView
                     style="@style/setting_column2"
                     android:text="@string/setting_wifi_tip" />
-                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+
+				<LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+					<ToggleButton
+					   android:id="@+id/setting_wifi_tip_btn"
+					   android:layout_width="wrap_content"
+					   android:layout_height="wrap_content"
+					   android:background="@drawable/switch_bg"
+					   android:text="" />
+				</LinearLayout>
+               
                 
             </TableRow>
             
@@ -80,12 +89,43 @@
                 <TextView
                     style="@style/setting_column2"
                     android:text="@string/setting_ad_receive" />
-                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 
+                <LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+					<ToggleButton
+					   android:id="@+id/setting_ad_receive_btn"
+					   android:layout_width="wrap_content"
+					   android:layout_height="wrap_content"
+					   android:background="@drawable/switch_bg"
+					   android:text="" />
+				</LinearLayout>
             </TableRow>
             
-            <!-- 消息发送设置 -->
+            
             <TableRow
+                android:id="@+id/setting_online_push"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                >
+                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_message" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_online_push" />
+                <LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+					<ToggleButton
+					   android:id="@+id/setting_online_push_btn"
+					   android:layout_width="wrap_content"
+					   android:layout_height="wrap_content"
+					   android:background="@drawable/switch_bg"
+					   android:text="" />
+				</LinearLayout>	
+            </TableRow>
+            
+            
+            
+            <!-- 消息发送设置 -->
+            <!-- <TableRow
                 android:id="@+id/setting_message_send"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" 
@@ -96,9 +136,18 @@
                 <TextView
                     style="@style/setting_column2"
                     android:text="@string/setting_message_send" />
-                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                <LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+                	<Spinner
+                        android:id="@+id/setting_message_send_mode_spinner"
+                        style="@style/Txl.Skin.Widget.Spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawSelectorOnTop="true"
+                        android:layout_alignParentRight="true"
+                        android:prompt="@string/prompt_setting_message_send_mode" />
+                </LinearLayout>
                 
-            </TableRow>
+            </TableRow> -->
             
             <!-- 同步号码 -->
             <TableRow
@@ -118,7 +167,7 @@
             
             
             <!-- 来电过滤 -->
-            <TableRow
+            <!-- <TableRow
                 android:id="@+id/setting_incoming_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" 
@@ -131,7 +180,7 @@
                     android:text="@string/setting_incoming_filter" />
                 <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 
-            </TableRow>
+            </TableRow> -->
             
             <!-- 拨号设置 -->
             <TableRow
@@ -145,11 +194,22 @@
                 <TextView
                     style="@style/setting_column2"
                     android:text="@string/setting_dial_mode" />
-                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
-                
+                <LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+                	<Spinner
+                        android:id="@+id/setting_dial_mode_btn"
+                        style="@style/Txl.Skin.Widget.Spinner"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:drawSelectorOnTop="true"
+                        android:prompt="@string/prompt_setting_dial_mode" />
+                </LinearLayout>
             </TableRow>
             
+            
             </TableLayout>
+            
+        
+        
     </ScrollView>
 
 </LinearLayout>

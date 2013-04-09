@@ -24,7 +24,7 @@
                         android:drawSelectorOnTop="true"
                         android:layout_marginRight="10dp"
                         android:layout_alignParentRight="true"
-                        android:prompt="@string/commdir_type" 
+                        android:prompt="@string/prompt_commdir_type" 
                         />
 
 </RelativeLayout>

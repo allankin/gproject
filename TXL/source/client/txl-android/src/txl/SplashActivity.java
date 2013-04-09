@@ -1,6 +1,7 @@
 package txl;
 
 import txl.activity.R;
+import txl.common.po.User;
 import txl.config.Config;
 import txl.config.ConfigParser;
 import android.app.Activity;
@@ -47,7 +48,9 @@ public class SplashActivity extends Activity
         setContentView(R.layout.splashlanch);
         Config.launcher = this;
         ConfigParser.init(this);
-         
+        
+        new TxlDbHelper(this).getWritableDatabase().close();
+        User.getSingle().load(this);
         
         checkUpgrade();
         

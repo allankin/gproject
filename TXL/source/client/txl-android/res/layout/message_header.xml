@@ -31,7 +31,7 @@
                         android:drawSelectorOnTop="true"
                         android:layout_marginRight="10dp"
                         android:layout_alignParentRight="true"
-                        android:prompt="@string/message_type" />
+                        android:prompt="@string/prompt_message_type" />
 
 </RelativeLayout>
  
