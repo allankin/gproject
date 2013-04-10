@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical" 
     android:id="@+id/setting_layout"
+    android:background="@color/activity_background_color"
     >
     <include layout="@layout/header" />
-    
 
     <ScrollView
         android:id="@+id/setting_scroll"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_height="match_parent" 
+        >
 
         <TableLayout
             android:id="@+id/tableLayout1"
@@ -71,7 +72,8 @@
 					   android:layout_width="wrap_content"
 					   android:layout_height="wrap_content"
 					   android:background="@drawable/switch_bg"
-					   android:text="" />
+					   android:textOn=""
+                		android:textOff="" />
 				</LinearLayout>
                
                 
@@ -96,7 +98,8 @@
 					   android:layout_width="wrap_content"
 					   android:layout_height="wrap_content"
 					   android:background="@drawable/switch_bg"
-					   android:text="" />
+					   android:textOn=""
+                		android:textOff=""/>
 				</LinearLayout>
             </TableRow>
             
@@ -118,7 +121,8 @@
 					   android:layout_width="wrap_content"
 					   android:layout_height="wrap_content"
 					   android:background="@drawable/switch_bg"
-					   android:text="" />
+					   android:textOn=""
+                		android:textOff="" />
 				</LinearLayout>	
             </TableRow>
             
@@ -194,7 +198,7 @@
                 <TextView
                     style="@style/setting_column2"
                     android:text="@string/setting_dial_mode" />
-                <LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+                <LinearLayout style="@style/setting_column3" android:layout_weight="3" android:layout_marginRight="15dp">
                 	<Spinner
                         android:id="@+id/setting_dial_mode_btn"
                         style="@style/Txl.Skin.Widget.Spinner"

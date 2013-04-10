@@ -4,6 +4,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" 
     android:id="@+id/setting_layout"
+    android:background="@color/activity_background_color"
     >
     <include layout="@layout/header" />
     
@@ -12,8 +13,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" >
 
+        <LinearLayout  
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:orientation="vertical" 
+		    >
         <TableLayout
-            android:id="@+id/tableLayout1"
+            android:id="@+id/setting_sync_table"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
@@ -50,16 +56,31 @@
                     android:id="@+id/setting_login_label"
                     android:text="@string/setting_sync_share" />
                 
-				<LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
-                	<ImageView style="@style/setting_column3"  
+				<ImageView style="@style/setting_column3"  
                 	    android:id="@+id/setting_setting_more_down_share"
                 	    android:src="@drawable/setting_more_down" 
                 	    android:layout_height="wrap_content" android:layout_width="wrap_content" />
-				</LinearLayout>
                 
             </TableRow>
             
+            <TableRow
+                android:id="@+id/setting_sync_share_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                
+            
+            </TableRow>
             
      	 </TableLayout>
+     	 
+        		<TableLayout
+		            android:id="@+id/setting_sync_share_item_table"
+		            android:layout_width="match_parent"
+		            android:layout_height="wrap_content"
+		            >
+                    
+		        </TableLayout>
+     	 </LinearLayout>
 	</ScrollView>
 </LinearLayout>

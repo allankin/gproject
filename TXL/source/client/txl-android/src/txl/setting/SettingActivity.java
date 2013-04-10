@@ -3,10 +3,12 @@ package txl.setting;
 import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.login.LoginDialog;
-import txl.common.po.User;
+import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -28,8 +30,14 @@ public class SettingActivity extends TxlActivity {
 	private SettingActivity me = this;
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		Resources res = getResources();
+        Drawable drawable = res.getDrawable(R.drawable.window_bgcolor);
+        this.getWindow().setBackgroundDrawable(drawable);
+		
 		setContentView(R.layout.tab_setting);
-		Setting setting = User.getSingle().setting;
+		TextView header = (TextView)findViewById(R.id.header);
+		header.setText("软件设置");
+		Setting setting = Account.getSingle().setting;
 		log.info("setting    dialMode : "+setting.dialMode);
 		
 		TableRow statusTr = (TableRow)findViewById(R.id.setting_status);
@@ -46,7 +54,7 @@ public class SettingActivity extends TxlActivity {
 		wifiTipBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				SettingDaoImpl settingDao = SettingDaoImpl.getSingle(me);
+				SettingDao settingDao = SettingDao.getSingle(me);
 				settingDao.updateWifiTip(isChecked?"1":"0");
 			}
 		});
@@ -56,7 +64,7 @@ public class SettingActivity extends TxlActivity {
 		adReceiveBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				SettingDaoImpl settingDao = SettingDaoImpl.getSingle(me);
+				SettingDao settingDao = SettingDao.getSingle(me);
 				settingDao.updateAdReceive(isChecked?"1":"0");
 			}
 		});
@@ -66,7 +74,7 @@ public class SettingActivity extends TxlActivity {
 		onlinePushBtn.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				SettingDaoImpl settingDao = SettingDaoImpl.getSingle(me);
+				SettingDao settingDao = SettingDao.getSingle(me);
 				settingDao.updatePushMessage(isChecked?"1":"0");
 			}
 		});
@@ -93,9 +101,9 @@ public class SettingActivity extends TxlActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
                 if(position==0){
-                	SettingDaoImpl.getSingle(me).updateDialMode("0");
+                	SettingDao.getSingle(me).updateDialMode("0");
                 }else{
-                	SettingDaoImpl.getSingle(me).updateDialMode("1");
+                	SettingDao.getSingle(me).updateDialMode("1");
                 }
             }
             @Override

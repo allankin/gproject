@@ -9,7 +9,7 @@ import txl.common.TxlAlertDialog;
 import txl.common.TxlToast;
 import txl.common.TxlAlertDialog.DialogInvoker;
 import txl.common.WebLoadingTipDialog;
-import txl.common.po.User;
+import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.util.Tool;
@@ -78,7 +78,7 @@ public class LoginDialog {
                 
                 WebLoadingTipDialog.getInstance(ctx).show("正在登陆...");
                 
-                User user = User.getSingle();
+                Account user = Account.getSingle();
                 user.userName = untv.getText().toString();
                 user.phone = user.userName;
                 user.password = password.getText().toString();
@@ -110,7 +110,7 @@ public class LoginDialog {
                         EditText findBack = (EditText)findBackView.findViewById(R.id.find_password_back_phone);
                         String phone = findBack.getText().toString().trim();
                         if(ValidateUtil.isPhoneNumber(phone)){
-                           User user = User.getNew();
+                           Account user = Account.getNew();
                            user.phone = phone;
                            new FindBackPasswordTask(ctx).execute(user);
                         }else{
@@ -129,23 +129,23 @@ public class LoginDialog {
 	 * @author jinchao
 	 *
 	 */
-	class FindBackPasswordTask extends AsyncTask<User, Void, User>{
+	class FindBackPasswordTask extends AsyncTask<Account, Void, Account>{
 	    public TxlActivity ctx ;
         public FindBackPasswordTask(TxlActivity ctx){
             this.ctx = ctx;
         }
         @Override
-        protected User doInBackground(User... users)
+        protected Account doInBackground(Account... users)
         {
             //HS_TODO: 远程找回密码
             
-            User userRet = users[0];
+            Account userRet = users[0];
             userRet.findBackStatus = 1;
             
             return userRet;
         }
         @Override
-        protected void onPostExecute(User userRet)
+        protected void onPostExecute(Account userRet)
         {
             if(userRet.findBackStatus==1){
                 TxlAlertDialog.show(ctx, "短信已经发出,请注意查收", "确定", new DialogInvoker()
@@ -164,15 +164,15 @@ public class LoginDialog {
 	 * @author jinchao
 	 *
 	 */
-	class LoginTask extends AsyncTask<User, Void, User>{
+	class LoginTask extends AsyncTask<Account, Void, Account>{
         public TxlActivity ctx ;
         public LoginTask(TxlActivity ctx){
             this.ctx = ctx;
         }
 		@Override
-		protected User doInBackground(User... user) {
+		protected Account doInBackground(Account... user) {
 			//HS_TODO 远程登陆
-			User userRet = user[0];
+			Account userRet = user[0];
 			userRet.userId= 1;
 			userRet.loginStatus=1;
 			userRet.compCode="";
@@ -195,7 +195,7 @@ public class LoginDialog {
 		}
 		
 		@Override
-        protected void onPostExecute(User userRet)
+        protected void onPostExecute(Account userRet)
         {
             WebLoadingTipDialog.getInstance(ctx).dismiss();
             switch (userRet.loginStatus) {

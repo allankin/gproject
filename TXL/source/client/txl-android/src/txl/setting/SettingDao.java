@@ -2,7 +2,7 @@ package txl.setting;
 
 import txl.BaseDao;
 import txl.CacheAble;
-import txl.common.po.User;
+import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import android.content.ContentValues;
@@ -17,17 +17,17 @@ import android.util.Log;
  * @Author JinChao
  * @Date 2012-2-21 下午3:05:16
  */
-public class SettingDaoImpl extends BaseDao implements CacheAble
+public class SettingDao extends BaseDao implements CacheAble
 {
-	private final TxLogger  log = new TxLogger(SettingDaoImpl.class, TxlConstants.MODULE_ID_SETTING);
-    private static SettingDaoImpl settingDao;
-    private SettingDaoImpl(Context context){
+	private final TxLogger  log = new TxLogger(SettingDao.class, TxlConstants.MODULE_ID_SETTING);
+    private static SettingDao settingDao;
+    private SettingDao(Context context){
        super(context);
     }
     
-    public static SettingDaoImpl getSingle(Context context){
+    public static SettingDao getSingle(Context context){
     	if(settingDao == null){
-    		settingDao = new SettingDaoImpl(context);
+    		settingDao = new SettingDao(context);
     	}
     	return settingDao;
     }
@@ -121,7 +121,7 @@ public class SettingDaoImpl extends BaseDao implements CacheAble
     @Override
     public void refreshCache()
     {
-        User.getSingle().setting = getSetting();
+        Account.getSingle().setting = getSetting();
     }
   
    

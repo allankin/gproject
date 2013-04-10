@@ -6,4 +6,5 @@
     <color name="lightgreen">#7cd12e</color>
     <color name="black">#000000</color>
     <color name="blue">#3366CC</color>
+    <color name="activity_background_color">#FFFFFF</color>
 </resources>

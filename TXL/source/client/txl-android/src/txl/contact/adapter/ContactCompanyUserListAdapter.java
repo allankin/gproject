@@ -1,42 +1,28 @@
 package txl.contact.adapter;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import txl.activity.R;
 import txl.config.TxlConstants;
-import txl.contact.po.ContactVo;
+import txl.contact.po.CompanyUser;
 import txl.log.TxLogger;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-public class ContactListAdapter extends BaseAdapter implements SectionIndexer
-    {
+public class ContactCompanyUserListAdapter extends BaseAdapter 
+{
 	
-	private final static TxLogger log = new TxLogger(ContactListAdapter.class, TxlConstants.MODULE_ID_BASE);
+	private final static TxLogger log = new TxLogger(ContactCompanyUserListAdapter.class, TxlConstants.MODULE_ID_CONTACT);
     	private Context mContext;
-    	private List<ContactVo> contactList;
-    	private Map<Character,Integer> firstLetterMap = new HashMap<Character,Integer>();
-        public ContactListAdapter(Context context,List<ContactVo> contactList)
+    	private List<CompanyUser> contactList;
+        public ContactCompanyUserListAdapter(Context context,List<CompanyUser> contactList)
         {
             mContext = context;
             this.contactList = contactList;
-             
-            for(int i=0,len=contactList.size();i<len;i++){
-            	ContactVo cv = contactList.get(i);
-            	if(!firstLetterMap.containsKey(cv.firstLetter)){
-            		firstLetterMap.put(cv.firstLetter, i);
-            		log.info("firstLetter: "+cv.firstLetter+",index: "+i);
-            	}
-            }
-            
-            
         }
 
         public int getCount()
@@ -62,7 +48,7 @@ public class ContactListAdapter extends BaseAdapter implements SectionIndexer
         private ViewHolder holder ;
         public View getView(int position, View convertView, ViewGroup parent)
         {
-            ContactVo cv = contactList.get(position);
+        	CompanyUser cv = contactList.get(position);
             if (convertView == null)
             {
             	holder = new ViewHolder();
@@ -73,8 +59,8 @@ public class ContactListAdapter extends BaseAdapter implements SectionIndexer
             }else{
             	holder = (ViewHolder)convertView.getTag();
             }
-            holder.nameView.setText(cv.displayName);
-            holder.phoneView.setText(cv.phone);
+            holder.nameView.setText(cv.name);
+            holder.phoneView.setText(cv.userPhone);
             return convertView;
         }
         
@@ -82,24 +68,4 @@ public class ContactListAdapter extends BaseAdapter implements SectionIndexer
         	TextView nameView;
             TextView phoneView;
         }
-
-		@Override
-		public Object[] getSections() {
-			return null;
-		}
-
-		@Override
-		public int getPositionForSection(int section) {
-			Integer idx = firstLetterMap.get((char)section);
-			if(idx==null){
-				idx = -1;
-			}
-			return idx;
-		}
-
-		@Override
-		public int getSectionForPosition(int position) {
-			return 0;
-		}
-
     }

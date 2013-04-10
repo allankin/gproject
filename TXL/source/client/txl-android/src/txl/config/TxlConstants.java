@@ -97,4 +97,9 @@ public class TxlConstants
     public static final String DB_NAME = "txl";
     public static final int DB_VERSION = 3;
     
+    
+    public static final String INTENT_BUNDLE_HEADER_TITLE = "headerTitle";
+    public static final String INTENT_BUNDLE_COMMDIR_ID = "commDirId";
+    public static final String INTENT_BUNDLE_COUNT = "count";
+    
 }

@@ -6,14 +6,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-
 import txl.Handlable;
 import txl.activity.R;
 import txl.common.SideBar;
 import txl.config.TxlConstants;
 import txl.contact.adapter.ContactListAdapter;
+import txl.contact.adapter.ContactShareCommDirListAdapter;
+import txl.contact.dao.CommDirDao;
 import txl.contact.dao.ContactDao;
+import txl.contact.po.CommDir;
 import txl.contact.po.ContactVo;
+import txl.contact.po.ShareUser;
 import txl.util.ContactVoComparator;
 import android.app.Activity;
 import android.content.Context;
@@ -28,11 +31,15 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.TextView;
 import android.widget.AbsListView.OnScrollListener;
+import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 /**
  * @ClassName: CallRecord.java
@@ -50,47 +57,112 @@ public class ContactActivity extends Activity implements Handlable
     Context                       mContext                  = null;
     private TextView headerView = null;
 
-    public List<ContactVo> contactList = new ArrayList<ContactVo>();
-    public Set<String> contactPhoneSet = new HashSet<String>();
-
-    ListView                      personalListView                 = null;
-    ContactListAdapter            personalContactListAdapter                 = null;
-    
+    private LinearLayout commDirContainer;
+    private LayoutInflater inflater;
     private ContactActivity me = this;
-
-    private TextView overlay;
     
+    
+    /************************************* 个人通讯录 变量 *****************************************************/
+    private List<ContactVo> contactList = new ArrayList<ContactVo>();
+    private Set<String> contactPhoneSet = new HashSet<String>();
+    private ListView                      personalListView                 = null;
+    private ContactListAdapter            personalContactListAdapter                 = null;
+    
+    private TextView overlay;
     private boolean visible;
+    private boolean personalCommDirLoaded = false;
+    private View personalLayout;
+    /************************************* 公司通讯录 变量 *****************************************************/
+    private boolean companyCommDirLoaded = false;
+
+    
+    
+    
+    
+    
+    
+    
+    /************************************* 共享通讯录 变量 *****************************************************/
+    private boolean shareCommDirLoaded = false;
+    private List<CommDir> shareCommDirList;
+    private ListView                      shareCommDirListView                 = null;
+    private ContactShareCommDirListAdapter            shareCommDirListAdapter                 = null;
+    
+    
+    
+    
+    
+    
+    
+    
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         mContext = this;
-        final LayoutInflater inflater = LayoutInflater.from(this);
+        inflater = LayoutInflater.from(this);
         setContentView(inflater.inflate(R.layout.tab_contact, null));
-        this.overlay = (TextView) View.inflate(this, R.layout.overlay, null);
-        headerView = (TextView)findViewById(R.id.header);
-        headerView.setText("联系人");
-        personalListView = (ListView) this.findViewById(R.id.contact_list); 
-        /** 得到手机通讯录联系人信息 **/
-        ContactDao.getPhoneContacts(this,contactList,contactPhoneSet);
-        ContactDao.getSIMContacts(this,contactList,contactPhoneSet);
-        Collections.sort(contactList,new ContactVoComparator());
-        personalContactListAdapter = new ContactListAdapter(this,contactList);
-        personalListView.setAdapter(personalContactListAdapter);
-
-        personalListView.setOnItemClickListener(new OnItemClickListener()
-        {
+        commDirContainer = (LinearLayout)findViewById(R.id.contact_commdir_container);
+        
+        Spinner commdirTypeSpinner = (Spinner)findViewById(R.id.commdir_type);
+		ArrayAdapter<String> commDirTypeAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,me.getResources().getStringArray(R.array.contact_commdir_type));
+		commDirTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		commdirTypeSpinner.setAdapter(commDirTypeAdapter);
+		
+		commdirTypeSpinner.setSelection(0,false);
+		/*默认为个人通讯录*/
+		loadPersonalCommDir();
+		commdirTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
             {
-                Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactList.get(position).phone));
-                //startActivity(dialIntent);
+                if(position==0){
+                	loadPersonalCommDir();
+                }else if(position == 1){
+                	
+                }else if(position == 2){
+                	loadShareCommDir();
+                }
             }
+            @Override
+            public void onNothingSelected(AdapterView<?> parent)
+            {
+                
+            }
+            
         });
-        personalListView.setOnScrollListener(new OnScrollListener() {
-
-
+        
+        
+    }
+    
+    /**
+     * 加载个人通讯录
+     */
+    public void loadPersonalCommDir(){
+    	
+    	commDirContainer.removeAllViews();
+    	
+		personalLayout = inflater.inflate(R.layout.contact_personal_commdir, commDirContainer);
+		personalListView = (ListView) personalLayout.findViewById(R.id.contact_list); 
+		/** 得到手机通讯录联系人信息 **/
+		ContactDao.getPhoneContacts(this,contactList,contactPhoneSet);
+		ContactDao.getSIMContacts(this,contactList,contactPhoneSet);
+		Collections.sort(contactList,new ContactVoComparator());
+		personalContactListAdapter = new ContactListAdapter(this,contactList);
+		personalListView.setAdapter(personalContactListAdapter);
+		
+		personalListView.setOnItemClickListener(new OnItemClickListener()
+		{
+			@Override
+			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
+			{
+				Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactList.get(position).phone));
+				//startActivity(dialIntent);
+			}
+		});
+		personalListView.setOnScrollListener(new OnScrollListener() {
+			
+			
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				visible = true;
@@ -98,7 +170,7 @@ public class ContactActivity extends Activity implements Handlable
 					overlay.setVisibility(View.INVISIBLE);
 				}
 			}
-
+			
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
@@ -111,24 +183,62 @@ public class ContactActivity extends Activity implements Handlable
 				}
 			}
 		});
-        
-        this.overlay = (TextView) View.inflate(this, R.layout.overlay, null);
+		
+		this.overlay = (TextView) View.inflate(this, R.layout.overlay, null);
 		getWindowManager()
-				.addView(
-						overlay,
-						new WindowManager.LayoutParams(
-								LayoutParams.WRAP_CONTENT,
-								LayoutParams.WRAP_CONTENT,
-								WindowManager.LayoutParams.TYPE_APPLICATION,
-								WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-										| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-								PixelFormat.TRANSLUCENT));
-        
-        SideBar sideBar = (SideBar) findViewById(R.id.sideBar);  
-        sideBar.setListView(personalListView); 
-        sideBar.setHandlable(this);
+		.addView(
+				overlay,
+				new WindowManager.LayoutParams(
+						LayoutParams.WRAP_CONTENT,
+						LayoutParams.WRAP_CONTENT,
+						WindowManager.LayoutParams.TYPE_APPLICATION,
+						WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+						| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+						PixelFormat.TRANSLUCENT));
+		
+		SideBar sideBar = (SideBar) personalLayout.findViewById(R.id.sideBar);  
+		sideBar.setListView(personalListView); 
+		sideBar.setHandlable(this);
+		
     }
-
+    
+    
+    /**
+     * 加载公司通讯录
+     */
+    public void loadCompanyCommDir(){
+    	commDirContainer.removeAllViews();
+    }
+    /**
+     * 加载共享通讯录
+     */
+    public void loadShareCommDir(){
+    	
+    	commDirContainer.removeAllViews();
+		//if(!shareCommDirLoaded){
+			View shareLayout = inflater.inflate(R.layout.contact_share_commdir, commDirContainer);
+			shareCommDirListView = (ListView) shareLayout.findViewById(R.id.contact_share_commdir_list); 
+			shareCommDirList = CommDirDao.getSingle(me).getShareCommDirList();
+			shareCommDirListAdapter = new ContactShareCommDirListAdapter(this,shareCommDirList);
+			shareCommDirListView.setAdapter(shareCommDirListAdapter);
+			shareCommDirListView.setOnItemClickListener(new OnItemClickListener()
+    		{
+    			@Override
+    			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
+    			{
+    				Intent intent = new Intent(me,ShareUserActivity.class);
+    				CommDir commDir = shareCommDirList.get(position);
+    				intent.putExtra(TxlConstants.INTENT_BUNDLE_HEADER_TITLE, commDir.name);
+    				intent.putExtra(TxlConstants.INTENT_BUNDLE_COMMDIR_ID, commDir.dirId);
+    				intent.putExtra(TxlConstants.INTENT_BUNDLE_COUNT, commDir.contactCount);
+    				startActivity(intent);
+    			}
+    		});
+			//shareCommDirListAdapter.notifyDataSetChanged();
+			
+		/*	shareCommDirLoaded = true;
+		}*/
+    }
     public Handler handler = new Handler(){
     	public void handleMessage(Message msg)
         {

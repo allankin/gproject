@@ -40,5 +40,12 @@
 	    <item>直接拨打</item>
 	    <item>可选拨打</item>
 	</string-array>
+	<string-array name="contact_commdir_type">
+	    <item>个人通讯录</item>
+	    <item>公司通讯录</item>
+	    <item>共享通讯录</item>
+	</string-array>
 	
+	
+	<drawable name="window_bgcolor">#ffffff</drawable>
 </resources>

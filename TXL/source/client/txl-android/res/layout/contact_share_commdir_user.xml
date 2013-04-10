@@ -5,21 +5,17 @@
     android:layout_height="fill_parent"
     android:background="@color/activity_background_color"
     >  
-    
-    
-    <include layout="@layout/contact_header" 
+    <include layout="@layout/header" 
     	android:layout_alignParentTop="true"
     />
-    <LinearLayout 
-        android:layout_height="fill_parent"
-    	android:layout_width="fill_parent"
-    	android:id="@+id/contact_commdir_container" 
-    	android:layout_marginTop="54dp"
-    	android:orientation="vertical"
-        >
-       
-        
-    </LinearLayout>
+    
+    <ListView
+        	android:id="@+id/contact_list" 
+        	android:layout_width="wrap_content"   
+            android:layout_height="wrap_content"   
+            android:layout_marginTop="54dp"
+              >  
+    </ListView>
     
 </RelativeLayout>
  

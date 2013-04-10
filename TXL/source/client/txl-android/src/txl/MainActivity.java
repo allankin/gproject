@@ -46,7 +46,7 @@ public class MainActivity extends TabActivity
         setupTab("菜单", intent);
         
         
-        tabHost.setCurrentTab(3);
+        tabHost.setCurrentTab(2);
          
     }
     private void setupTab(final String tag,Intent intent) {

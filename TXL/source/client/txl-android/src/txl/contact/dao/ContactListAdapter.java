@@ -1,4 +1,4 @@
-package txl.contact.adapter;
+package txl.contact.dao;
 
 import java.util.HashMap;
 import java.util.List;

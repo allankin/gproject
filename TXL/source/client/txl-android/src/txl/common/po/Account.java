@@ -8,14 +8,14 @@ import java.util.Properties;
 
 import txl.config.Config;
 import txl.setting.Setting;
-import txl.setting.SettingDaoImpl;
+import txl.setting.SettingDao;
 import txl.util.DESUtil;
 import txl.util.MD5Util;
 import android.content.Context;
 
  
 
-public class User {
+public class Account {
 	/*用户名*/
 	public String userName;
 	public String name;
@@ -24,7 +24,7 @@ public class User {
 	/*用户手机*/
 	public String phone;
 	/*用户id*/
-	public long userId;
+	public int userId;
 	
 	public Setting setting;
 	
@@ -38,23 +38,23 @@ public class User {
 	/*修改密码状态：1：成功*/
 	public int modifyPasswordStatus;
 	
-	public long compId;
+	public int compId;
 	private static byte[]       rawKeyData    = "txl".getBytes();
 	private static String       directoryPath = Config.DATA_PACKAGE + "user" + File.separator;	
 	private static String       fileName      = MD5Util.md5("txlUserFile");
 	private static DESUtil      ed            = new DESUtil();
 	
 	
-	private static User user;
-	private User(){
+	private static Account user;
+	private Account(){
 	}
 	/**
 	 * 单一实例
 	 * @return
 	 */
-	public static User getSingle(){
+	public static Account getSingle(){
 	   if(user==null){
-	       user = new User();
+	       user = new Account();
 	       user.setting = new Setting();
 	   }
 	   return user;
@@ -64,16 +64,16 @@ public class User {
 	 * 获取新实例
 	 * @return
 	 */
-	public static User getNew(){
-	   return new User(); 
+	public static Account getNew(){
+	   return new Account(); 
 	}
 	public void saveUserToFS(){
 		this.encryUserInfo();
 	}
 	
 	
-	public static User readUserFromFS(){
-		User user = new User();
+	public static Account readUserFromFS(){
+		Account user = new Account();
         File file = new File(directoryPath + fileName);
         if (!file.exists())
         {
@@ -87,7 +87,7 @@ public class User {
             userInfoProp.load(bais);
             user.password = userInfoProp.getProperty("password");
             user.userName = userInfoProp.getProperty("userName");
-            user.userId = Long.parseLong(userInfoProp.getProperty("userId"));
+            user.userId = Integer.parseInt(userInfoProp.getProperty("userId"));
             user.name = userInfoProp.getProperty("name");
             user.phone = userInfoProp.getProperty("phone");
             user.compCode = userInfoProp.getProperty("compCode");
@@ -138,7 +138,7 @@ public class User {
 	}
 	
 	private void loadSetting(Context ctx){
-		SettingDaoImpl.getSingle(ctx).refreshCache();
+		SettingDao.getSingle(ctx).refreshCache();
 	}
 	
 

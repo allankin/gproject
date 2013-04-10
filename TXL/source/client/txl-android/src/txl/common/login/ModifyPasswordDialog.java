@@ -4,7 +4,7 @@ import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.TxlToast;
 import txl.common.WebLoadingTipDialog;
-import txl.common.po.User;
+import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import android.content.DialogInterface;
@@ -97,7 +97,7 @@ public class ModifyPasswordDialog
                 
                 WebLoadingTipDialog.getInstance(ctx).show("正在登陆...");
                 
-                User user = User.getNew();
+                Account user = Account.getNew();
                 user.userName = untv.getText().toString();
                 user.phone = user.userName;
                 user.password = password.getText().toString();
@@ -110,23 +110,23 @@ public class ModifyPasswordDialog
     }
     
     
-    class ModifyPasswordTask  extends AsyncTask<User, Void, User>{
+    class ModifyPasswordTask  extends AsyncTask<Account, Void, Account>{
         public TxlActivity ctx ;
         public ModifyPasswordTask(TxlActivity ctx){
             this.ctx = ctx;
         }
         @Override
-        protected User doInBackground(User... users)
+        protected Account doInBackground(Account... users)
         {
             //HS_TODO: 远程修改密码
             
-            User userRet = users[0];
+            Account userRet = users[0];
             userRet.modifyPasswordStatus = 1;
             
             return userRet;
         }
         @Override
-        protected void onPostExecute(User userRet)
+        protected void onPostExecute(Account userRet)
         {
             if(userRet.modifyPasswordStatus==1){
                 TxlToast.showShort(ctx, "密码修改成功!");

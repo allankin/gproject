@@ -66,13 +66,13 @@ public class MessageActivity extends Activity {
     private View smsCategoryListLayout;
     private SmsCategoryListAdapter categoryListAdapter ;
     private Button headerSlideBtn;
+    private boolean smsModuleLoaded = false;
     
     /************************************ SMS 模块变量  end ********************************************************/
     
     
     /************************************ PUSHMessage 模块变量  start ********************************************************/
     /*模块加载标识,防止重复加载数据产生性能问题*/
-    private boolean smsModuleLoaded = false;
     private boolean pushMesssageModuleLoaded = false;
     
     
