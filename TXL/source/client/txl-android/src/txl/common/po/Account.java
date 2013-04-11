@@ -105,7 +105,7 @@ public class Account {
 	private boolean encryUserInfo()
     {
         Properties userProp = new Properties();
-        userProp.put("userId", this.userId);
+        userProp.put("userId", String.valueOf(this.userId));
         userProp.put("userName", this.userName);
         userProp.put("password", this.password);
         userProp.put("phone", this.phone);

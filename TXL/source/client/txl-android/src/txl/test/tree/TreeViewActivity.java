@@ -183,18 +183,18 @@ public class TreeViewActivity extends Activity {
         public long getItemId(int position) {  
             return position;  
         }  
-  
+        //private ViewHolder holder;  
         public View getView(int position, View convertView, ViewGroup parent) {  
-            ViewHolder holder;  
-            /* if (convertView == null) { */  
-            convertView = mInflater.inflate(R.layout.test_tree_item, null);  
-            holder = new ViewHolder();  
-            holder.text = (TextView) convertView.findViewById(R.id.text);  
-            holder.icon = (ImageView) convertView.findViewById(R.id.icon);  
-            convertView.setTag(holder);  
-            /* 
-             * } else { holder = (ViewHolder) convertView.getTag(); } 
-             */  
+            ViewHolder holder; 
+            //if (convertView == null) { 
+                convertView = mInflater.inflate(R.layout.test_tree_item, null);  
+                holder = new ViewHolder();  
+                holder.text = (TextView) convertView.findViewById(R.id.text);  
+                holder.icon = (ImageView) convertView.findViewById(R.id.icon);  
+                //convertView.setTag(holder);  
+                
+            //} else { holder = (ViewHolder) convertView.getTag(); } 
+             
   
             final TreeElement obj = mfilelist.get(position);  
   
@@ -215,9 +215,6 @@ public class TreeViewActivity extends Activity {
                 holder.icon.setImageBitmap(mIconCollapse);  
             } else if (obj.isMhasChild() && (obj.isExpanded() == true)) {  
                 holder.icon.setImageBitmap(mIconExpand);  
-            } else if (!obj.isMhasChild()) {  
-                holder.icon.setImageBitmap(mIconCollapse);  
-                holder.icon.setVisibility(View.INVISIBLE);  
             }  
             return convertView;  
         }  

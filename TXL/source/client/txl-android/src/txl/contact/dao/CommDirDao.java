@@ -11,6 +11,7 @@ import txl.contact.po.CompanyUser;
 import txl.contact.po.Department;
 import txl.contact.po.ShareUser;
 import txl.log.TxLogger;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -50,8 +51,7 @@ public class CommDirDao extends BaseDao
           commDir.dirId = cursor.getInt(0); 
           commDir.name  = cursor.getString(1);
           commDir.type = 1;
-          int compId = Account.getSingle().compId;
-          commDir.departList = this.getDepartListByCompId(compId);
+          commDir.departList = this.getDepartList();
        }
        cursor.close();
        db.close();
@@ -62,8 +62,8 @@ public class CommDirDao extends BaseDao
      * @param compId
      * @return
      */
-    public List<Department> getDepartListByCompId(int compId){
-       String sql = "select dep_id,dep_name,dep_parent_id from txl_department where comp_id="+compId;
+    public List<Department> getDepartList(){
+       String sql = "select dep_id,dep_name,dep_parent_id from txl_department ";
        SQLiteDatabase db = dbHelper.getWritableDatabase();
        Cursor cursor = db.rawQuery(sql, null);
        List<Department> departmentList = new ArrayList<Department>();
@@ -100,6 +100,28 @@ public class CommDirDao extends BaseDao
        cursor.close();
        db.close();
        return companyUserList;
+    }
+    /**
+     *  获取公司所有用户信息
+     * @return
+     */
+    public List<CompanyUser> getCompUserList(){
+        String sql ="select user_id,dep_id,name,user_phone,comp_id from txl_comp_user ";
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        List<CompanyUser> companyUserList = new ArrayList<CompanyUser>();
+        while(cursor.moveToNext()){
+            CompanyUser compUser = new CompanyUser();
+            compUser.userId = cursor.getInt(0);
+            compUser.depId = cursor.getInt(1);
+            compUser.name = cursor.getString(2);
+            compUser.userPhone = cursor.getString(3);
+            compUser.compId = cursor.getInt(4);
+            companyUserList.add(compUser);
+        }
+        cursor.close();
+        db.close();
+        return companyUserList;
     }
     
     /**
@@ -151,4 +173,86 @@ public class CommDirDao extends BaseDao
          db.close();
          return commDirList;
     }
+    /**
+     * 以顶级部门返回部门树 
+     * 顶级部门的dep_parent_id为0
+     * @return
+     */
+    public Department getTopDepartmentTree(){
+        String sql = "select dep_id,dep_name,dep_parent_id from txl_department where dep_parent_id=0 ";
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        Department depart = null;
+        if(cursor.moveToNext()){
+            depart = new Department();
+            depart.depId = cursor.getInt(0);
+            depart.depName = cursor.getString(1);
+            depart.depParentId = cursor.getInt(2);
+            log.info(" top department,  depId : "+depart.depId+" ,  depName: "+depart.depName+",   parent_id: "+depart.depParentId);
+        }
+        cursor.close();
+        if(depart!=null){
+            recursiveTraversalSubDeparts(depart,db);
+        }
+        db.close();
+        return depart;
+    }
+    /**
+     * 递归遍历子部门
+     * @param depart
+     */
+    public void recursiveTraversalSubDeparts(Department depart,SQLiteDatabase db){
+        String sql = "select dep_id,dep_name,dep_parent_id from txl_department where dep_parent_id="+depart.depId; 
+        Cursor cursor = db.rawQuery(sql, null);
+        //ArrayList<Department> departmentList = new ArrayList<Department>();
+        int count = cursor.getCount();
+        if(count>0){
+            while(cursor.moveToNext()){
+                Department subDepart = new Department();
+                subDepart.depId = cursor.getInt(0);
+                subDepart.depName = cursor.getString(1);
+                subDepart.depParentId = cursor.getInt(2);
+                //departmentList.add(subDepart); 
+                depart.addChild(subDepart);
+                log.info(" subDepart ,  depId : "+subDepart.depId+" ,  depName: "+subDepart.depName+",   parent_id: "+subDepart.depParentId);
+            }
+            //depart.childList= departmentList;
+            cursor.close();
+            for(Department _depart : depart.childList){
+                recursiveTraversalSubDeparts(_depart,db);
+            }
+        }
+    }
+    
+    /**
+     * 保存部门
+     * @param departs
+     */
+    public void saveDepart(List<Department> departs){
+    	 SQLiteDatabase db = dbHelper.getWritableDatabase();
+    	 db.beginTransaction();
+    	 ContentValues cv = new ContentValues();
+    	 for(Department depart:departs){
+    		 cv.put("dep_id", depart.depId);
+             cv.put("dep_name", depart.depName);
+             cv.put("dep_parent_id", depart.depParentId);
+             cv.put("comp_id", depart.compId);
+             db.insert("txl_department", null, cv);
+    	 }
+    	 
+         db.setTransactionSuccessful();
+         db.endTransaction();
+         db.close();
+         log.info("saveDepart... size : "+departs.size());
+    }
+    /**
+     * 删除部门
+     */
+    public void deleteDepart(){
+    	SQLiteDatabase db = dbHelper.getWritableDatabase();
+    	db.delete("txl_department", null, null);
+    	db.close();
+    	log.info("deleteDepart ");
+    }
+    
 }

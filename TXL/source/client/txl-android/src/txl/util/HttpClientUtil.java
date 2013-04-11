@@ -47,11 +47,15 @@ public class HttpClientUtil
             return "";
         String body = "";
         List<NameValuePair> paramPairs = new ArrayList<NameValuePair>();
+        //HS_TODO: 测试http发送参数
+        StringBuilder sb = new StringBuilder();
         if(params!=null && !params.isEmpty()){
             for(Map.Entry<String, String> entry : params.entrySet()){
                 paramPairs.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+                sb.append(entry.getKey()+":"+entry.getValue());
             }
         }
+        log.info("request: "+path+"...params-> "+sb.toString());
         UrlEncodedFormEntity entitydata;
         try
         {

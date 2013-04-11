@@ -52,7 +52,7 @@ public class ContactCompanyUserListAdapter extends BaseAdapter
             if (convertView == null)
             {
             	holder = new ViewHolder();
-                convertView = LayoutInflater.from(mContext).inflate(R.layout.contact_personal_list_item, null);
+                convertView = LayoutInflater.from(mContext).inflate(R.layout.contact_company_user_item, null);
                 holder.nameView = (TextView) convertView.findViewById(R.id.contact_name);
                 holder.phoneView = (TextView) convertView.findViewById(R.id.contact_phone);
                 convertView.setTag(holder);

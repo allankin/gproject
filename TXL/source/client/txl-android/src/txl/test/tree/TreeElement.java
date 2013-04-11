@@ -94,7 +94,7 @@ public class TreeElement {
         this.parent = null;  
     }  
   
-    public TreeElement(String id, String outlineTitle, boolean mhasParent,  
+    /*public TreeElement(String id, String outlineTitle, boolean mhasParent,  
             boolean mhasChild, TreeElement parent, int level, boolean expanded) {  
         super();  
         this.id = id;  
@@ -107,6 +107,6 @@ public class TreeElement {
         }  
         this.level = level;  
         this.expanded = expanded;  
-    }  
+    }*/  
   
 }  

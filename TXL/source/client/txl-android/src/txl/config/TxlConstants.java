@@ -79,6 +79,9 @@ public class TxlConstants
     public static final int SETTING_HANDLER_ONLINE_STATUS = 0x0003;
     public static final int SETTING_HANDLER_LOGIN_FAIL = 0x0004;
     
+    public static final int NETWORK_HANDLER_CONNECTION_TIMEOUT = 0x0005;
+    
+    public static final int MSG_LOAD_DEPARTMENT = 0x0006;
     
     
     public static class Toast{
@@ -91,8 +94,15 @@ public class TxlConstants
     public static final int HTTP_CONNECTION_TIMEOUT = 5000;
     public static final int HTTP_SO_TIMEOUT = 10000;
     
-    public static String LOGIN_URL = "http://111.1.45.158/txlmain-manage/mobile/login.txl";
+    public static String TXLMAIN_HOST = "192.168.2.100";
+    public static int WEB_PORT = 8080;
+    public static String LOGIN_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileLogin.txl";
+    public static String SEARCH_DEPARTMENT_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/department/mobileSearch.txl";
     public static String FIND_BACK_PASSWORD_URL = "";
+
+    public static String TXLSHARE_HOST = TXLMAIN_HOST;
+    public static String SEARCH_SHARE_COMMDIR_URL =  "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBook/mobileSearch.txl";
+    public static String SEARCH_SHARE_COMMDIR_USER_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBookUser/mobileSearch.txl";
     
     public static final String DB_NAME = "txl";
     public static final int DB_VERSION = 3;
@@ -101,5 +111,14 @@ public class TxlConstants
     public static final String INTENT_BUNDLE_HEADER_TITLE = "headerTitle";
     public static final String INTENT_BUNDLE_COMMDIR_ID = "commDirId";
     public static final String INTENT_BUNDLE_COUNT = "count";
+    public static final String INTENT_BUNDLE_REQUEST_CLASS = "requestClass";
+    
+    public static final String INTENT_BUNDLE_DEPART = "depart";
+    public static final String INTENT_BUNDLE_DEPART_ID = "departId";
+    
+    public static final int REQUEST_CODE_SELECT_DEPARTMENT = 0x0001;
+    
+    public static final String ERROR_NETWORK_TIMEOUT = "网络超时";
+    public static final String TIP_QUERING = "正在查询";
     
 }

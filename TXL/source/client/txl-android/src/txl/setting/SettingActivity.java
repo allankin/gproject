@@ -2,6 +2,7 @@ package txl.setting;
 
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.common.TxlToast;
 import txl.common.login.LoginDialog;
 import txl.common.po.Account;
 import txl.config.TxlConstants;
@@ -47,6 +48,7 @@ public class SettingActivity extends TxlActivity {
 				LoginDialog.getInstance().show(me);
 			}
 		});
+		
 		
 		/*wifi提示设置开关*/
 		ToggleButton wifiTipBtn = (ToggleButton)findViewById(R.id.setting_wifi_tip_btn);

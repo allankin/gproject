@@ -6,6 +6,7 @@ import txl.config.Config;
 import txl.contact.ContactActivity;
 import txl.message.MessageActivity;
 import txl.setting.SettingActivity;
+import txl.test.tree.TreeViewActivity;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;

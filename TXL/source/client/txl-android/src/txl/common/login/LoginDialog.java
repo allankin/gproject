@@ -1,22 +1,28 @@
 package txl.common.login;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.http.client.HttpClient;
+import org.apache.http.conn.ConnectTimeoutException;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.TxlAlertDialog;
-import txl.common.TxlToast;
 import txl.common.TxlAlertDialog.DialogInvoker;
+import txl.common.TxlToast;
 import txl.common.WebLoadingTipDialog;
 import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
+import txl.util.HttpClientUtil;
 import txl.util.Tool;
 import txl.util.ValidateUtil;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.provider.ContactsContract.CommonDataKinds.Phone;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -73,10 +79,8 @@ public class LoginDialog {
                     Toast.makeText(ctx, "请输入密码", TxlConstants.Toast.SHORT).show();  
                     return;
                 }
-               
-                alert.dismiss();
-                
                 WebLoadingTipDialog.getInstance(ctx).show("正在登陆...");
+                alert.dismiss();
                 
                 Account user = Account.getSingle();
                 user.userName = untv.getText().toString();
@@ -172,25 +176,36 @@ public class LoginDialog {
 		@Override
 		protected Account doInBackground(Account... user) {
 			//HS_TODO 远程登陆
+			Map<String,String> params = new HashMap<String,String>();
+			params.put("user.account", user[0].userName);
+			params.put("user.password", user[0].password);
 			Account userRet = user[0];
-			userRet.userId= 1;
-			userRet.loginStatus=1;
-			userRet.compCode="";
-			userRet.userName="lisi";
-			userRet.password = "lisi";
-			userRet.name="李斯";
-			userRet.isSave = true;
 			
-			
-			/*登陆成功后*/
-			if(user[0].loginStatus==1){
-				/*保存用户信息*/
-				if(userRet.isSave){
-					userRet.saveUserToFS();
+			try {
+				String body = HttpClientUtil.httpPostUTF8(TxlConstants.LOGIN_URL, params);
+				body = body.trim();
+				JSONObject json = new JSONObject(body);
+				int loginStatus = json.optInt("status");
+				userRet.loginStatus=loginStatus;
+				/*登陆成功后*/
+				if(loginStatus==1){
+					JSONObject account = json.optJSONObject("account");
+					userRet.userId= account.optInt("userId");
+					userRet.compCode= account.optString("compCode");
+					userRet.name= account.optString("name");
+					userRet.isSave = true;
+					
+					/*保存用户信息*/
+					if(userRet.isSave){
+						userRet.saveUserToFS();
+					}
 				}
-				
+			} catch (ConnectTimeoutException e) {
+				WebLoadingTipDialog.getInstance(ctx).overLoadingDismiss();
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
 			}
-			
 			return userRet;
 		}
 		
@@ -200,20 +215,25 @@ public class LoginDialog {
             WebLoadingTipDialog.getInstance(ctx).dismiss();
             switch (userRet.loginStatus) {
                 case 1:
-                    Toast.makeText(ctx, "登陆成功!", TxlConstants.Toast.LONG).show();
+                    TxlToast.showLong(ctx, "登陆成功!");
                     ctx.getHandler().sendMessage(Tool.genMessage(TxlConstants.SETTING_HANDLER_ONLINE_STATUS));
-                    
                     break;
                 case 2:
-                    Toast.makeText(ctx, "用户名密码不能为空!", TxlConstants.Toast.LONG).show();
+                	TxlToast.showLong(ctx, "用户名密码不能为空!");
                 case 3:
-                    Toast.makeText(ctx, "用户名不存在 !", TxlConstants.Toast.LONG).show();
+                    TxlToast.showLong(ctx, "用户名不存在 !");
                 case 4:
-                    Toast.makeText(ctx, "密码不正确 !", TxlConstants.Toast.LONG).show();
+                    TxlToast.showLong(ctx, "密码不正确 !");
                 case 5:
-                    Toast.makeText(ctx, "账号被冻结 !", TxlConstants.Toast.LONG).show();
+                    TxlToast.showLong(ctx, "账号被冻结 !");
                 case 6:
-                    Toast.makeText(ctx, "用户没有登陆权限 !", TxlConstants.Toast.LONG).show();
+                    TxlToast.showLong(ctx, "用户没有登陆权限 !");
+                case 7:
+                	TxlToast.showLong(ctx, "产品管理员不能用手机登陆 !");
+                case 8:
+                	TxlToast.showLong(ctx, "公司管理员不能用手机登陆 !");
+                case 9:
+                	TxlToast.showLong(ctx, "您所在的公司已经过期，无法登陆 !");
                 default:
                     LoginDialog.getInstance().show(ctx);    
                     break;

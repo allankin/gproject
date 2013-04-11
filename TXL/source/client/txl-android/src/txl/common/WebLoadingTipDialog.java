@@ -33,7 +33,7 @@ public class WebLoadingTipDialog {
 	
 	public void overLoadingDismiss(){
 		if(loadingTipDialog.isShowing()){
-            Toast.makeText(ctx, "加载超时", TxlConstants.Toast.SHORT).show();
+			TxlToast.showLong(ctx, TxlConstants.ERROR_NETWORK_TIMEOUT);
             loadingTipDialog.dismiss();
         }
 	}

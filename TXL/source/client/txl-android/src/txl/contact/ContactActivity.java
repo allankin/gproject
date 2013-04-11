@@ -1,5 +1,6 @@
 package txl.contact;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -10,13 +11,15 @@ import txl.Handlable;
 import txl.activity.R;
 import txl.common.SideBar;
 import txl.config.TxlConstants;
+import txl.contact.adapter.ContactCompanyUserListAdapter;
 import txl.contact.adapter.ContactListAdapter;
 import txl.contact.adapter.ContactShareCommDirListAdapter;
 import txl.contact.dao.CommDirDao;
 import txl.contact.dao.ContactDao;
 import txl.contact.po.CommDir;
+import txl.contact.po.CompanyUser;
 import txl.contact.po.ContactVo;
-import txl.contact.po.ShareUser;
+import txl.contact.po.Department;
 import txl.util.ContactVoComparator;
 import android.app.Activity;
 import android.content.Context;
@@ -28,6 +31,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
 import android.widget.AbsListView;
@@ -36,6 +40,8 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
@@ -46,7 +52,6 @@ import android.widget.TextView;
  * @Description:
  * @Author JinChao
  * @Date 2013-2-17 下午3:54:19
- * @Copyright: 版权由 HundSun 拥有
  */
 public class ContactActivity extends Activity implements Handlable
 {
@@ -74,10 +79,10 @@ public class ContactActivity extends Activity implements Handlable
     private View personalLayout;
     /************************************* 公司通讯录 变量 *****************************************************/
     private boolean companyCommDirLoaded = false;
-
-    
-    
-    
+    private List<CompanyUser> companyUserList;
+    private ListView                      companyUserListView                 = null;
+    private ContactCompanyUserListAdapter contactCompanyUserListAdapter = null;
+    private View companyUserLayout;
     
     
     
@@ -87,7 +92,7 @@ public class ContactActivity extends Activity implements Handlable
     private List<CommDir> shareCommDirList;
     private ListView                      shareCommDirListView                 = null;
     private ContactShareCommDirListAdapter            shareCommDirListAdapter                 = null;
-    
+    private View shareLayout;
     
     
     
@@ -119,7 +124,7 @@ public class ContactActivity extends Activity implements Handlable
                 if(position==0){
                 	loadPersonalCommDir();
                 }else if(position == 1){
-                	
+                    loadCompanyCommDir();
                 }else if(position == 2){
                 	loadShareCommDir();
                 }
@@ -208,6 +213,42 @@ public class ContactActivity extends Activity implements Handlable
      */
     public void loadCompanyCommDir(){
     	commDirContainer.removeAllViews();
+    	companyUserLayout = inflater.inflate(R.layout.contact_company_commdir, commDirContainer);
+    	EditText searchTxtView = (EditText)companyUserLayout.findViewById(R.id.company_user_search);
+    	TextView depName = (TextView)companyUserLayout.findViewById(R.id.company_depName);
+    	depName.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Object obj = v.getTag();
+                Integer depId =0;
+                if(obj!=null){
+                    depId = (Integer)obj;
+                }
+                Intent intent = new Intent(me,DepartmentTreeActivity.class);
+                intent.putExtra(TxlConstants.INTENT_BUNDLE_DEPART_ID,depId);
+                me.startActivityForResult(intent,TxlConstants.REQUEST_CODE_SELECT_DEPARTMENT);
+            }
+        });
+    	
+    	Button searchBtn = (Button)companyUserLayout.findViewById(R.id.company_search_btn);
+    	searchBtn.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                
+            }
+        });
+    	
+    	
+    	
+    	companyUserList = CommDirDao.getSingle(me).getCompUserList();
+        companyUserListView                 = (ListView) companyUserLayout.findViewById(R.id.contact_company_user_list);
+        contactCompanyUserListAdapter =  new ContactCompanyUserListAdapter(me,companyUserList);
+        companyUserListView.setAdapter(contactCompanyUserListAdapter);
+     
     }
     /**
      * 加载共享通讯录
@@ -216,7 +257,7 @@ public class ContactActivity extends Activity implements Handlable
     	
     	commDirContainer.removeAllViews();
 		//if(!shareCommDirLoaded){
-			View shareLayout = inflater.inflate(R.layout.contact_share_commdir, commDirContainer);
+			shareLayout = inflater.inflate(R.layout.contact_share_commdir, commDirContainer);
 			shareCommDirListView = (ListView) shareLayout.findViewById(R.id.contact_share_commdir_list); 
 			shareCommDirList = CommDirDao.getSingle(me).getShareCommDirList();
 			shareCommDirListAdapter = new ContactShareCommDirListAdapter(this,shareCommDirList);
@@ -239,6 +280,22 @@ public class ContactActivity extends Activity implements Handlable
 		/*	shareCommDirLoaded = true;
 		}*/
     }
+    
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
+        switch (resultCode) {  
+            case TxlConstants.REQUEST_CODE_SELECT_DEPARTMENT:
+                TextView depName = (TextView)companyUserLayout.findViewById(R.id.company_depName);
+                Serializable obj = data.getSerializableExtra(TxlConstants.INTENT_BUNDLE_DEPART);
+                if(obj!=null){
+                    Department depart = (Department)obj;
+                    depName.setText(depart.depName); 
+                    depName.setTag(depart.depId);
+                }
+                break;  
+            default:  
+                break;  
+        }  
+    }  
     public Handler handler = new Handler(){
     	public void handleMessage(Message msg)
         {

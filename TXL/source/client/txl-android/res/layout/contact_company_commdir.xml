@@ -1,19 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?> 
-<RelativeLayout  
-    xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:layout_width="fill_parent"  
-    android:layout_height="fill_parent">  
-    <include layout="@layout/contact_header" 
-    	android:layout_alignParentTop="true"
-    />
+<merge xmlns:android="http://schemas.android.com/apk/res/android"  >
+    
+    <LinearLayout 
+        android:layout_height="40dp"
+    	android:layout_width="fill_parent"
+        >
+        <EditText
+	        android:id="@+id/company_user_search"
+	        android:layout_width="150dp"
+	        android:layout_height="fill_parent"
+	        android:text="" 
+	        android:textSize="25sp"
+	        />
+        
+        <TextView
+	        android:id="@+id/company_depName"
+	        android:layout_width="wrap_content"
+	        android:layout_height="fill_parent"
+	        android:text="部门选择" 
+	        android:textSize="20sp"
+	        />
+        
+        <Button
+	            android:id="@+id/company_search_btn"
+	            android:layout_width="60dp"
+	            android:layout_height="fill_parent"
+	            android:text="搜索"
+	            />
+    </LinearLayout>
+    
     
     <ListView
-        	android:id="@+id/contact_list" 
+        	android:id="@+id/contact_company_user_list" 
         	android:layout_width="wrap_content"   
             android:layout_height="wrap_content"   
-            android:layout_marginTop="54dp"
               >  
     </ListView>
     
-</RelativeLayout>
- 
+</merge>
