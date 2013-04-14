@@ -10,7 +10,8 @@
     <ListView
         	android:id="@+id/test_tree_list" 
         	android:layout_width="wrap_content"   
-              android:layout_height="wrap_content"   
+            android:layout_height="wrap_content"  
+            android:cacheColorHint="@android:color/transparent" 
               >  
     </ListView>
     

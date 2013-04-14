@@ -3,26 +3,21 @@ package txl.common.login;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.http.client.HttpClient;
-import org.apache.http.conn.ConnectTimeoutException;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.common.NetworkAsyncTask;
 import txl.common.TxlAlertDialog;
 import txl.common.TxlAlertDialog.DialogInvoker;
 import txl.common.TxlToast;
 import txl.common.WebLoadingTipDialog;
 import txl.common.po.Account;
-import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.util.HttpClientUtil;
 import txl.util.Tool;
 import txl.util.ValidateUtil;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -32,6 +27,9 @@ import android.widget.Toast;
 
 public class LoginDialog {
 	private static LoginDialog loginDialog;
+	private android.app.AlertDialog loginAlert;
+	private android.app.AlertDialog findBackAlert;
+	 
 	private LoginDialog(){
 		
 	}
@@ -42,28 +40,37 @@ public class LoginDialog {
 		return loginDialog;
 	}
 	 
-	
+	public void dismissAllAlerts(){
+		if(loginAlert!=null){
+			loginAlert = null;
+			loginAlert.dismiss();
+		}
+		if(findBackAlert!=null){
+			findBackAlert = null;
+			findBackAlert.dismiss();
+		}
+	}
 	public void show(final TxlActivity ctx){
 		final LayoutInflater factory = LayoutInflater.from(ctx);
         final View loginView = factory.inflate(R.layout.login, null);
         final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ctx);
-        builder.setTitle(Config.getInstance().getTiptitle());
+        builder.setTitle("用户登陆");
         builder.setView(loginView); 
         builder.setPositiveButton("登录", null);
         builder.setNegativeButton("取消", null);
-        final android.app.AlertDialog alert = builder.create();
-        alert.show();
+        loginAlert = builder.create();
+        loginAlert.show();
         
-        Button cancelBtn = alert.getButton(DialogInterface.BUTTON_NEGATIVE);
+        Button cancelBtn = loginAlert.getButton(DialogInterface.BUTTON_NEGATIVE);
         cancelBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-            	alert.dismiss();
+            	loginAlert.dismiss();
             }
         });
-        Button theButton = alert.getButton(DialogInterface.BUTTON_POSITIVE);
+        Button theButton = loginAlert.getButton(DialogInterface.BUTTON_POSITIVE);
         
         theButton.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -79,8 +86,8 @@ public class LoginDialog {
                     Toast.makeText(ctx, "请输入密码", TxlConstants.Toast.SHORT).show();  
                     return;
                 }
-                WebLoadingTipDialog.getInstance(ctx).show("正在登陆...");
-                alert.dismiss();
+               
+                loginAlert.dismiss();
                 
                 Account user = Account.getSingle();
                 user.userName = untv.getText().toString();
@@ -88,7 +95,7 @@ public class LoginDialog {
                 user.password = password.getText().toString();
                 
                 new LoginTask(ctx).execute(user);
-                 
+                
                 
             }
         });
@@ -103,7 +110,7 @@ public class LoginDialog {
                 final View findBackView = factory.inflate(R.layout.find_password_back, null);
                 builder.setView(findBackView);
                 builder.setPositiveButton("发送", null);
-                android.app.AlertDialog findBackAlert = builder.create();
+                findBackAlert = builder.create();
                 findBackAlert.show(); 
                 Button sendBtn = findBackAlert.getButton(DialogInterface.BUTTON_POSITIVE);
                 sendBtn.setOnClickListener(new View.OnClickListener(){
@@ -133,8 +140,7 @@ public class LoginDialog {
 	 * @author jinchao
 	 *
 	 */
-	class FindBackPasswordTask extends AsyncTask<Account, Void, Account>{
-	    public TxlActivity ctx ;
+	class FindBackPasswordTask extends NetworkAsyncTask<Account, Void, Account>{
         public FindBackPasswordTask(TxlActivity ctx){
             this.ctx = ctx;
         }
@@ -168,10 +174,13 @@ public class LoginDialog {
 	 * @author jinchao
 	 *
 	 */
-	class LoginTask extends AsyncTask<Account, Void, Account>{
-        public TxlActivity ctx ;
+	class LoginTask extends NetworkAsyncTask<Account, Void, Account>{
         public LoginTask(TxlActivity ctx){
             this.ctx = ctx;
+        }
+        @Override
+        protected void onPreExecute(){
+        	WebLoadingTipDialog.getInstance(ctx).show("正在登陆..."); 
         }
 		@Override
 		protected Account doInBackground(Account... user) {
@@ -193,6 +202,7 @@ public class LoginDialog {
 					userRet.userId= account.optInt("userId");
 					userRet.compCode= account.optString("compCode");
 					userRet.name= account.optString("name");
+					userRet.compId = account.optInt("compId");
 					userRet.isSave = true;
 					
 					/*保存用户信息*/
@@ -200,11 +210,8 @@ public class LoginDialog {
 						userRet.saveUserToFS();
 					}
 				}
-			} catch (ConnectTimeoutException e) {
-				WebLoadingTipDialog.getInstance(ctx).overLoadingDismiss();
-				e.printStackTrace();
-			} catch (JSONException e) {
-				e.printStackTrace();
+			}catch(Exception e){
+				this.dealNetworkException(e,null);
 			}
 			return userRet;
 		}
@@ -217,6 +224,7 @@ public class LoginDialog {
                 case 1:
                     TxlToast.showLong(ctx, "登陆成功!");
                     ctx.getHandler().sendMessage(Tool.genMessage(TxlConstants.SETTING_HANDLER_ONLINE_STATUS));
+                    ctx.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_LOAD_COMPANY_COMMDIR));
                     break;
                 case 2:
                 	TxlToast.showLong(ctx, "用户名密码不能为空!");

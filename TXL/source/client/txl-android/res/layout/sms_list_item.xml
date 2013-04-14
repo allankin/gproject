@@ -12,6 +12,7 @@
         android:textSize="15sp"  
         android:textIsSelectable="true"
         android:text="刘先生"
+        android:textColor="@color/listview_item_text_color"
         />  
 
    
@@ -25,6 +26,7 @@
         android:textSize="12sp" 
         android:textIsSelectable="true"
         android:text="(23)"
+        android:textColor="@color/listview_item_text_gray_color"
         />
     <TextView
         android:id="@+id/sms_date"
@@ -34,6 +36,7 @@
         android:layout_alignBottom="@+id/sms_name"
         android:text="4/2 21:30"
         android:textIsSelectable="true"
+        android:textColor="@color/listview_item_text_gray_color"
         android:textSize="12sp" />
      
 	<!-- ??? 不解，为何需要：android:layout_marginTop="20dp"  -->       
@@ -46,6 +49,7 @@
         android:textSize="15sp" 
         android:textIsSelectable="true"
         android:text="" 
+        android:textColor="@color/listview_item_text_gray_color"
         />
     
 </RelativeLayout>  

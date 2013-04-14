@@ -4,16 +4,12 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" 
     android:id="@+id/dialLayout"
+    android:focusable="true"
+    android:focusableInTouchMode="true" 
+    android:background="#e8e8e8"
     >
 	<LinearLayout style="@style/dial_liner"
 	    >
-		<Button
-	            android:id="@+id/dial_stretchBtn"
-	            android:layout_weight="1"
-	            android:layout_width="0dp"
-	            android:layout_height="fill_parent"
-	            android:text="伸缩"
-	            />			   
 	     <EditText 
 	         android:id="@+id/dial_phoneTxt"
 	         android:layout_weight="2"
@@ -104,8 +100,16 @@
 	</LinearLayout>
 	
 	<LinearLayout style="@style/dial_liner">
+	    <Button
+	            android:id="@+id/dial_stretchBtn"
+	            android:layout_weight="1"
+	            android:layout_width="0dp"
+	            android:layout_height="fill_parent"
+	            android:text="隐藏"
+	            />
 	    <Button android:id="@+id/dial_callBtn" 
-	        android:layout_width="fill_parent"
+	        android:layout_weight="2"
+	        android:layout_width="0dp"
 	        android:layout_height="fill_parent"
 	        android:text="呼叫">
 	    </Button>

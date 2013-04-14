@@ -1,21 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?> 
-<RelativeLayout  
-    xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:layout_width="fill_parent"  
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/activity_background_color"
-    >  
-    <include layout="@layout/header" 
-    	android:layout_alignParentTop="true"
-    />
-    
+    android:orientation="vertical"
+    android:background="@color/activity_background_color" >
+
+    <include
+        android:layout_alignParentTop="true"
+        layout="@layout/header" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" >
+
+        <EditText
+        android:id="@+id/share_commdir_user_search"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:textSize="15sp" />
+
+	    <Button
+	        android:id="@+id/share_commdir_user_search_btn"
+	        android:layout_width="60dp"
+	        android:layout_height="fill_parent"
+	        android:text="搜索" />
+        
+    </LinearLayout>
+
+
     <ListView
-        	android:id="@+id/contact_list" 
-        	android:layout_width="wrap_content"   
-            android:layout_height="wrap_content"   
-            android:layout_marginTop="54dp"
-              >  
+        android:id="@+id/contact_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="@android:color/transparent"
+        android:listSelector="@android:color/transparent" >
     </ListView>
-    
-</RelativeLayout>
- 
+
+</LinearLayout>

@@ -132,4 +132,55 @@ public class SettingActivity extends TxlActivity {
             
         }
 	};
+	
+	
+	@Override
+    protected void onNewIntent (Intent intent){
+       log.info("onNewIntent");
+       
+    } 
+    
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        log.info("onPause");
+        
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        log.info("onStart");
+        
+    }
+    
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        log.info("onRestart");
+        
+    }
+    
+    @Override
+    protected void onResume(){
+        super.onResume();
+        log.info("onResume");
+        
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        log.info("onStop");
+        
+    }
+    
+    @Override
+    protected void onDestroy()
+    {
+    	super.onDestroy();
+        log.info("onDestroy");
+         
+        LoginDialog.getInstance().dismissAllAlerts();
+    }
 }

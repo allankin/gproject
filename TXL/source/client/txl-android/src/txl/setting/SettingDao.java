@@ -84,6 +84,14 @@ public class SettingDao extends BaseDao implements CacheAble
     public boolean updateDialMode(String value){
     	return this.updateField("dial_mode",value);
     }
+    public boolean updateSyncCompany(String value){
+    	return this.updateField("sync_company", value);
+    }
+    
+    public boolean updateSyncShare(String value){
+    	return this.updateField("sync_share", value);
+    }
+    
     private boolean updateField(String fieldName, String value){
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         ContentValues values = new ContentValues();
@@ -101,7 +109,7 @@ public class SettingDao extends BaseDao implements CacheAble
     
     public Setting getSetting(){
         String sql ="select setting_id,wifi_tip,ad_receive,push_message,message_send_mode," +
-        		"phone_filter,dial_mode " +
+        		"phone_filter,dial_mode,sync_company,sync_share " +
         		"from txl_setting ";
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
@@ -113,6 +121,8 @@ public class SettingDao extends BaseDao implements CacheAble
             setting.messageSendMode = cursor.getInt(4);
             setting.phoneFilter = cursor.getInt(5);
             setting.dialMode = cursor.getInt(6);
+            setting.syncCompany = cursor.getInt(7);
+            setting.syncShare = cursor.getInt(8);
         }
         cursor.close();
         db.close();

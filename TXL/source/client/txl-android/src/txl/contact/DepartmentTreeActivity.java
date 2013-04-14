@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -43,8 +44,8 @@ public class DepartmentTreeActivity extends TxlActivity
     private ArrayList<Department> mPdfOutlinesCount = new ArrayList<Department>();
     private TreeViewAdapter       treeViewAdapter   = null;
 
-    private TxlActivity              me                = this;
-    
+    private DepartmentTreeActivity              me                = this;
+    private TextView headerView = null;
     private int depId;
     //private Class requestClass = null;
     @Override
@@ -53,7 +54,8 @@ public class DepartmentTreeActivity extends TxlActivity
         super.onCreate(savedInstanceState);
         final LayoutInflater inflater = LayoutInflater.from(this);
         setContentView(inflater.inflate(R.layout.contact_department_tree, null));
-        
+        headerView = (TextView)findViewById(R.id.header);
+        headerView.setText("部门选择");
         Intent intent = me.getIntent();
         if(intent!=null){
             depId = intent.getIntExtra(TxlConstants.INTENT_BUNDLE_DEPART_ID, 0);
@@ -121,7 +123,17 @@ public class DepartmentTreeActivity extends TxlActivity
         });
     }
     
-  
+    public boolean onKeyUp(int keyCode, KeyEvent event)
+    {
+        
+        switch (keyCode) {  
+            case KeyEvent.KEYCODE_BACK:
+            	finish();
+                return false;
+            default: 
+                return super.onKeyUp(keyCode, event);    
+        }
+    }
 
     private class TreeViewAdapter extends ArrayAdapter
     {
@@ -213,10 +225,10 @@ public class DepartmentTreeActivity extends TxlActivity
     }
     
     private Handler handler = new Handler(){
-	  public void handleMessage(Message msg)
+		public void handleMessage(Message msg)
 	    {
 	        if(msg.what == TxlConstants.MSG_LOAD_DEPARTMENT){
-	        	((DepartmentTreeActivity)me).loadDepartment();
+	        	me.loadDepartment();
 	        } 
 	        
 	    }

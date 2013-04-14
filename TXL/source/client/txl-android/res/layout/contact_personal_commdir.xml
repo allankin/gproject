@@ -4,16 +4,9 @@
 	        	android:id="@+id/contact_list" 
 	        	android:layout_width="wrap_content"   
 	            android:layout_height="wrap_content"   
+	            android:cacheColorHint="@android:color/transparent"
 	              >  
 	    </ListView>
-	     
-	 
-	    <txl.common.SideBar  
-	        android:id="@+id/sideBar"  
-	        android:layout_width="35dp"  
-	        android:layout_height="wrap_content" 
-	        android:layout_marginTop="54dp" 
-	        android:layout_alignParentRight="true"  /> 
     
 </merge>
  

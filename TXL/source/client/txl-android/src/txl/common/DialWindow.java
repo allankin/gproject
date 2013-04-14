@@ -4,14 +4,17 @@ import txl.activity.R;
 import txl.util.IntentUtil;
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
-import android.net.Uri;
 import android.provider.Settings;
+import android.text.InputType;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnKeyListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.PopupWindow;
@@ -28,6 +31,9 @@ public class DialWindow extends PopupWindow {
 	private static final int TONE_LENGTH_MS = 150;
 	private static final int TONE_RELATIVE_VOLUME = 80;
 	private static final int DIAL_TONE_STREAM_TYPE = AudioManager.STREAM_MUSIC;
+	private boolean isShow;
+
+	
 
 	public DialWindow(Activity context, int width, int height) {
 		super(context);
@@ -35,14 +41,41 @@ public class DialWindow extends PopupWindow {
 		inflater = LayoutInflater.from(this.context);
 
 		layout = inflater.inflate(R.layout.dial, null);
+		
+		/**
+		 * HS_TODO:  未能够捕获返回按键。 造成点击返回键后，需要点两次才能显示
+		 *
+		 */
+		layout.setOnKeyListener(new OnKeyListener() {
+			@Override
+			public boolean onKey(View v, int keyCode, KeyEvent event) {
+				if(event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_BACK){
+					DialWindow.this.dismiss();
+					isShow = false;
+				}
+				
+		        return false;
+			}
+		});
+		
 		phoneNumberView = (EditText) layout.findViewById(R.id.dial_phoneTxt);
 
+		phoneNumberView.setOnTouchListener(new OnTouchListener() {             
+            public boolean onTouch(View v, MotionEvent event) {  
+            	phoneNumberView.setInputType(InputType.TYPE_NULL); // 关闭软键盘      
+                return false;
+            }
+        });  
+		
 		Button stretchBtnView = (Button) layout
 				.findViewById(R.id.dial_stretchBtn);
 		stretchBtnView.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				DialWindow.this.dismiss();
+				if(isShow){
+					DialWindow.this.dismiss();
+					isShow = false;
+				}
 			}
 		});
 
@@ -77,7 +110,9 @@ public class DialWindow extends PopupWindow {
 		setWidth(width);
 		setHeight(height);
 		setContentView(layout);
+		setFocusable(true);
 		setupKeypad(layout);
+		setBackgroundDrawable(new BitmapDrawable());
 		mDTMFToneEnabled = Settings.System.getInt(context.getContentResolver(),
 				Settings.System.DTMF_TONE_WHEN_DIALING, 1) == 1;
 		synchronized (mToneGeneratorLock) {
@@ -98,7 +133,16 @@ public class DialWindow extends PopupWindow {
 		}
 
 	}
-
+	
+	@Override
+	public void showAtLocation(View parent, int gravity, int x, int y) {
+		if(!isShow){
+			super.showAtLocation(parent, gravity, x, y);
+			isShow = true;
+		}else{
+			isShow = false;
+		}
+	}
 	private void setupKeypad(View layout) {
 		layout.findViewById(R.id.dial_1Btn).setOnClickListener(
 				itemClickListener);
@@ -223,7 +267,7 @@ public class DialWindow extends PopupWindow {
 			mToneGenerator.startTone(tone, TONE_LENGTH_MS);
 		}
 	}
-
+	
 	private void keyPressed(int keyCode) {
 		// mHaptic.vibrate();
 		KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);

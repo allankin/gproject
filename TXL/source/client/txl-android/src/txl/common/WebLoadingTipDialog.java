@@ -1,26 +1,25 @@
 package txl.common;
 
-import txl.TxlActivity;
 import txl.config.TxlConstants;
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.widget.Toast;
 
 
 public class WebLoadingTipDialog {
 	private static WebLoadingTipDialog webLoadingTipDialog; 
 	private ProgressDialog loadingTipDialog;
 	
-	private TxlActivity ctx;
-	private WebLoadingTipDialog(TxlActivity ctx){
+	private Activity ctx;
+	private WebLoadingTipDialog(Activity ctx){
 		this.ctx = ctx;
 	}
-	public static WebLoadingTipDialog getInstance(TxlActivity  ctx){
+	public static WebLoadingTipDialog getInstance(Activity  ctx){
 		if(webLoadingTipDialog==null){
 			return webLoadingTipDialog = new WebLoadingTipDialog(ctx);
 		}
 		return webLoadingTipDialog;
 	}
+	
 	
 	public void show(String msg){
 		loadingTipDialog  = new ProgressDialog(ctx);
@@ -32,15 +31,17 @@ public class WebLoadingTipDialog {
 	}
 	
 	public void overLoadingDismiss(){
-		if(loadingTipDialog.isShowing()){
+		if(loadingTipDialog!=null && loadingTipDialog.isShowing()){
 			TxlToast.showLong(ctx, TxlConstants.ERROR_NETWORK_TIMEOUT);
             loadingTipDialog.dismiss();
+            loadingTipDialog=null;
         }
 	}
 	
 	public void dismiss(){
-		if(loadingTipDialog.isShowing()){
+		if(loadingTipDialog!=null && loadingTipDialog.isShowing()){
 			loadingTipDialog.dismiss();
+			loadingTipDialog = null;
 		}
 	}
 	

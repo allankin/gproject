@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.TxlHorizontalScrollView;
 import txl.common.TxlHorizontalScrollView.SizeCallback;
@@ -19,10 +20,10 @@ import txl.message.sms.adapter.SmsListAdapter;
 import txl.message.sms.dao.SmsDao;
 import txl.message.sms.po.SmsRecord;
 import txl.util.IntentUtil;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -37,12 +38,12 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-public class MessageActivity extends Activity {
+public class MessageActivity extends TxlActivity {
 	
 	private final TxLogger  log = new TxLogger(MessageActivity.class, TxlConstants.MODULE_ID_MESSAGE);
 	
 	private Context                       mContext        = null;
-	private TextView headerView = null;
+	//private TextView headerView = null;
 	
 	
 	
@@ -99,7 +100,7 @@ public class MessageActivity extends Activity {
 		//hScrollView = (MyHorizontalScrollView) inflater.inflate(R.layout.tab_message, null);
         setContentView(inflater.inflate(R.layout.tab_message, null));
 		//setContentView(R.layout.tab_message);
-        headerView = (TextView)findViewById(R.id.header);
+        //headerView = (TextView)findViewById(R.id.header);
         headerSlideBtn = (Button)findViewById(R.id.header_slide);
         
         messageTypeSpinner = (Spinner)findViewById(R.id.message_type);
@@ -142,7 +143,7 @@ public class MessageActivity extends Activity {
 		smsScrollListLayout = inflater.inflate(R.layout.sms_scroll_list, null);
         smsCategoryListLayout = inflater.inflate(R.layout.sms_category_scroll_list, null);
 		
-		headerView.setText("短信列表");
+		//headerView.setText("短信列表");
 		
 		smsListView = (ListView)smsScrollListLayout.findViewById(R.id.sms_list);
 		smsListView.setOnItemClickListener(new OnItemClickListener() {
@@ -173,7 +174,7 @@ public class MessageActivity extends Activity {
 		
 		headerSlideBtn.setVisibility(View.VISIBLE);
 		if(!smsModuleLoaded){
-			headerSlideBtn.setOnClickListener(new ClickListenerForScrolling(hScrollView, smsCategoryListLayout));
+			headerSlideBtn.setOnClickListener(new ClickListenerForScrolling(headerSlideBtn,hScrollView, smsCategoryListLayout));
 		}
 		
 		final View[] children = new View[] { smsCategoryListLayout, smsScrollListLayout };
@@ -190,7 +191,7 @@ public class MessageActivity extends Activity {
 		/*清理操作*/
 		messageListViewPartsContainer.removeAllViews();
 		
-		headerView.setText("推送消息列表");
+		//headerView.setText("推送消息列表");
 		headerSlideBtn.setVisibility(View.INVISIBLE);
 		pushMsgScrollListLayout = inflater.inflate(R.layout.pushmsg_scroll_list, null); 
 		pushMsgListView = (ListView)pushMsgScrollListLayout.findViewById(R.id.pushmsg_list);
@@ -218,11 +219,13 @@ public class MessageActivity extends Activity {
          * Menu must NOT be out/shown to start with.
          */
         boolean menuOut = false;
+        Button slideBtn;
 
-        public ClickListenerForScrolling(HorizontalScrollView scrollView, View menu) {
+        public ClickListenerForScrolling(Button slideBtn,HorizontalScrollView scrollView, View menu) {
             super();
             this.scrollView = scrollView;
             this.menu = menu;
+            this.slideBtn = slideBtn;
         }
 
         @Override
@@ -241,10 +244,12 @@ public class MessageActivity extends Activity {
                 // Scroll to 0 to reveal menu
                 int left = 0;
                 scrollView.smoothScrollTo(left, 0);
+                slideBtn.setBackgroundResource(R.drawable.menu_unfold_ori);
             } else {
                 // Scroll to menuWidth so menu isn't on screen.
                 int left = menuWidth;
                 scrollView.smoothScrollTo(left, 0);
+                slideBtn.setBackgroundResource(R.drawable.menu_fold_ori);
             }
             menuOut = !menuOut;
         }
@@ -280,4 +285,63 @@ public class MessageActivity extends Activity {
             }
         }
     }
+    
+    
+    
+    @Override
+    protected void onNewIntent (Intent intent){
+       log.info("onNewIntent");
+       
+    } 
+    
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        log.info("onPause");
+        
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        log.info("onStart");
+        
+    }
+    
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        log.info("onRestart");
+        
+    }
+    
+    @Override
+    protected void onResume(){
+        super.onResume();
+        log.info("onResume");
+        
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        log.info("onStop");
+        
+    }
+    
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        log.info("onDestroy");
+    }
+    
+    private Handler handler = new Handler(){
+        
+    };
+    @Override
+    public Handler getHandler()
+    {
+        return handler;
+    } 
 }

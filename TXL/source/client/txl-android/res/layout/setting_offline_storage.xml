@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?> 
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" 
+    android:id="@+id/setting_layout"
+    android:background="@color/activity_background_color"
+    >
+    <include layout="@layout/header" />
+     
+
+        <LinearLayout  
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:orientation="vertical" 
+		    >
+	        <TableLayout
+	            android:id="@+id/setting_offline_storage_table"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            >
+	            
+	            <TableRow
+	                android:id="@+id/setting_offline_storage_"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:gravity="center_vertical"
+	                >
+	                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_sync_commdir" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+	                
+	                <TextView
+	                    style="@style/setting_column2"
+	                    android:id="@+id/setting_login_label"
+	                    android:text="@string/setting_sync_company" />
+	                
+	                <TextView style="@style/setting_column3"/>
+	                
+	            </TableRow>
+	            
+	            
+	            
+	     	 </TableLayout>
+        		 
+     	 </LinearLayout>
+ 
+</LinearLayout>

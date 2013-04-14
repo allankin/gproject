@@ -82,6 +82,17 @@ public class TxlConstants
     public static final int NETWORK_HANDLER_CONNECTION_TIMEOUT = 0x0005;
     
     public static final int MSG_LOAD_DEPARTMENT = 0x0006;
+    public static final int MSG_RENDER_COMPANY_USER=0x0007;
+    public static final int MSG_LOAD_COMPANY_COMMDIR = 0x0008;
+    public static final int MSG_ACCOUNT_SESSTION_TIMEOUT = 0x0009;
+    
+    public static final int MSG_SHARE_BOOK_USER = 0x0009;
+    public static final int MSG_SHARE_COMPANY_NOT_EXIST = 0x0010;
+    public static final int MSG_SHARE_USER_NOT_EXIT = 0x0011;
+    
+    public static final int MSG_LOAD_SHARE_COMMDIR = 0x00012;
+    public static final int MSG_LOAD_SHARE_COMMDIR_USER = 0x00012;
+    public static final int MSG_SYNC_SHARE_COMMDIR_USER = 0x00013;
     
     
     public static class Toast{
@@ -94,18 +105,21 @@ public class TxlConstants
     public static final int HTTP_CONNECTION_TIMEOUT = 5000;
     public static final int HTTP_SO_TIMEOUT = 10000;
     
-    public static String TXLMAIN_HOST = "192.168.2.100";
-    public static int WEB_PORT = 8080;
+    public static String TXLMAIN_HOST = "111.1.45.158";   //192.168.2.100
+    public static int WEB_PORT = 80;//8080
     public static String LOGIN_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileLogin.txl";
     public static String SEARCH_DEPARTMENT_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/department/mobileSearch.txl";
+    public static String SEARCH_COMPANY_USER_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/s/mobileSearch.txl";
     public static String FIND_BACK_PASSWORD_URL = "";
 
     public static String TXLSHARE_HOST = TXLMAIN_HOST;
     public static String SEARCH_SHARE_COMMDIR_URL =  "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBook/mobileSearch.txl";
+    public static String SYNC_SHARE_COMMDIR_URL =  "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBook/mobileSync.txl";
+    
     public static String SEARCH_SHARE_COMMDIR_USER_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBookUser/mobileSearch.txl";
     
     public static final String DB_NAME = "txl";
-    public static final int DB_VERSION = 3;
+    public static final int DB_VERSION = 8;
     
     
     public static final String INTENT_BUNDLE_HEADER_TITLE = "headerTitle";
@@ -120,5 +134,23 @@ public class TxlConstants
     
     public static final String ERROR_NETWORK_TIMEOUT = "网络超时";
     public static final String TIP_QUERING = "正在查询";
+    public static final String TIP_SYNC = "正在同步";
     
+    public static final String SHARE_PREFERENCE_FILENAME = "app";
+    
+    public static final String TAB_ITEM_DIAL = "拨号";
+    public static final String TAB_ITEM_CONTACT = "联系人";
+    public static final String TAB_ITEM_MESSAGE = "信息";
+    public static final String TAB_ITEM_SETTING = "设置";
+    
+    
+    public static final int ACCOUNT_IS_ONLINE = 0x0001;
+    /*查询操作*/
+    public static final int ACTION_QUERY_CODE = 0x0001;
+    /*同步操作*/
+    public static final int ACTION_SYNC_CODE = 0x0002;
+    
+    
+    public static final int COMMDIR_COMPANY_TYPE = 1;
+    public static final int COMMDIR_SHARE_TYPE = 2;
 }

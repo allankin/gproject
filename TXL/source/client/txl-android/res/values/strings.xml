@@ -11,6 +11,7 @@
 	<string name="setting_modify_password_label">修改密码</string>
 	<string name="setting_dial_mode">拨打方式</string>
 	<string name="setting_sync_commdir">同步号码</string> 
+	<string name="setting_offline_storage">离线存储</string> 
 	<string name="setting_sync_company">同步公司通讯录</string>   
 	<string name="setting_sync_share">同步共享通讯录</string>
 	<string name="setting_sync_personal">同步个人通讯录</string>

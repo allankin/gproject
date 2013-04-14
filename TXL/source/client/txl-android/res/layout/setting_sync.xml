@@ -36,8 +36,15 @@
                     style="@style/setting_column2"
                     android:id="@+id/setting_login_label"
                     android:text="@string/setting_sync_company" />
-                
-                <TextView style="@style/setting_column3"/>
+                <LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+					<ToggleButton
+					   android:id="@+id/setting_sync_company_comdir_toggle"
+					   android:layout_width="wrap_content"
+					   android:layout_height="wrap_content"
+					   android:background="@drawable/switch_bg"
+					   android:textOn=""
+                		android:textOff="" />
+				</LinearLayout>
                  
                 
             </TableRow>
@@ -56,10 +63,15 @@
                     android:id="@+id/setting_login_label"
                     android:text="@string/setting_sync_share" />
                 
-				<ImageView style="@style/setting_column3"  
-                	    android:id="@+id/setting_setting_more_down_share"
-                	    android:src="@drawable/setting_more_down" 
-                	    android:layout_height="wrap_content" android:layout_width="wrap_content" />
+				<LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+					<ToggleButton
+					   android:id="@+id/setting_sync_share_commdir_toggle"
+					   android:layout_width="wrap_content"
+					   android:layout_height="wrap_content"
+					   android:background="@drawable/switch_bg"
+					   android:textOn=""
+                		android:textOff="" />
+				</LinearLayout>
                 
             </TableRow>
             

@@ -18,8 +18,11 @@ public class CommDir
     public int type;
     
     /*联系人人数*/
-    public int contactCount;
+    public int userCount;
     
     /*公司通讯录，有部门list*/
     public List<Department> departList;
+    
+    public int accessRight;
+    public int joinRight; 
 }

@@ -8,8 +8,12 @@ import java.util.List;
 import java.util.Set;
 
 import txl.Handlable;
+import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.SideBar;
+import txl.common.TxlToast;
+import txl.common.login.LoginDialog;
+import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.contact.adapter.ContactCompanyUserListAdapter;
 import txl.contact.adapter.ContactListAdapter;
@@ -17,11 +21,15 @@ import txl.contact.adapter.ContactShareCommDirListAdapter;
 import txl.contact.dao.CommDirDao;
 import txl.contact.dao.ContactDao;
 import txl.contact.po.CommDir;
+import txl.contact.po.CommDirQuery;
 import txl.contact.po.CompanyUser;
 import txl.contact.po.ContactVo;
 import txl.contact.po.Department;
+import txl.contact.po.UserQuery;
+import txl.contact.task.CampanyUserQueryTask;
+import txl.contact.task.ShareCommDirQueryTask;
+import txl.log.TxLogger;
 import txl.util.ContactVoComparator;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -30,10 +38,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.WindowManager;
 import android.view.WindowManager.LayoutParams;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -53,18 +64,18 @@ import android.widget.TextView;
  * @Author JinChao
  * @Date 2013-2-17 下午3:54:19
  */
-public class ContactActivity extends Activity implements Handlable
+public class ContactActivity extends TxlActivity implements Handlable
 {
 	
 
-    private final String          TAG                       = ContactActivity.class.getSimpleName();
-
+	private final TxLogger log = new TxLogger(ContactActivity.class, TxlConstants.MODULE_ID_CONTACT);
     Context                       mContext                  = null;
     private TextView headerView = null;
 
     private LinearLayout commDirContainer;
     private LayoutInflater inflater;
     private ContactActivity me = this;
+    private SideBar sideBar;
     
     
     /************************************* 个人通讯录 变量 *****************************************************/
@@ -107,6 +118,7 @@ public class ContactActivity extends Activity implements Handlable
         mContext = this;
         inflater = LayoutInflater.from(this);
         setContentView(inflater.inflate(R.layout.tab_contact, null));
+        sideBar =(SideBar)findViewById(R.id.sideBar);
         commDirContainer = (LinearLayout)findViewById(R.id.contact_commdir_container);
         
         Spinner commdirTypeSpinner = (Spinner)findViewById(R.id.commdir_type);
@@ -147,6 +159,19 @@ public class ContactActivity extends Activity implements Handlable
     	
     	commDirContainer.removeAllViews();
     	
+    	this.overlay = (TextView) View.inflate(this, R.layout.overlay, null);
+		getWindowManager()
+		.addView(
+				overlay,
+				new WindowManager.LayoutParams(
+						LayoutParams.WRAP_CONTENT,
+						LayoutParams.WRAP_CONTENT,
+						WindowManager.LayoutParams.TYPE_APPLICATION,
+						WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+						| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+						PixelFormat.TRANSLUCENT));
+    	
+    	
 		personalLayout = inflater.inflate(R.layout.contact_personal_commdir, commDirContainer);
 		personalListView = (ListView) personalLayout.findViewById(R.id.contact_list); 
 		/** 得到手机通讯录联系人信息 **/
@@ -167,7 +192,6 @@ public class ContactActivity extends Activity implements Handlable
 		});
 		personalListView.setOnScrollListener(new OnScrollListener() {
 			
-			
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				visible = true;
@@ -181,7 +205,7 @@ public class ContactActivity extends Activity implements Handlable
 					int visibleItemCount, int totalItemCount) {
 				if (visible) {
 					char firstLetter = contactList.get(firstVisibleItem).firstLetter;
-					if(firstLetter>0){
+					if(firstLetter!='0'){
 						overlay.setText(String.valueOf(firstLetter));
 						overlay.setVisibility(View.VISIBLE);
 					}
@@ -189,21 +213,13 @@ public class ContactActivity extends Activity implements Handlable
 			}
 		});
 		
-		this.overlay = (TextView) View.inflate(this, R.layout.overlay, null);
-		getWindowManager()
-		.addView(
-				overlay,
-				new WindowManager.LayoutParams(
-						LayoutParams.WRAP_CONTENT,
-						LayoutParams.WRAP_CONTENT,
-						WindowManager.LayoutParams.TYPE_APPLICATION,
-						WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-						| WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-						PixelFormat.TRANSLUCENT));
 		
-		SideBar sideBar = (SideBar) personalLayout.findViewById(R.id.sideBar);  
-		sideBar.setListView(personalListView); 
-		sideBar.setHandlable(this);
+		  
+		sideBar.setVisibility(View.VISIBLE);
+		if(!personalCommDirLoaded){
+			sideBar.setListView(personalListView); 
+			sideBar.setHandlable(this);
+		}
 		
     }
     
@@ -213,9 +229,20 @@ public class ContactActivity extends Activity implements Handlable
      */
     public void loadCompanyCommDir(){
     	commDirContainer.removeAllViews();
+    	sideBar.setVisibility(View.INVISIBLE);
+        if(this.overlay!=null){
+			getWindowManager().removeView(this.overlay);	
+			this.overlay = null;
+		}
+    	if(Account.getSingle().loginStatus != TxlConstants.ACCOUNT_IS_ONLINE){
+    		/*LoginDialog.getInstance().show(me);
+    		return;*/
+    		TxlToast.showLong(me, "网络未连接，将进入离线模式");
+    	}
     	companyUserLayout = inflater.inflate(R.layout.contact_company_commdir, commDirContainer);
-    	EditText searchTxtView = (EditText)companyUserLayout.findViewById(R.id.company_user_search);
-    	TextView depName = (TextView)companyUserLayout.findViewById(R.id.company_depName);
+    	final EditText searchTxtView = (EditText)companyUserLayout.findViewById(R.id.company_user_search);
+    	
+    	final TextView depName = (TextView)companyUserLayout.findViewById(R.id.company_depName);
     	depName.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -232,22 +259,36 @@ public class ContactActivity extends Activity implements Handlable
             }
         });
     	
-    	Button searchBtn = (Button)companyUserLayout.findViewById(R.id.company_search_btn);
+    	
+    	//companyUserList = CommDirDao.getSingle(me).getCompUserList();
+    	companyUserList = new ArrayList<CompanyUser>();
+        companyUserListView                 = (ListView) companyUserLayout.findViewById(R.id.contact_company_user_list);
+        companyUserListView.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				InputMethodManager imm = (InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);     
+		        imm.hideSoftInputFromWindow(searchTxtView.getWindowToken(), 0);  
+				return false;
+			}
+		});
+        contactCompanyUserListAdapter =  new ContactCompanyUserListAdapter(me,companyUserList);
+        companyUserListView.setAdapter(contactCompanyUserListAdapter);
+        
+        
+        Button searchBtn = (Button)companyUserLayout.findViewById(R.id.company_search_btn);
     	searchBtn.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                
+                UserQuery uq = new UserQuery();
+                Object tag = depName.getTag();
+                uq.depId = tag==null?0:(Integer)tag;
+                uq.name = searchTxtView.getText().toString().trim();
+                uq.compId = Account.getSingle().compId;
+                new CampanyUserQueryTask(me).execute(uq);
             }
         });
-    	
-    	
-    	
-    	companyUserList = CommDirDao.getSingle(me).getCompUserList();
-        companyUserListView                 = (ListView) companyUserLayout.findViewById(R.id.contact_company_user_list);
-        contactCompanyUserListAdapter =  new ContactCompanyUserListAdapter(me,companyUserList);
-        companyUserListView.setAdapter(contactCompanyUserListAdapter);
      
     }
     /**
@@ -259,7 +300,7 @@ public class ContactActivity extends Activity implements Handlable
 		//if(!shareCommDirLoaded){
 			shareLayout = inflater.inflate(R.layout.contact_share_commdir, commDirContainer);
 			shareCommDirListView = (ListView) shareLayout.findViewById(R.id.contact_share_commdir_list); 
-			shareCommDirList = CommDirDao.getSingle(me).getShareCommDirList();
+			shareCommDirList = new ArrayList<CommDir>();
 			shareCommDirListAdapter = new ContactShareCommDirListAdapter(this,shareCommDirList);
 			shareCommDirListView.setAdapter(shareCommDirListAdapter);
 			shareCommDirListView.setOnItemClickListener(new OnItemClickListener()
@@ -271,25 +312,58 @@ public class ContactActivity extends Activity implements Handlable
     				CommDir commDir = shareCommDirList.get(position);
     				intent.putExtra(TxlConstants.INTENT_BUNDLE_HEADER_TITLE, commDir.name);
     				intent.putExtra(TxlConstants.INTENT_BUNDLE_COMMDIR_ID, commDir.dirId);
-    				intent.putExtra(TxlConstants.INTENT_BUNDLE_COUNT, commDir.contactCount);
+    				intent.putExtra(TxlConstants.INTENT_BUNDLE_COUNT, commDir.userCount);
     				startActivity(intent);
     			}
     		});
+			Button searchBtn = (Button)shareLayout.findViewById(R.id.share_search_btn);
+			searchBtn.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					CommDirQuery cdq = new CommDirQuery();
+					EditText nameView = (EditText)shareLayout.findViewById(R.id.share_commdir_search);
+					cdq.sbName = nameView.getText().toString().trim();
+					Account account = Account.readUserFromFS();
+					/* 共享库访问， 需要携带outUserId和compCode， 这两个需要用户登陆成功后，并将其加密保存在本地  
+					 * 若为account 为null，则需要重新登陆
+					 * */
+					if(account==null || account.compCode==null){
+						LoginDialog.getInstance().show(me);
+					}else{
+						new ShareCommDirQueryTask(me).execute(cdq);
+					}
+					 
+				}
+			});
+			
 			//shareCommDirListAdapter.notifyDataSetChanged();
 			
 		/*	shareCommDirLoaded = true;
 		}*/
+			
+		sideBar.setVisibility(View.INVISIBLE);
+		if(this.overlay!=null){
+			getWindowManager().removeView(this.overlay);	
+			this.overlay = null;
+		}
     }
     
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {  
-        switch (resultCode) {  
+    	log.info(" onActivityResult  resultCode : "+resultCode);
+        switch (resultCode) { 
             case TxlConstants.REQUEST_CODE_SELECT_DEPARTMENT:
                 TextView depName = (TextView)companyUserLayout.findViewById(R.id.company_depName);
                 Serializable obj = data.getSerializableExtra(TxlConstants.INTENT_BUNDLE_DEPART);
                 if(obj!=null){
                     Department depart = (Department)obj;
+                    log.info("onActivityResult.... depName: "+depart.depName+", depId: "+depart.depId);
                     depName.setText(depart.depName); 
-                    depName.setTag(depart.depId);
+                    /*若为顶级部门 */
+                    if(depart.depParentId==0){
+                    	depName.setTag(null);
+                    }else{
+                    	depName.setTag(depart.depId);
+                    }
                 }
                 break;  
             default:  
@@ -303,6 +377,28 @@ public class ContactActivity extends Activity implements Handlable
             	me.overlay.setVisibility(View.INVISIBLE);
             }else if(msg.what == TxlConstants.CONTACT_HANDLER_OVERLAY_VISIBLE){
             	visible = true;
+            }else if(msg.what == TxlConstants.MSG_RENDER_COMPANY_USER){
+            	companyUserList.clear();
+            	List<CompanyUser> users = (List<CompanyUser>)msg.obj;
+            	for(CompanyUser user: users){
+            		companyUserList.add(user); 
+            	}
+            	contactCompanyUserListAdapter.notifyDataSetChanged();
+            }else if(msg.what == TxlConstants.MSG_LOAD_COMPANY_COMMDIR){
+            	loadCompanyCommDir();
+            }else if(msg.what == TxlConstants.MSG_SHARE_COMPANY_NOT_EXIST){
+            	TxlToast.showLong(me, "您所在的公司未开启共享!");
+            }else if(msg.what == TxlConstants.MSG_SHARE_USER_NOT_EXIT){
+            	TxlToast.showLong(me, "您的还未共享自身信息!");
+            }else if(msg.what == TxlConstants.MSG_LOAD_SHARE_COMMDIR){
+            	shareCommDirList.clear();
+            	List<CommDir> commDirs = (List<CommDir>)msg.obj;
+            	for(CommDir commDir: commDirs){
+            		shareCommDirList.add(commDir); 
+            	}
+            	shareCommDirListAdapter.notifyDataSetChanged();
+            }else if(msg.what == TxlConstants.MSG_SYNC_SHARE_COMMDIR_USER){
+            	TxlToast.showShort(me, "共享通讯录同步成功!");
             }
             
         }
@@ -312,5 +408,66 @@ public class ContactActivity extends Activity implements Handlable
 	public Handler getHandler() {
 		return this.handler;
 	}
+    
+	
+	
+	@Override
+    protected void onNewIntent (Intent intent){
+       log.info("onNewIntent");
+       
+    } 
+    
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        isRunning = false;
+        log.info("onPause");
+        if(overlay!=null){
+        	overlay.setVisibility(View.INVISIBLE);
+        }
+        
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        log.info("onStart");
+        
+    }
+    
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        log.info("onRestart");
+        
+    }
+    
+    @Override
+    protected void onResume(){
+        super.onResume();
+        isRunning = true;
+        log.info("onResume");
+        
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        log.info("onStop");
+        
+    }
+    
+    @Override
+    protected void onDestroy()
+    {
+    	super.onDestroy();
+        log.info("onDestroy");
+        
+        /*防止泄露*/
+        if(this.overlay!=null){
+        	getWindowManager().removeView(overlay);
+        	overlay = null;
+        }
+    }
     
 }

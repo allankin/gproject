@@ -9,4 +9,5 @@ public class ContactVo {
 	public String firstLetterSet;
 	/*首字母*/
 	public char firstLetter;
+	//public String firstChineseLetter;
 }

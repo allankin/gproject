@@ -5,22 +5,24 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import txl.TxlActivity;
 import txl.activity.R;
 import txl.call.po.CallRecord;
 import txl.common.DialWindow;
 import txl.config.Config;
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CallLog;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -35,7 +37,7 @@ import android.widget.TextView;
  * @Date 2013-2-17 下午4:49:03
  * @Copyright: 版权由 HundSun 拥有
  */
-public class CallRecordActivity extends Activity
+public class CallRecordActivity extends TxlActivity
 {
 
 	private Context                       mContext        = null;
@@ -57,6 +59,8 @@ public class CallRecordActivity extends Activity
     
     private SimpleDateFormat sfd = new SimpleDateFormat("MM/dd HH:mm");
     private View layout ;
+    private Button stretchBtn;
+    private static boolean showDial = false;
     
     public void onCreate(Bundle savedInstanceState)
     {
@@ -70,9 +74,9 @@ public class CallRecordActivity extends Activity
         getCallRecord();
         mAdapter = new MyListAdapter(this);
         mListView.setAdapter(mAdapter);
-        int width = getWindowManager().getDefaultDisplay().getWidth()-15;       
+        int width = getWindowManager().getDefaultDisplay().getWidth()-10;       
         //int height = getWindowManager().getDefaultDisplay().getHeight();   
-        int height = 520;
+        int height = 530;
         dw = new DialWindow(this, width, height);
         Config.tabHost.getTabWidget().getChildTabViewAt(0).setOnTouchListener(new OnTouchListener() {
 			
@@ -84,8 +88,6 @@ public class CallRecordActivity extends Activity
 				return false;
 			}
 		});
-        
-       
         
     }
     
@@ -206,22 +208,21 @@ public class CallRecordActivity extends Activity
             holder.callPhoneView.setText(cr.phoneNumber);
             holder.callDateView.setText(cr.time);
             holder.countView.setText(String.valueOf(cr.count));
-            String statusStr="";
+            int callStatusResId = R.drawable.ic_calllog_incomming_normal;
             switch (cr.type) {
 				case CallLog.Calls.INCOMING_TYPE:
-					statusStr = "来电";
+					callStatusResId = R.drawable.ic_calllog_incomming_normal;
 					break;
 				case CallLog.Calls.OUTGOING_TYPE:
-					statusStr = "拨打";
+					callStatusResId = R.drawable.ic_calllog_outgoing_nomal;
 					break;
 				case CallLog.Calls.MISSED_TYPE:
-					statusStr ="未接";
+					callStatusResId = R.drawable.ic_calllog_missed_normal;
 					break;
 				default:
 					break;
 			}
-            
-            holder.statusBtnView.setText(statusStr);
+            holder.statusBtnView.setBackgroundResource(callStatusResId);
             holder.statusBtnView.setTag(cr);
             return convertView;
         }
@@ -253,5 +254,15 @@ public class CallRecordActivity extends Activity
         }
         
     }; 
+    
+    
+    private Handler handler = new Handler(){
+        
+    };
+    @Override
+    public Handler getHandler()
+    {
+        return handler;
+    } 
 
 }

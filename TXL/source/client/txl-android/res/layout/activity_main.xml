@@ -16,7 +16,6 @@
             android:scrollbars="none" >
  -->
             <FrameLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -46,7 +45,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:background="@drawable/headerbg"
+                android:background="@color/black"
                 android:gravity="center" />
         </RelativeLayout>
     </TabHost>

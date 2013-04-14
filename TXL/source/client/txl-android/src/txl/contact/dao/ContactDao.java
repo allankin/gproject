@@ -48,6 +48,8 @@ public class ContactDao {
 
                 // 得到手机号码
                 String phoneNumber = phoneCursor.getString(0);
+                
+                log.info("getPhoneContacts... phoneNumber:"+phoneNumber);
                 if(contactPhoneSet!=null){
                 	if(contactPhoneSet.contains(phoneNumber)){
                 		continue;
@@ -83,6 +85,7 @@ public class ContactDao {
                 cv.firstLetter = cv.firstLetterSet.charAt(0);
                 cv.phone = phoneNumber;
                 cv.contactId = contactId;
+                //cv.firstChineseLetter = contactName.substring(0,1);
                 
                 //log.info("phone contacts ----- displayName: "+contactName+",phone: "+phoneNumber+",contactId: "+contactId);
                 contactList.add(cv);
@@ -124,6 +127,7 @@ public class ContactDao {
             	ContactVo cv = new ContactVo();
             	
                 String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex("number"));
+                log.info("getSIMContacts... phoneNumber:"+phoneNumber);
                 if(contactPhoneSet!=null){
                 	if(contactPhoneSet.contains(phoneNumber)){
                 		continue;

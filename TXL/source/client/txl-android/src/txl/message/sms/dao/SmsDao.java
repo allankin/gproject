@@ -89,9 +89,11 @@ public class SmsDao {
             		Integer smsIndex = smsMap.get(key);
             		if(smsIndex!=null){
             			SmsRecord _sr = smsRecordMap.get(smsIndex);
-            			/*群发短信,接收人用|间隔*/
-            			if(!_sr.address.contains(sr.address)){
-            				_sr.address+="|"+sr.address;
+            			if(_sr!=null && _sr.address!=null){
+            				/*群发短信,接收人用|间隔*/
+            				if(!_sr.address.contains(sr.address)){
+            					_sr.address+="|"+sr.address;
+            				}
             			}
             			_sr.historyList.add(sr);
             		}else{

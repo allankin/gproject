@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import txl.config.Config;
@@ -27,19 +29,21 @@ public class Account {
 	public int userId;
 	
 	public Setting setting;
+	/*共享通讯录ID List*/
+	public List<Integer> shareCommDirIdList;
 	
 	/*登陆操作返回状态：1:成功  2：用户名密码不能为空 3：用户名不存在 4：密码不正确 5：账号被冻结 6：用户没有登陆权限 */
 	public int loginStatus;
-	
+
 	public boolean isSave;
-	
+	 
 	/*找回密码返回状态：1：成功*/
 	public int findBackStatus;
 	/*修改密码状态：1：成功*/
 	public int modifyPasswordStatus;
 	
 	public int compId;
-	private static byte[]       rawKeyData    = "txl".getBytes();
+	private static byte[]       rawKeyData    = "txl123456_ak365".getBytes();
 	private static String       directoryPath = Config.DATA_PACKAGE + "user" + File.separator;	
 	private static String       fileName      = MD5Util.md5("txlUserFile");
 	private static DESUtil      ed            = new DESUtil();
@@ -54,8 +58,12 @@ public class Account {
 	 */
 	public static Account getSingle(){
 	   if(user==null){
-	       user = new Account();
+		   user = Account.readUserFromFS();
+		   if(user==null){
+			   user = new Account();
+		   }
 	       user.setting = new Setting();
+	       user.shareCommDirIdList = new ArrayList<Integer>();
 	   }
 	   return user;
 	}
@@ -73,7 +81,7 @@ public class Account {
 	
 	
 	public static Account readUserFromFS(){
-		Account user = new Account();
+		Account user = null;
         File file = new File(directoryPath + fileName);
         if (!file.exists())
         {
@@ -85,6 +93,7 @@ public class Account {
         try
         {
             userInfoProp.load(bais);
+            user = new Account();
             user.password = userInfoProp.getProperty("password");
             user.userName = userInfoProp.getProperty("userName");
             user.userId = Integer.parseInt(userInfoProp.getProperty("userId"));
@@ -139,6 +148,10 @@ public class Account {
 	
 	private void loadSetting(Context ctx){
 		SettingDao.getSingle(ctx).refreshCache();
+	}
+	
+	private void loadShareCommDirIdList(Context ctx){
+		
 	}
 	
 

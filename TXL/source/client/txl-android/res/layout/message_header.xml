@@ -8,20 +8,20 @@
     
     <Button
 	            android:id="@+id/header_slide"
-	            android:layout_width="50dp"
-	            android:layout_height="fill_parent"
-	            android:text="slide"
+	            android:layout_width="42.6dp"
+	            android:layout_height="42.6dp"
 	            android:layout_alignParentLeft="true"
 	            android:layout_centerVertical="true"
+	            android:background="@drawable/menu_unfold_ori"
 	            />		
-    <TextView
+    <!-- <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="" 
         android:textSize="25sp"
         android:layout_centerInParent="true"	
-        />
+        /> -->
     
     <Spinner
                         android:id="@+id/message_type"
@@ -29,8 +29,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawSelectorOnTop="true"
-                        android:layout_marginRight="10dp"
-                        android:layout_alignParentRight="true"
+                        android:layout_centerInParent="true"
                         android:prompt="@string/prompt_message_type" />
 
 </RelativeLayout>

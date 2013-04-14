@@ -33,11 +33,14 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@android:style/Theme.NoTitleBar"
+        android:launchMode="singleTask"
+        android:screenOrientation="portrait"
         >
         <activity
             android:name="txl.SplashActivity"
             android:label="@string/app_name" 
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
+            android:screenOrientation="portrait"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -46,21 +49,22 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="txl.MainActivity"/>
-        <activity android:name="txl.call.CallRecordActivity"/>
-        <activity android:name="txl.call.CallRecordDetailActivity"/>
+        <activity android:name="txl.MainActivity" android:launchMode="singleTask" android:screenOrientation="portrait"/>
+        <activity android:name="txl.call.CallRecordActivity" android:launchMode="singleTask" android:windowSoftInputMode="stateAlwaysHidden" android:screenOrientation="portrait"/>
+        <activity android:name="txl.call.CallRecordDetailActivity" android:launchMode="singleTask"/>
         
-        <activity android:name="txl.message.MessageActivity"/>
-        <activity android:name=".SmsActivity"/>
-        <activity android:name=".SiteActivity"/>
-        <activity android:name="txl.contact.ContactActivity"/>
-        <activity android:name="txl.contact.ShareUserActivity" />
-        <activity android:name="txl.contact.DepartmentTreeActivity" />
+        <activity android:name="txl.message.MessageActivity" android:launchMode="singleTask"/>
+        <activity android:name=".SmsActivity" android:launchMode="singleTask"/>
+        <activity android:name=".SiteActivity" android:launchMode="singleTask"/>
+        <activity android:name="txl.contact.ContactActivity" />
+        <activity android:name="txl.contact.ShareUserActivity" android:launchMode="singleTask" android:screenOrientation="portrait"/>
+        <activity android:name="txl.contact.DepartmentTreeActivity"/>
         
 
-        <activity android:name="txl.setting.SettingActivity" />
-        <activity android:name="txl.setting.SyncSettingActivity" />
+        <activity android:name="txl.setting.SettingActivity" android:launchMode="singleTask"/>
+        <activity android:name="txl.setting.SyncSettingActivity" android:launchMode="singleTask"/>
         
+        <activity android:name="txl.guide.GuideActivity" />
         
         <activity android:name="txl.test.sidecom.Main"/>
         <activity android:name="txl.test.tree.TreeViewActivity" />

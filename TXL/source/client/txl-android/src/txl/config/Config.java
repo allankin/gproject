@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import txl.SplashActivity;
+import android.app.Activity;
 import android.content.Context;
 import android.widget.TabHost;
 
@@ -50,6 +51,8 @@ public class Config
     
     public static SplashActivity launcher = null;
     public static TabHost tabHost;
+    /*tab应用,缓存tab context */
+    public static Activity mainContext;
     
     public static final int CHECKING_UPGRADE = 0x005;
     public static final int DOWNLOADING_RES = 0x006;

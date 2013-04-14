@@ -13,6 +13,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.HttpConnectionParams;
@@ -20,7 +21,6 @@ import org.apache.http.util.EntityUtils;
 
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
-import txl.message.MessageActivity;
 
 /**
  * @ClassName:  HttpClientUtil.java
@@ -41,8 +41,9 @@ public class HttpClientUtil
      * @param enc
      * @return
      * @throws ConnectTimeoutException  超时异常抛出，由调用者处理。
+     * @throws HttpHostConnectException 
      */
-    public static String httpPost(String path, Map<String, String> params, String enc) throws ConnectTimeoutException {
+    public static String httpPost(String path, Map<String, String> params, String enc) throws ConnectTimeoutException, HttpHostConnectException {
         if(path==null||path.length()==0)
             return "";
         String body = "";
@@ -78,6 +79,9 @@ public class HttpClientUtil
         catch(ConnectTimeoutException e){
             throw e;
         }
+        catch(HttpHostConnectException e){
+        	throw e;
+        }
         catch (UnsupportedEncodingException e)
         {
             e.printStackTrace();
@@ -94,7 +98,7 @@ public class HttpClientUtil
         return body;
     }
     
-    public static String httpPostUTF8(String path, Map<String, String> params)throws ConnectTimeoutException{
+    public static String httpPostUTF8(String path, Map<String, String> params)throws ConnectTimeoutException, HttpHostConnectException{
         return httpPost(path, params, "utf-8");
     } 
 }

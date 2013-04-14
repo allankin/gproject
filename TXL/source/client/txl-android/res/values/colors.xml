@@ -7,4 +7,6 @@
     <color name="black">#000000</color>
     <color name="blue">#3366CC</color>
     <color name="activity_background_color">#FFFFFF</color>
+    <color name="listview_item_text_color">#000000</color>
+    <color name="listview_item_text_gray_color">#cccccc</color>
 </resources>

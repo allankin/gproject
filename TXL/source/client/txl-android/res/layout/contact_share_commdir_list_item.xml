@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>  
   
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:layout_width="fill_parent" android:layout_height="40dp">  
+    android:layout_width="fill_parent" android:layout_height="40dp" android:paddingLeft="5dp"
+    android:descendantFocusability="blocksDescendants"
+    >  
     <!-- <ImageView android:id="@+id/color_image"  
         android:layout_width="40dip" android:layout_height="40dip" /> -->  
     <TextView android:id="@+id/contact_share_commdir_name"  
@@ -12,6 +14,7 @@
         android:textSize="20sp"  
         android:textIsSelectable="true"
         android:text="dd"
+        android:textColor="@color/listview_item_text_color"
         />  
     <TextView android:id="@+id/contact_share_commdir_count"  
         android:layout_width="wrap_content" 
@@ -19,7 +22,18 @@
         android:singleLine="true"  
         android:textSize="15sp"
         android:textIsSelectable="true"
+        android:layout_toRightOf="@id/contact_share_commdir_name"
+        android:layout_marginLeft="10dp"
+        android:textColor="@color/listview_item_text_gray_color"
+        android:layout_centerVertical="true"
+        /> 
+        
+    <Button android:layout_width="wrap_content" 
+        android:layout_height="wrap_content" 
         android:layout_alignParentRight="true"
-        android:text="(20)"
-        />  
+        android:text="同"
+        android:id="@+id/share_commdir_sync_btn"
+        android:focusable="false"
+        />
+     
 </RelativeLayout>  

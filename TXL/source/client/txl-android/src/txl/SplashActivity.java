@@ -4,12 +4,13 @@ import txl.activity.R;
 import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.ConfigParser;
+import txl.config.TxlConstants;
+import txl.log.TxLogger;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -23,8 +24,7 @@ import android.widget.Toast;
 public class SplashActivity extends Activity
 {
     public static final int SHOW_CONNECT_TOAST = 0x0001;
-    private static final String TAG = SplashActivity.class.getSimpleName();
-    
+    private TxLogger log =null;    
     private TextView progressMessage;
     private ProgressBar progressBar;
     public static boolean finished = false;
@@ -48,6 +48,7 @@ public class SplashActivity extends Activity
         setContentView(R.layout.splashlanch);
         Config.launcher = this;
         ConfigParser.init(this);
+        log = new TxLogger(SplashActivity.class, TxlConstants.MODULE_ID_SPLASHSCREEN);
         
         new TxlDbHelper(this).getWritableDatabase().close();
         Account.getSingle().load(this);
@@ -71,7 +72,6 @@ public class SplashActivity extends Activity
         public void handleMessage(Message msg)
         {
             if(msg.what == Config.CHECKING_UPGRADE){
-                Log.d(TAG, "CHECKING_UPGRADE....");
                 setProgressMessage("正在检查更新...");
             }else if(msg.what == Config.DOWNLOADING_RES){
                 progressBar.setProgress(1);
@@ -130,5 +130,51 @@ public class SplashActivity extends Activity
             }
         }
     };*/
+    @Override
+    protected void onNewIntent (Intent intent){
+       log.info("onNewIntent");
+       
+    } 
     
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        log.info("onPause");
+        
+    }
+
+    @Override
+    protected void onStart(){
+        super.onStart();
+        log.info("onStart");
+        
+    }
+    
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        log.info("onRestart");
+        
+    }
+    
+    @Override
+    protected void onResume(){
+        super.onResume();
+        log.info("onResume");
+        
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        log.info("onStop");
+        
+    }
+    
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        log.info("onDestroy");
+    }
 }

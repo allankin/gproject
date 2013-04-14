@@ -40,6 +40,27 @@ public class TxlDbHelper extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
+    	createDB(db);
+        
+        //db.execSQL("CREATE TABLE apps (apps_id integer primary key autoincrement,app_name text,full_name text,package_name text )");
+        
+        //db.execSQL("CREATE TABLE traffic_stat(stat_id integer primary key autoincrement,network_rxbytes integer,network_txbytes integer,app_package_name varchar(100),stat_datetime timestamp)");
+        
+        //db.execSQL("CREATE TABLE traffic_stat_custom(app_package_name varchar(100) primary key, network_rxbytes_start integer default 0,network_txbytes_start integer default 0)");
+        
+        //HS_TODO: test
+        //test(db);
+        
+        //db.close();
+    }
+    
+    private void createDB(SQLiteDatabase db){
+    	db.execSQL("DROP TABLE IF EXISTS txl_setting");
+        db.execSQL("DROP TABLE IF EXISTS txl_comm_dir");
+        db.execSQL("DROP TABLE IF EXISTS txl_department");
+        db.execSQL("DROP TABLE IF EXISTS txl_comp_user");
+        db.execSQL("DROP TABLE IF EXISTS txl_share_user");
+        db.execSQL("DROP TABLE IF EXISTS txl_setting");
         
         db.execSQL("CREATE TABLE txl_setting (setting_id integer primary key autoincrement," +
         		"wifi_tip char(1)," +
@@ -47,14 +68,18 @@ public class TxlDbHelper extends SQLiteOpenHelper
         		"push_message char(1),"+
         		"message_send_mode char(1)," +
         		"phone_filter char(1)," +
-        		"dial_mode char(1)"+
+        		"dial_mode char(1),"+
+        		"sync_company char(1),"+
+        		"sync_share char(1)"+
         		")");
         
         db.execSQL("CREATE TABLE txl_comm_dir (dir_id integer primary key,"+
                 "name varchar(100),"+
-                "type char(1)" +
+                "type char(1)," +
+                "access_right char(1),"+
+                "join_right char(1)"+
                 ")");
-        
+       
         db.execSQL("CREATE TABLE  txl_department (dep_id integer primary key," +
         		"dep_name  varchar(20)," +
         		"dep_parent_id  integer," +
@@ -67,8 +92,8 @@ public class TxlDbHelper extends SQLiteOpenHelper
         		"name varchar(20)," +
         		"user_phone varchar(20)" +
         		")");
-        
-        db.execSQL("CREATE TABLE  txl_share_user(user_id integer primary key," +
+       
+        db.execSQL("CREATE TABLE  txl_share_user(user_id integer," +
                 "dir_id integer," +
                 "name varchar(20)," +
                 "user_phone varchar(20)," +
@@ -85,17 +110,6 @@ public class TxlDbHelper extends SQLiteOpenHelper
         		"1,1,1,1,1," +
         		"1)";
         db.execSQL(sql);
-        
-        //db.execSQL("CREATE TABLE apps (apps_id integer primary key autoincrement,app_name text,full_name text,package_name text )");
-        
-        //db.execSQL("CREATE TABLE traffic_stat(stat_id integer primary key autoincrement,network_rxbytes integer,network_txbytes integer,app_package_name varchar(100),stat_datetime timestamp)");
-        
-        //db.execSQL("CREATE TABLE traffic_stat_custom(app_package_name varchar(100) primary key, network_rxbytes_start integer default 0,network_txbytes_start integer default 0)");
-        
-        //HS_TODO: test
-        test(db);
-        
-        //db.close();
     }
      
     private void test(SQLiteDatabase db){
@@ -266,9 +280,8 @@ public class TxlDbHelper extends SQLiteOpenHelper
     {
         log.info("db upgrade .....");
         //this.backUp();
-        
-        boolean flag = context.deleteDatabase(TxlConstants.DB_NAME); 
-        log.info("drop db ....  "+flag);
+        createDB(db);
+
     }
  
     public boolean backUp(){
