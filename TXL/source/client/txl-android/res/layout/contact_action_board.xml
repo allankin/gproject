@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView 
+       	style="@style/contact_action_liner"
+        android:id="@+id/contact_action_call"
+        android:text="拨打电话"
+        />
+     
+    <TextView
+        style="@style/contact_action_liner"
+        android:id="@+id/contact_action_send_sms"
+        android:text="发送短信"
+        />
+    
+     <TextView
+         style="@style/contact_action_liner"
+        android:id="@+id/contact_action_send_pushmessage"
+        android:text="发送推送消息"
+       /> 
+        
+</LinearLayout>

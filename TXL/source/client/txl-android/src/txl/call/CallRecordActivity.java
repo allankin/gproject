@@ -9,7 +9,11 @@ import txl.TxlActivity;
 import txl.activity.R;
 import txl.call.po.CallRecord;
 import txl.common.DialWindow;
+import txl.common.TxlAlertDialog;
 import txl.config.Config;
+import txl.config.TxlConstants;
+import txl.log.TxLogger;
+import txl.util.IntentUtil;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +29,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -35,11 +41,10 @@ import android.widget.TextView;
  * @Description:
  * @Author JinChao
  * @Date 2013-2-17 下午4:49:03
- * @Copyright: 版权由 HundSun 拥有
  */
 public class CallRecordActivity extends TxlActivity
 {
-
+	private final TxLogger  log = new TxLogger(CallRecordActivity.class, TxlConstants.MODULE_ID_CONTACT);
 	private Context                       mContext        = null;
 	private ListView                      mListView       = null;
 	private MyListAdapter                 mAdapter       = null;
@@ -62,6 +67,8 @@ public class CallRecordActivity extends TxlActivity
     private Button stretchBtn;
     private static boolean showDial = false;
     
+    private CallRecordActivity me = this;
+    
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -71,9 +78,55 @@ public class CallRecordActivity extends TxlActivity
         tv.setText("通话记录");
         mContext = this;
         mListView = (ListView)findViewById(R.id.call_list);
+        
         getCallRecord();
         mAdapter = new MyListAdapter(this);
         mListView.setAdapter(mAdapter);
+        
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				log.info("position:"+position+" id: "+id);
+				final CallRecord callRecord = callRecordMap.get(position);
+				View actionBoardView = LayoutInflater.from(me).inflate(R.layout.contact_action_board,null);
+				/*拨打电话*/
+				TextView actionCall = (TextView)actionBoardView.findViewById(R.id.contact_action_call);
+				actionCall.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						me.startActivity(IntentUtil.getCallIntent(callRecord.phoneNumber));
+						TxlAlertDialog.alert.dismiss();
+					}
+				});
+				/*发送sms*/
+				TextView actionSendSms = (TextView)actionBoardView.findViewById(R.id.contact_action_send_sms);
+				actionSendSms.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						me.startActivity(IntentUtil.getSmsSendDialogIntent("",callRecord.phoneNumber));
+						TxlAlertDialog.alert.dismiss();
+					}
+				});
+				
+				
+				/*发送推送消息*/
+				TextView actionSendPushMessage = (TextView)actionBoardView.findViewById(R.id.contact_action_send_pushmessage);
+				actionSendPushMessage.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						//HS_TODO: 打开消息推送编辑activity
+						
+						
+						TxlAlertDialog.alert.dismiss();
+					}
+				});
+				TxlAlertDialog.show(me, actionBoardView, "", null);
+			}
+        	
+		});
+        
         int width = getWindowManager().getDefaultDisplay().getWidth()-10;       
         //int height = getWindowManager().getDefaultDisplay().getHeight();   
         int height = 530;

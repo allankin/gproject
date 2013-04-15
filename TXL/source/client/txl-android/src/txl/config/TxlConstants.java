@@ -93,6 +93,8 @@ public class TxlConstants
     public static final int MSG_LOAD_SHARE_COMMDIR = 0x00012;
     public static final int MSG_LOAD_SHARE_COMMDIR_USER = 0x00012;
     public static final int MSG_SYNC_SHARE_COMMDIR_USER = 0x00013;
+    public static final int MSG_LOGIN_OFFLINE_STATUS = 0x00014;
+    public static final int MSG_LOGOUT_SUCCESS = 0x00015;
     
     
     public static class Toast{
@@ -108,15 +110,23 @@ public class TxlConstants
     public static String TXLMAIN_HOST = "111.1.45.158";   //192.168.2.100
     public static int WEB_PORT = 80;//8080
     public static String LOGIN_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileLogin.txl";
+    public static String LOGOUT_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileLogout.txl";
+    public static String FIND_BACK_PASSWORD_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileFindBackPassword.naf";
+    public static String MODIFY_PASSWORD_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileModifyPassword.naf";
+    
     public static String SEARCH_DEPARTMENT_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/department/mobileSearch.txl";
     public static String SEARCH_COMPANY_USER_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/s/mobileSearch.txl";
-    public static String FIND_BACK_PASSWORD_URL = "";
 
+    
+    
     public static String TXLSHARE_HOST = TXLMAIN_HOST;
     public static String SEARCH_SHARE_COMMDIR_URL =  "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBook/mobileSearch.txl";
     public static String SYNC_SHARE_COMMDIR_URL =  "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBook/mobileSync.txl";
-    
     public static String SEARCH_SHARE_COMMDIR_USER_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBookUser/mobileSearch.txl";
+    
+    
+    
+    
     
     public static final String DB_NAME = "txl";
     public static final int DB_VERSION = 8;

@@ -3,6 +3,8 @@ package txl.common.login;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
 import org.json.JSONObject;
 
 import txl.TxlActivity;
@@ -108,6 +110,11 @@ public class LoginDialog {
             public void onClick(View v)
             {
                 final View findBackView = factory.inflate(R.layout.find_password_back, null);
+                final EditText findBack = (EditText)findBackView.findViewById(R.id.find_password_back_phone);
+                String phone = Account.getSingle().phone;
+                if(phone!=null){
+                	findBack.setText(phone);
+                }
                 builder.setView(findBackView);
                 builder.setPositiveButton("发送", null);
                 findBackAlert = builder.create();
@@ -118,7 +125,6 @@ public class LoginDialog {
                     @Override
                     public void onClick(View v)
                     {
-                        EditText findBack = (EditText)findBackView.findViewById(R.id.find_password_back_phone);
                         String phone = findBack.getText().toString().trim();
                         if(ValidateUtil.isPhoneNumber(phone)){
                            Account user = Account.getNew();
@@ -145,28 +151,41 @@ public class LoginDialog {
             this.ctx = ctx;
         }
         @Override
+        protected void onPreExecute(){
+        	WebLoadingTipDialog.getInstance(ctx).show("正在查找..."); 
+        }
+        
+        @Override
         protected Account doInBackground(Account... users)
         {
-            //HS_TODO: 远程找回密码
-            
-            Account userRet = users[0];
-            userRet.findBackStatus = 1;
-            
-            return userRet;
+        	Account user = users[0];
+            Map<String,String> params = new HashMap<String, String>();
+            params.put("user.userName", user.phone);
+            params.put("user.userPhone", user.phone);
+            try {
+				String body = HttpClientUtil.httpPostUTF8(TxlConstants.FIND_BACK_PASSWORD_URL, params);
+				JSONObject jobj = new JSONObject(body);
+				int status = jobj.optInt("status");
+				user.findBackStatus = status;
+			} catch(Exception e){
+				this.dealNetworkException(e,null);
+				/*若出异常，则将user赋为null*/
+				user = null;
+			}
+            return user;
         }
         @Override
         protected void onPostExecute(Account userRet)
         {
-            if(userRet.findBackStatus==1){
-                TxlAlertDialog.show(ctx, "短信已经发出,请注意查收", "确定", new DialogInvoker()
-                {
-                    @Override
-                    public void doInvoke(DialogInterface dialog, int btndex)
-                    {
-                        
-                    }
-                });
-            }
+        	WebLoadingTipDialog.getInstance(ctx).dismiss();
+        	if(userRet!=null){
+        		if(userRet.findBackStatus==1){
+                    TxlToast.showShort(ctx, "短信已经发出,请注意查收");
+                    findBackAlert.dismiss();
+                }else{
+                	TxlToast.showShort(ctx, "对不起，无法找到该用户，请核对！");
+                }
+        	}
         }
 	}
 	/**
@@ -202,6 +221,7 @@ public class LoginDialog {
 					userRet.userId= account.optInt("userId");
 					userRet.compCode= account.optString("compCode");
 					userRet.name= account.optString("name");
+					userRet.phone= account.optString("phone");
 					userRet.compId = account.optInt("compId");
 					userRet.isSave = true;
 					
@@ -228,25 +248,46 @@ public class LoginDialog {
                     break;
                 case 2:
                 	TxlToast.showLong(ctx, "用户名密码不能为空!");
+                	loginFail();
+                	break;
                 case 3:
                     TxlToast.showLong(ctx, "用户名不存在 !");
+                    loginFail();
+                    break;
                 case 4:
                     TxlToast.showLong(ctx, "密码不正确 !");
+                    loginFail();
+                    break;
                 case 5:
                     TxlToast.showLong(ctx, "账号被冻结 !");
+                    loginFail();
+                    break;
                 case 6:
                     TxlToast.showLong(ctx, "用户没有登陆权限 !");
+                    loginFail();
+                    break;
                 case 7:
                 	TxlToast.showLong(ctx, "产品管理员不能用手机登陆 !");
+                	loginFail();
+                	break;
                 case 8:
                 	TxlToast.showLong(ctx, "公司管理员不能用手机登陆 !");
+                	loginFail();
+                	break;
                 case 9:
                 	TxlToast.showLong(ctx, "您所在的公司已经过期，无法登陆 !");
+                	loginFail();
+                	break;
                 default:
                     LoginDialog.getInstance().show(ctx);    
                     break;
             }
         }
+		
+		private void loginFail(){
+			LoginDialog.getInstance().show(ctx);
+			ctx.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_LOGIN_OFFLINE_STATUS));
+		}
 	}
 }
 	

@@ -62,7 +62,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 	}
 
 	/**
-	 * 根据公司id获取部门列表
+	 * 获取部门列表
 	 * 
 	 * @param compId
 	 * @return
@@ -79,6 +79,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 			depart.depParentId = cursor.getInt(2);
 			departmentList.add(depart);
 		}
+		log.info(" getDepartList  count : "+departmentList.size());
 		cursor.close();
 		db.close();
 		return departmentList;

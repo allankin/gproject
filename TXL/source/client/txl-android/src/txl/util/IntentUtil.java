@@ -253,14 +253,18 @@ public class IntentUtil
      * 获取短信发送编辑框
      * 
      * @param content
+     * @param phoneNumber 若为null，则不传接收人号码
      * @return
      */
-    public static Intent getSmsSendDialogIntent(String content)
+    public static Intent getSmsSendDialogIntent(String content,String phoneNumber)
     {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.putExtra("sms_body", content);
-        intent.setType("vnd.android-dir/mms-sms");
-        return intent;
+        Intent sendIntent = new Intent(Intent.ACTION_VIEW); 
+        sendIntent.putExtra("sms_body", content); 
+        sendIntent.setType("vnd.android-dir/mms-sms"); 
+        if(phoneNumber!=null && phoneNumber.length()>0){
+        	sendIntent.putExtra("address", phoneNumber);
+        }
+        return sendIntent;
     }
 
     /**

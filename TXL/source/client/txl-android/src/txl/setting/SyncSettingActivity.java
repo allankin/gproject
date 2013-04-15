@@ -4,6 +4,7 @@ import java.util.List;
 
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.common.TxlAlertDialog;
 import txl.common.TxlToast;
 import txl.common.login.LoginDialog;
 import txl.common.po.Account;
@@ -18,6 +19,8 @@ import txl.contact.task.CampanyUserQueryTask;
 import txl.contact.task.DepartmentQueryTask;
 import txl.contact.task.ShareCommDirUserQueryTask;
 import txl.log.TxLogger;
+import txl.util.Tool;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -55,8 +58,29 @@ private final TxLogger  log = new TxLogger(SyncSettingActivity.class, TxlConstan
 				SettingDao settingDao = SettingDao.getSingle(me);
 				settingDao.updateSyncCompany(isChecked?"1":"0");
 				if(isChecked){
-					/* 先 同步部门 */
-					new DepartmentQueryTask(me,TxlConstants.ACTION_SYNC_CODE).execute();
+					/*是否有wifi提醒设置*/
+					if(Account.getSingle().setting.wifiTip==1){
+						if(!Tool.isWifi(me)){
+							TxlAlertDialog.show(me, "未连接至wifi，确定同步吗？", "确定,取消", new TxlAlertDialog.DialogInvoker(){
+								@Override
+								public void doInvoke(DialogInterface dialog,
+										int btndex) {
+									if(btndex == TxlAlertDialog.FIRST_BTN_INDEX){
+										/* 先 同步部门 */
+										new DepartmentQueryTask(me,TxlConstants.ACTION_SYNC_CODE).execute();
+									} 
+								}
+								
+							});
+						}else{
+							/* 先 同步部门 */
+							new DepartmentQueryTask(me,TxlConstants.ACTION_SYNC_CODE).execute();
+						}
+					}else{
+						/* 先 同步部门 */
+						new DepartmentQueryTask(me,TxlConstants.ACTION_SYNC_CODE).execute();
+					}
+					
 					
 				}
 			}

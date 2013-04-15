@@ -69,7 +69,23 @@ public class Tool {
 		return false;
 	}
 	
- 
+	public static boolean isWifi(Context context){
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); 
+		NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo();
+		if(activeNetInfo!=null  && activeNetInfo.getType()==ConnectivityManager.TYPE_WIFI){
+			return true;
+		} 
+		return false;
+	}
+	
+	public static boolean is3G(Context context){
+		ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE); 
+		NetworkInfo activeNetInfo = connectivityManager.getActiveNetworkInfo(); 
+		if(activeNetInfo!=null && activeNetInfo.getType()==ConnectivityManager.TYPE_MOBILE) {
+			return true;
+		}
+		return false;
+	}
 	
 	public static void sendLauncherMessage(int what){
         Message msg = new Message(); 

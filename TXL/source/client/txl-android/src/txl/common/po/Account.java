@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.Properties;
 
 import txl.config.Config;
+import txl.config.TxlConstants;
+import txl.log.TxLogger;
 import txl.setting.Setting;
 import txl.setting.SettingDao;
 import txl.util.DESUtil;
@@ -18,6 +20,8 @@ import android.content.Context;
  
 
 public class Account {
+	
+	private static TxLogger log = new TxLogger(Account.class, TxlConstants.MODULE_ID_BASE);
 	/*用户名*/
 	public String userName;
 	public String name;
@@ -100,7 +104,7 @@ public class Account {
             user.name = userInfoProp.getProperty("name");
             user.phone = userInfoProp.getProperty("phone");
             user.compCode = userInfoProp.getProperty("compCode");
-            		
+            log.info("readUserFromFS : password:"+user.password+",userName: "+user.userName+",userId:"+user.userId+",name:"+user.name+",phone:"+user.phone+",compCode:"+user.compCode);	
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -136,7 +140,7 @@ public class Account {
             return false;
         }
         ed.encryString(rawKeyData, filePath, filePath);
-
+        log.info("readUserFromFS : password:"+this.password+",userName: "+this.userName+",userId:"+this.userId+",name:"+this.name+",phone:"+this.phone+",compCode:"+this.compCode);	
         return true;
     }
 	

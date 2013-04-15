@@ -1,12 +1,23 @@
 package txl.setting;
 
+import org.apache.http.conn.ConnectTimeoutException;
+import org.apache.http.conn.HttpHostConnectException;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.common.TxlAlertDialog;
 import txl.common.TxlToast;
+import txl.common.WebLoadingTipDialog;
 import txl.common.login.LoginDialog;
+import txl.common.login.ModifyPasswordDialog;
 import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
+import txl.util.HttpClientUtil;
+import txl.util.Tool;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
@@ -14,11 +25,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -42,13 +55,79 @@ public class SettingActivity extends TxlActivity {
 		log.info("setting    dialMode : "+setting.dialMode);
 		
 		TableRow statusTr = (TableRow)findViewById(R.id.setting_status);
+		
+		/*设置退出监听*/
 		statusTr.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				LoginDialog.getInstance().show(me);
+				TextView loginStatusView = (TextView)findViewById(R.id.setting_login_label);
+				if(loginStatusView.getText().equals("登陆")){
+					LoginDialog.getInstance().show(me);
+				}else if(loginStatusView.getText().equals("退出")){
+					TxlAlertDialog.show(me, "确定退出吗？", "确定,取消", new TxlAlertDialog.DialogInvoker(){
+						
+						@Override
+						public void doInvoke(DialogInterface dialog, int btndex) {
+							if(btndex == TxlAlertDialog.FIRST_BTN_INDEX){
+								WebLoadingTipDialog.getInstance(me).show("正在退出..."); 
+								new Thread(new Runnable() {
+									public void run() {
+										try {
+											String body = HttpClientUtil.httpPostUTF8(TxlConstants.LOGOUT_URL, null);
+											JSONObject jobj = new JSONObject(body);
+											final int status = jobj.optInt("status");
+											me.runOnUiThread(new Runnable() {
+												public void run() {
+													if(status==-2){
+														TxlToast.showShort(me, "您已经退出！");
+													}else if(status==-1){
+														TxlToast.showShort(me, "会话过期，您已经退出！");
+													}
+												}
+											});
+											me.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_LOGIN_OFFLINE_STATUS));
+										} catch (HttpHostConnectException e) {
+											me.runOnUiThread(new Runnable() {
+												public void run() {
+													TxlToast.showShort(me, "网络未连接！");
+												}
+											});
+											e.printStackTrace();
+										} catch (ConnectTimeoutException e) {
+											me.runOnUiThread(new Runnable() {
+												public void run() {
+													WebLoadingTipDialog.getInstance(me).overLoadingDismiss();
+												}
+											});
+											e.printStackTrace();
+										} catch (JSONException e) {
+											e.printStackTrace();
+										}
+										me.runOnUiThread(new Runnable() {
+											public void run() {
+												WebLoadingTipDialog.getInstance(me).dismiss();
+											}
+										});
+									}
+								}).start();
+							}else if(btndex == TxlAlertDialog.SENCOND_BTN_INDEX){
+								
+							}
+						}
+						
+					});
+				}
 			}
 		});
 		
+		
+		TableRow mptr = (TableRow)findViewById(R.id.setting_modify_password);
+		mptr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ModifyPasswordDialog.getInstance().show(me);
+			}
+		});
 		
 		/*wifi提示设置开关*/
 		ToggleButton wifiTipBtn = (ToggleButton)findViewById(R.id.setting_wifi_tip_btn);
@@ -127,8 +206,15 @@ public class SettingActivity extends TxlActivity {
         {
             if(msg.what == TxlConstants.SETTING_HANDLER_ONLINE_STATUS){
             	TextView loginStatusView = (TextView)findViewById(R.id.setting_login_label);
-            	loginStatusView.setText("已在线");
-            } 
+            	ImageView stateImage = (ImageView)findViewById(R.id.setting_state_image);
+            	stateImage.setImageResource(R.drawable.state_online);
+            	loginStatusView.setText("退出");
+            }else if(msg.what == TxlConstants.MSG_LOGIN_OFFLINE_STATUS){
+            	TextView loginStatusView = (TextView)findViewById(R.id.setting_login_label);
+            	ImageView stateImage = (ImageView)findViewById(R.id.setting_state_image);
+            	stateImage.setImageResource(R.drawable.state_offline);
+            	loginStatusView.setText("登陆");
+            }
             
         }
 	};

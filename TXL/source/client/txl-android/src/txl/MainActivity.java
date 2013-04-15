@@ -37,7 +37,12 @@ public class MainActivity extends TabActivity
         super.onCreate(savedInstanceState);
         ConfigParser.init(me);
         log = new TxLogger(MainActivity.class, TxlConstants.MODULE_ID_SPLASHSCREEN);
-        boolean loaded = TxlSharedPreferences.getBoolean(me, "loaded", false);
+        preprocess();
+         
+    }
+    
+    private void preprocess(){
+    	boolean loaded = TxlSharedPreferences.getBoolean(me, "loaded", false);
         if(loaded){
             final View view = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
             setContentView(view);
@@ -63,7 +68,6 @@ public class MainActivity extends TabActivity
             Intent intent = new Intent(me,GuideActivity.class);
             startActivity(intent);
         }
-         
     }
     private void setupTab(final String tag,Intent intent) {
         /*View tabview = createTabView(tabHost.getContext(), tag);
@@ -111,7 +115,7 @@ public class MainActivity extends TabActivity
     @Override
     protected void onNewIntent (Intent intent){
        log.info("onNewIntent");
-       
+       preprocess();
     } 
     
     @Override

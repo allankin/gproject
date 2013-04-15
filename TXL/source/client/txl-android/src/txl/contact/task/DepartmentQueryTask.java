@@ -64,6 +64,10 @@ public class DepartmentQueryTask extends NetworkAsyncTask<Void,Void,List<Departm
 					/*若为查询操作，则从本地加载*/
 					if(me.actionCode == TxlConstants.ACTION_QUERY_CODE){
 						tipTemp = "网络未连接,查询本地数据!";
+						List<Department> departs1= CommDirDao.getSingle(ctx).getDepartList();
+						for(Department depart :departs1){
+							departs.add(depart);
+						}
 					} 
 					final String tip = tipTemp;
 					ctx.runOnUiThread(new Runnable() {
@@ -95,12 +99,22 @@ public class DepartmentQueryTask extends NetworkAsyncTask<Void,Void,List<Departm
 				TxlToast.showLong(ctx, "会话过期,请到设置中重新登陆");
 				return;
 			}else{
-			    if(this.actionCode == TxlConstants.ACTION_QUERY_CODE){
+				/*在线查询*/
+				if(this.actionCode == TxlConstants.ACTION_QUERY_CODE){
 			        ctx.getHandler().dispatchMessage(Tool.genMessage(TxlConstants.MSG_LOAD_DEPARTMENT));
-			    }else if(this.actionCode == TxlConstants.ACTION_SYNC_CODE){
+			    }
+				/*在线同步*/
+				else if(this.actionCode == TxlConstants.ACTION_SYNC_CODE){
 		            TxlToast.showShort(this.ctx, "公司部门同步完成");
+		            ctx.getHandler().dispatchMessage(Tool.genMessage(TxlConstants.MSG_LOAD_DEPARTMENT));
 		        }
 			}
+		}
+		/*离线查询*/
+		else{
+			if(this.actionCode == TxlConstants.ACTION_QUERY_CODE){
+		        ctx.getHandler().dispatchMessage(Tool.genMessage(TxlConstants.MSG_LOAD_DEPARTMENT));
+		    }
 		}
 		
 	}

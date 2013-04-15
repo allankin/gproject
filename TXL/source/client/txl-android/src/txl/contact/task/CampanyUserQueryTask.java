@@ -47,9 +47,9 @@ public class CampanyUserQueryTask extends NetworkAsyncTask<UserQuery,Void,List<C
 	protected void onPreExecute() {
 		log.info("onPreExecute...  isRunning: "+ctx.isRunning);
 		if(me.actionCode == TxlConstants.ACTION_QUERY_CODE){
-			WebLoadingTipDialog.getInstance(this.ctx.getParent()).show(TxlConstants.TIP_QUERING);
+			WebLoadingTipDialog.getInstance(this.ctx).show(TxlConstants.TIP_QUERING);
 		}else if(me.actionCode == TxlConstants.ACTION_SYNC_CODE){
-			WebLoadingTipDialog.getInstance(this.ctx.getParent()).show(TxlConstants.TIP_SYNC);
+			WebLoadingTipDialog.getInstance(this.ctx).show(TxlConstants.TIP_SYNC);
 		}
 		
 	}
@@ -128,7 +128,9 @@ public class CampanyUserQueryTask extends NetworkAsyncTask<UserQuery,Void,List<C
 			if(sessionTimeout){
 				/*若没有打开同步公司开关*/
 				TxlToast.showLong(ctx, "会话过期,请到设置中重新登陆");
-			}else{
+			}
+			/*在线查询、同步*/
+			else{
 				if(this.actionCode == TxlConstants.ACTION_QUERY_CODE){
 					Message msg = new Message();
 					msg.what = TxlConstants.MSG_RENDER_COMPANY_USER;
@@ -137,6 +139,15 @@ public class CampanyUserQueryTask extends NetworkAsyncTask<UserQuery,Void,List<C
 				}else if(this.actionCode == TxlConstants.ACTION_SYNC_CODE){
 					TxlToast.showShort(this.ctx, "公司通讯录联系人同步完成");
 				}
+			}
+		}
+		/*离线查询*/
+		else{
+			if(this.actionCode == TxlConstants.ACTION_QUERY_CODE){
+				Message msg = new Message();
+				msg.what = TxlConstants.MSG_RENDER_COMPANY_USER;
+				msg.obj = result;
+				ctx.getHandler().sendMessage(msg);
 			}
 		}
 	}

@@ -1,14 +1,20 @@
 package txl.common.login;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.json.JSONObject;
+
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.common.NetworkAsyncTask;
 import txl.common.TxlToast;
 import txl.common.WebLoadingTipDialog;
 import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
+import txl.util.HttpClientUtil;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -40,7 +46,6 @@ public class ModifyPasswordDialog
     public void show(final TxlActivity ctx){
         final LayoutInflater factory = LayoutInflater.from(ctx);
         final View modifyView = factory.inflate(R.layout.modify_password, null);
-        
         
         CheckBox pwdVisible = (CheckBox)modifyView.findViewById(R.id.password_visible);
         pwdVisible.setOnCheckedChangeListener(new OnCheckedChangeListener()
@@ -95,11 +100,9 @@ public class ModifyPasswordDialog
                
                 alert.dismiss();
                 
-                WebLoadingTipDialog.getInstance(ctx).show("正在登陆...");
-                
                 Account user = Account.getNew();
                 user.userName = untv.getText().toString();
-                user.phone = user.userName;
+                //user.phone = user.userName;
                 user.password = password.getText().toString();
                 
                 new ModifyPasswordTask(ctx).execute(user);
@@ -110,30 +113,48 @@ public class ModifyPasswordDialog
     }
     
     
-    class ModifyPasswordTask  extends AsyncTask<Account, Void, Account>{
+    class ModifyPasswordTask  extends NetworkAsyncTask<Account, Void, Account>{
         public TxlActivity ctx ;
         public ModifyPasswordTask(TxlActivity ctx){
             this.ctx = ctx;
         }
+        
+        @Override
+        protected void onPreExecute(){
+        	WebLoadingTipDialog.getInstance(ctx).show("正在修改密码...");
+        }
         @Override
         protected Account doInBackground(Account... users)
         {
-            //HS_TODO: 远程修改密码
-            
-            Account userRet = users[0];
-            userRet.modifyPasswordStatus = 1;
-            
-            return userRet;
+        	Account user = users[0];
+        	Map<String,String> params = new HashMap<String, String>();
+            params.put("user.userName", user.userName);
+            params.put("user.password", user.password);
+            try {
+				String body = HttpClientUtil.httpPostUTF8(TxlConstants.MODIFY_PASSWORD_URL, params);
+				JSONObject jobj = new JSONObject(body);
+				int status = jobj.optInt("status");
+				user.modifyPasswordStatus = status;
+			} catch(Exception e){
+				this.dealNetworkException(e,null);
+				/*若出异常，则将user赋为null*/
+				user = null;
+			}
+            return user;
         }
         @Override
         protected void onPostExecute(Account userRet)
         {
-            if(userRet.modifyPasswordStatus==1){
-                TxlToast.showShort(ctx, "密码修改成功!");
-            }else{
-                TxlToast.showLong(ctx, "密码修改失败!");
-            }
-                
+        	WebLoadingTipDialog.getInstance(ctx).dismiss();
+        	if(userRet!=null){
+        		if(userRet.modifyPasswordStatus==1){
+        			TxlToast.showShort(ctx, "密码修改成功!");
+        		}else if(userRet.modifyPasswordStatus == 2){
+        			TxlToast.showLong(ctx, "请输入用户名和密码!");
+        		}else if(userRet.modifyPasswordStatus == 3){
+        			TxlToast.showLong(ctx, "密码修改失败!");
+        		}
+        	}
         }
     }
     
