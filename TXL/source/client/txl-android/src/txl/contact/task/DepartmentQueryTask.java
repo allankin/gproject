@@ -48,6 +48,7 @@ public class DepartmentQueryTask extends NetworkAsyncTask<Void,Void,List<Departm
 						depart.depParentId = departJson.getInt("depParentId");
 						departs.add(depart);
 					}
+					/*查询、同步 操作，均保存*/
 					CommDirDao.getSingle(ctx).deleteDepart();
 					CommDirDao.getSingle(ctx).saveDepart(departs);
 				}
@@ -93,12 +94,15 @@ public class DepartmentQueryTask extends NetworkAsyncTask<Void,Void,List<Departm
 			if(sessionTimeout){
 				TxlToast.showLong(ctx, "会话过期,请到设置中重新登陆");
 				return;
-			} 
+			}else{
+			    if(this.actionCode == TxlConstants.ACTION_QUERY_CODE){
+			        ctx.getHandler().dispatchMessage(Tool.genMessage(TxlConstants.MSG_LOAD_DEPARTMENT));
+			    }else if(this.actionCode == TxlConstants.ACTION_SYNC_CODE){
+		            TxlToast.showShort(this.ctx, "公司部门同步完成");
+		        }
+			}
 		}
-		ctx.getHandler().dispatchMessage(Tool.genMessage(TxlConstants.MSG_LOAD_DEPARTMENT));
-		if(this.actionCode == TxlConstants.ACTION_SYNC_CODE){
-			TxlToast.showShort(this.ctx, "公司部门同步完成");
-		}
+		
 	}
 	
 }

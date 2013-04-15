@@ -5,6 +5,7 @@ import java.util.List;
 import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.TxlToast;
+import txl.common.login.LoginDialog;
 import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.contact.DepartmentTreeActivity;
@@ -17,6 +18,7 @@ import txl.contact.task.CampanyUserQueryTask;
 import txl.contact.task.DepartmentQueryTask;
 import txl.contact.task.ShareCommDirUserQueryTask;
 import txl.log.TxLogger;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -137,5 +139,51 @@ private final TxLogger  log = new TxLogger(SyncSettingActivity.class, TxlConstan
 	public Handler getHandler() {
 		return handler;
 	}
+	@Override
+    protected void onNewIntent (Intent intent){
+       log.info("onNewIntent");
+       
+    } 
+    
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        log.info("onPause");
+        
+    }
 
+    @Override
+    protected void onStart(){
+        super.onStart();
+        log.info("onStart");
+        
+    }
+    
+    @Override
+    protected void onRestart(){
+        super.onRestart();
+        log.info("onRestart");
+        
+    }
+    
+    @Override
+    protected void onResume(){
+        super.onResume();
+        log.info("onResume");
+        
+    }
+    @Override
+    protected void onStop(){
+        super.onStop();
+        log.info("onStop");
+        
+    }
+    
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        log.info("onDestroy");
+    }
 }

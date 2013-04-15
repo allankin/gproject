@@ -1,11 +1,21 @@
 package txl.common;
 
 import txl.config.TxlConstants;
+import txl.contact.dao.CommDirDao;
+import txl.log.TxLogger;
 import android.app.Activity;
 import android.app.ProgressDialog;
 
-
+/**
+ * 由于dialog的显示关联具体的activity的context，注意context必须关联到当前的activity 的context.
+ * 注意：同时需要多个dialog显示可能存在问题
+ * 
+ * @author jinchao
+ *
+ */
 public class WebLoadingTipDialog {
+    private final TxLogger log = new TxLogger(WebLoadingTipDialog.class,
+                                              TxlConstants.MODULE_ID_BASE);
 	private static WebLoadingTipDialog webLoadingTipDialog; 
 	private ProgressDialog loadingTipDialog;
 	
@@ -16,6 +26,8 @@ public class WebLoadingTipDialog {
 	public static WebLoadingTipDialog getInstance(Activity  ctx){
 		if(webLoadingTipDialog==null){
 			return webLoadingTipDialog = new WebLoadingTipDialog(ctx);
+		}else{
+		    webLoadingTipDialog.ctx = ctx;
 		}
 		return webLoadingTipDialog;
 	}
@@ -27,7 +39,10 @@ public class WebLoadingTipDialog {
 		loadingTipDialog.setMessage(msg);
 		loadingTipDialog.setIndeterminate(false);
 		loadingTipDialog.setCancelable(false);
-		loadingTipDialog.show();
+		log.info("class name : "+ctx.getClass().getSimpleName());
+		//if(!ctx.isFinishing()){
+		    loadingTipDialog.show();
+		//}
 	}
 	
 	public void overLoadingDismiss(){

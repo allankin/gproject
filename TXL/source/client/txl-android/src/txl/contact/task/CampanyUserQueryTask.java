@@ -115,12 +115,7 @@ public class CampanyUserQueryTask extends NetworkAsyncTask<UserQuery,Void,List<C
 					
 				}
 			});
-			
-			if(me.actionCode == TxlConstants.ACTION_QUERY_CODE){
-				return userList;
-			}
 		}
-		
 		return userList;
 	}
 	

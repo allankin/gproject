@@ -68,7 +68,9 @@ public class DepartmentTreeActivity extends TxlActivity
     
     private void loadDepartment(){
     	Department topDepart = CommDirDao.getSingle(me).getTopDepartmentTree();
-        mPdfOutlinesCount.add(topDepart);
+    	if(topDepart!=null){
+    	    mPdfOutlinesCount.add(topDepart);
+    	}
         
         treeViewAdapter = new TreeViewAdapter(this, R.layout.contact_department_tree_item, mPdfOutlinesCount);
         ListView listView = (ListView) findViewById(R.id.department_tree_list);
