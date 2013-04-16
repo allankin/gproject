@@ -117,32 +117,34 @@ public class NIOServer {
             {
                System.out.println(msg);
                 JSONObject jobj = new JSONObject(msg);
-                int comId = jobj.optInt("comId");
-                // 注册流程
-                if(comId==8){
+                int bizId = jobj.optInt("b");
+                
+                
+                /* 注册流程 */
+                if(bizId==1){
                    System.out.println(">>>>>>>>>开始处理注册流程");
-                   String userName = jobj.optString("userName");
-                   System.out.println("获取用户名:"+userName);
+                   int userId = jobj.optInt("u");
+                   System.out.println("userId:"+userId);
                    System.out.println(">>>>>>>>>结束处理注册流程");
                    
-                   String registerResp = "{\"userName\":\""+userName+"\",\"comId\":9}";
+                   String registerResp = "{\"b\":2}";
                    ByteBuffer writeBuffer = ByteBuffer.wrap(registerResp.getBytes());
                    
                
                    int registerRespCount = channel.write(writeBuffer);
                    System.out.println("发送注册回馈："+registerResp+" 发送字节数 : "+registerRespCount);
                    
-                   WrapChannel existChannel = channelExist(userName);
+                   WrapChannel existChannel = channelExist(userId);
                    if(existChannel!=null){
-                       String offlineResp = "{\"userName\":\""+userName+"\",\"comId\":11}";
+                       String offlineResp = "{\"b\":7}";
                        existChannel.channel.write(ByteBuffer.wrap(offlineResp.getBytes())); 
                    }
                    //channel.socket().setSendBufferSize(20);
                    int i=1;
                    while(i<2){
                        
-                       String dataJsonStr = "{\"details\":{\"billId\":\"456122\",\"name\":\"小李"+i+"\",\"addr\":\"a-b-103\",\"phone\":\"13899999999\",\"billType\":\"维修-网络\",\"billContent\":\"网络出现严重故障，请处理\"},\"type\":\"bill\",\"uuId\":\"abccfdfdfd"+i+"\",\"userId\":123,\"comId\":10,\"url\":\"http://192.168.52.22:5622/maw-home2JSGD/\"}";
-                       writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes());
+                       String dataJsonStr = "{\"b\":6,\"c\":\"服务器消息内容...."+i+"\"}";
+                       writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes("UTF-8"));
                        int num = channel.write(writeBuffer);
                        System.out.println(num);
                        System.out.println("发送内容："+dataJsonStr+" 发送字节数："+num);
@@ -157,16 +159,22 @@ public class NIOServer {
                    }
                    
                    
-                }else if(comId==6){
+                }
+                /*心跳处理*/
+                else if(bizId==3){
                     System.out.println(">>>>>>>>>开始处理心跳流程");
-                    String userName = jobj.optString("userName");
-                    System.out.println("获取用户名:"+userName);
+                    int userId = jobj.optInt("u");
+                    System.out.println("userId:"+userId);
                     System.out.println(">>>>>>>>>结束处理心跳流程");
                     
-                    String registerResp = "{\"userName\":\""+userName+"\",\"comId\":7}";
+                    String registerResp = "{\"b\":4}";
                     ByteBuffer writeBuffer = ByteBuffer.wrap(registerResp.getBytes());
                     
                     channel.write(writeBuffer);
+                }
+                /*内容包处理*/
+                else if(bizId == 5){
+                	System.out.println("内容包："+jobj.toString());
                 }
                 
             } catch (JSONException e)
@@ -202,9 +210,9 @@ public class NIOServer {
 	}
 	
 	
-	public WrapChannel channelExist(String userName){
+	public WrapChannel channelExist(int userId){
 	    for(WrapChannel channel : channelList){
-	       if(userName.equals(channel.userName)){
+	       if(userId == channel.userId){
 	           return channel;
 	       }
 	    }
@@ -213,7 +221,7 @@ public class NIOServer {
     
     class WrapChannel{
         public SocketChannel channel;
-        public String userName;
+        public int userId;
         public WrapChannel(SocketChannel channel){
             this.channel = channel;
         }
