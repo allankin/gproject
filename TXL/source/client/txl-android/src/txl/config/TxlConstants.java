@@ -163,4 +163,18 @@ public class TxlConstants
     
     public static final int COMMDIR_COMPANY_TYPE = 1;
     public static final int COMMDIR_SHARE_TYPE = 2;
+    
+    public static final int resendDuration=10000;
+    public static final int heartBeatInterval = 10000;
+    public static final int resendCount = 3;
+    public static final String ACTION_OFFLINE_NOTICE = "offline.notice";
+    public static final String ACTION_OVER_RESEND_COUNT = "over.resend.count";
+    
+    
+    public static final int[] replyComIds = {7,9,11};
+    public static final int HEARTBEAT_REQUST_CODE = 0x006;
+    public static final int HEARTBEAT_REPLY_CODE = 0x007;
+    
+    
+    
 }

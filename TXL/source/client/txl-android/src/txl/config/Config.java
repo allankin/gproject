@@ -32,6 +32,8 @@ public class Config
     public static String INTENT_PARAM_LIST_DATA ="listData";
     public static final String APP_PACKAGE_NAME = "txl.activity";
     
+    public static boolean isKickOut = false;
+    
     public ResDir getResDir()
     {
         return resDir;
