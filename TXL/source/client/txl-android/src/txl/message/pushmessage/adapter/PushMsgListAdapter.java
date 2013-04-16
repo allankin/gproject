@@ -6,7 +6,7 @@ import txl.activity.R;
 import txl.config.TxlConstants;
 import txl.contact.dao.ContactDao;
 import txl.log.TxLogger;
-import txl.message.pushmessage.po.PushMsg;
+import txl.message.pushmessage.po.PushMsgRecord;
 import txl.message.sms.po.SmsRecord;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -19,9 +19,9 @@ public class PushMsgListAdapter extends BaseAdapter {
 	private final static TxLogger log = new TxLogger(PushMsgListAdapter.class,
 			TxlConstants.MODULE_ID_MESSAGE);
 	private Context mContext;
-	public Map<Integer, PushMsg> pushMsgMap;
+	public Map<Integer, PushMsgRecord> pushMsgMap;
 
-	public PushMsgListAdapter(Context context, Map<Integer, PushMsg> pushMsgMap) {
+	public PushMsgListAdapter(Context context, Map<Integer, PushMsgRecord> pushMsgMap) {
 		this.mContext = context;
 		this.pushMsgMap = pushMsgMap;
 	}
@@ -50,7 +50,7 @@ public class PushMsgListAdapter extends BaseAdapter {
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
-		PushMsg pm = this.pushMsgMap.get(position);
+		PushMsgRecord pm = this.pushMsgMap.get(position);
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(mContext).inflate(
@@ -67,9 +67,9 @@ public class PushMsgListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
  
-		holder.pushMsgNameView.setText(pm.name);
-		holder.pushMsgDateView.setText(pm.dateStr);
-		holder.pushMsgContent.setText(pm.content);
+		holder.pushMsgNameView.setText(pm.pushMsg.name);
+		holder.pushMsgDateView.setText(pm.pushMsg.dateStr);
+		holder.pushMsgContent.setText(pm.pushMsg.content);
 
 		return convertView;
 	}

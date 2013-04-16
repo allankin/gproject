@@ -13,11 +13,10 @@ import txl.config.TxlConstants;
  * @Date 2013-2-25 上午09:45:58
  * @Copyright: 版权由 HundSun 拥有
  */
-public interface BizRunnable extends Runnable
+public interface BizRunnable
 {
     public final int resendDuration = TxlConstants.resendDuration;
     public final int timeSliceDuration = 100;
     public final int timeSliceTotal = resendDuration/timeSliceDuration;
     
-    public void dealReply(final JSONObject jobject);
 }

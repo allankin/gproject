@@ -171,9 +171,8 @@ public class TxlConstants
     public static final String ACTION_OVER_RESEND_COUNT = "over.resend.count";
     
     
-    public static final int[] replyComIds = {7,9,11};
-    public static final int HEARTBEAT_REQUST_CODE = 0x006;
-    public static final int HEARTBEAT_REPLY_CODE = 0x007;
+    public static final int HEARTBEAT_REQUST_CODE = 0x003;
+    public static final int HEARTBEAT_REPLY_CODE = 0x004;
     
     
     

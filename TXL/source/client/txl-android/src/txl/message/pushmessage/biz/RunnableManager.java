@@ -31,19 +31,28 @@ public class RunnableManager
         try
         {
             JSONObject jobj = new JSONObject(msg);
-            int comId = jobj.optInt("comId");
-            BizRunnable br = runnableMap.get(comId);
-            //回复包
-            if(Arrays.binarySearch(TxlConstants.replyComIds, comId)>=0){
-                br.dealReply(jobj);
-            }else if(comId == 10){//内容包
-                DataRunnable dr = (DataRunnable)br;
-                dr.dealData(jobj);
-                String uuId = jobj.optString("uuId");
-                String userName = jobj.optString("userName");
-                dr.sendReceived(uuId, userName);
+            int bizId = jobj.optInt("b");
+            BizRunnable br = runnableMap.get(bizId);
+            /*注册响应包*/
+            if(bizId == 2){
+            	RegistRunnable rr = (RegistRunnable)br;
+            	rr.dealReply(jobj);
             }
-            
+            /*心跳响应包*/
+            else if(bizId == 4){
+            	HeartBeatRunnable hbr = (HeartBeatRunnable)br;
+            	hbr.dealReply(jobj);
+            }
+            /*内容响应包*/
+            else if(bizId == 6){
+            	DataRunnable dr = (DataRunnable)br;
+            	dr.receive(jobj);
+            }
+            /*下线通知包*/
+            else if(bizId == 7){
+            	OfflineRunnable or = (OfflineRunnable)br;
+            	or.dealReply(jobj);
+            }
         } catch (JSONException e)
         {
             e.printStackTrace();

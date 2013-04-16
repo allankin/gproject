@@ -1,9 +1,9 @@
 package txl.message.pushmessage.po;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
-public class PushMsg {
+public class PushMsg implements Serializable{
+	private static final long serialVersionUID = 1L;
 	/*对方姓名*/
 	public String name;
 	public String dateStr;
@@ -13,5 +13,11 @@ public class PushMsg {
 	/*对方用户Id*/
 	public int userId;
 	
-	public List<PushMsg> pushMsgRecordList = new ArrayList<PushMsg>();
+	
+	public String  toJSONStroing(){
+		if(type==2){
+			return "{\"b\":5,\"r:\":["+this.userId+"],\"c\":\""+content+"\"}";
+		}
+		return "";
+	}
 }

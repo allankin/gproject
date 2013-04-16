@@ -2,8 +2,7 @@ package txl.common;
 
 import txl.MainActivity;
 import txl.activity.R;
-import txl.config.Config;
-import txl.message.pushmessage.po.PushInfo;
+import txl.message.pushmessage.po.PushMsg;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -32,7 +31,7 @@ public class TxlNotification
      }
     
      
-    public static synchronized void sendNotification2(Context context,PushInfo info,RemoteViews remoteView){
+    public static synchronized void sendNotification2(Context context,PushMsg info,RemoteViews remoteView){
         if(!inited){
             initNotification(context);
             inited = true;
@@ -50,8 +49,8 @@ public class TxlNotification
         Intent mIntent = new Intent(context,MainActivity.class);
         mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
         mIntent.putExtra("action", "message");
-        mIntent.putExtra("uuId", info.uuId);
-        mIntent.putExtra("userName",info.userName);
+        /*mIntent.putExtra("uuId", info.uuId);
+        mIntent.putExtra("userName",info.userName);*/
         
         //mIntent.putExtra("content", c);
         PendingIntent mContentIntent =PendingIntent.getActivity(context,NOTIFICATION_ID, mIntent, 0);

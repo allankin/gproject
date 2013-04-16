@@ -14,7 +14,7 @@ import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import txl.message.pushmessage.adapter.PushMsgListAdapter;
 import txl.message.pushmessage.dao.PushMsgDao;
-import txl.message.pushmessage.po.PushMsg;
+import txl.message.pushmessage.po.PushMsgRecord;
 import txl.message.sms.adapter.SmsCategoryListAdapter;
 import txl.message.sms.adapter.SmsListAdapter;
 import txl.message.sms.dao.SmsDao;
@@ -79,7 +79,7 @@ public class MessageActivity extends TxlActivity {
     
     private View pushMsgScrollListLayout;
     /*经过汇总后. key: 对方userId */
-    private Map<Integer,PushMsg> pushMsgMap = new HashMap<Integer,PushMsg>();
+    private Map<Integer,PushMsgRecord> pushMsgMap = new HashMap<Integer,PushMsgRecord>();
      
     private ListView pushMsgListView =null;
     private PushMsgListAdapter pushMsgListAdapter = null;

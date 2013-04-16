@@ -8,6 +8,9 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import org.json.JSONObject;
 
 import txl.config.TxlConstants;
+import txl.log.TxLogger;
+import txl.message.pushmessage.core.ReceiveMessageQueue;
+import txl.message.pushmessage.core.SendMessageQueue;
 import android.util.Log;
 
 
@@ -20,8 +23,10 @@ import android.util.Log;
  */
 public class HeartBeatRunnable implements BizRunnable
 {
-    private final String TAG = HeartBeatRunnable.class.getSimpleName();
-    public SocketChannel channel;
+	private TxLogger log = new TxLogger(HeartBeatRunnable.class, TxlConstants.MODULE_ID_MESSAGE);
+	
+	
+	public SocketChannel channel;
     public AtomicBoolean replied = new AtomicBoolean(true);
     public boolean isRunning = true;
     
@@ -29,17 +34,13 @@ public class HeartBeatRunnable implements BizRunnable
         this.channel = channel;
     }
     
-    @Override
-    public void run()
-    {
-        
-    }
+    
     
     public void stop(){
         isRunning = false;
     }
     
-    public void sendRequest(final String userName){
+    public void sendRequest(final int userId){
         Thread t = new Thread(new Runnable()
         {
             @Override
@@ -47,23 +48,20 @@ public class HeartBeatRunnable implements BizRunnable
             {
                 while(isRunning){
                     if(!replied.get()){
-                       Log.d(TAG, "与服务器已经断开连接");
+                       log.info("与服务器已经断开连接");
                        isRunning = false;
                        continue;
                     }
                     
-                    String str = "{\"userName\":\""+userName+"\",\"comId\":6}";
-                    ByteBuffer bb = ByteBuffer.wrap(str.getBytes());
-                    try
-                    {
-                        channel.write(bb);
-                        Log.d(TAG, "send: "+str);
-                        replied.set(false);
-                    } catch (IOException e)
-                    {
-                        e.printStackTrace();
-                        isRunning = false;
-                    }
+                    String str = "{\"u\":"+userId+",\"b\":3}";
+                    ByteBuffer writeBuffer = ByteBuffer.wrap(str.getBytes());
+                    try {
+						int count = channel.write(writeBuffer);
+						log.info("sendRequest  write : "+str+"   size:"+count);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
+                    replied.set(false);
                     
                     try
                     {
@@ -81,12 +79,10 @@ public class HeartBeatRunnable implements BizRunnable
     }
     
     
-    @Override
     public void dealReply(final JSONObject jobj)
     {
-        Log.d(TAG,"receive: "+jobj.toString());
+    	log.info("receive: "+jobj.toString());
         replied.set(true);
-        String userName = jobj.optString("userName");
     }
 
 }

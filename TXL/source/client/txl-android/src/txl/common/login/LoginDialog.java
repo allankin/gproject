@@ -16,6 +16,7 @@ import txl.common.TxlToast;
 import txl.common.WebLoadingTipDialog;
 import txl.common.po.Account;
 import txl.config.TxlConstants;
+import txl.message.pushmessage.core.MessageManager;
 import txl.util.HttpClientUtil;
 import txl.util.Tool;
 import txl.util.ValidateUtil;
@@ -229,6 +230,8 @@ public class LoginDialog {
 					if(userRet.isSave){
 						userRet.saveUserToFS();
 					}
+					
+					MessageManager.startMessageService(ctx, userRet.userId);
 				}
 			}catch(Exception e){
 				this.dealNetworkException(e,null);

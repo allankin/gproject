@@ -9,7 +9,10 @@ import txl.contact.ContactActivity;
 import txl.guide.GuideActivity;
 import txl.log.TxLogger;
 import txl.message.MessageActivity;
+import txl.message.pushmessage.core.MessageManager;
+import txl.message.pushmessage.core.MessageService;
 import txl.setting.SettingActivity;
+import txl.util.Tool;
 import txl.util.TxlSharedPreferences;
 import android.app.Activity;
 import android.app.TabActivity;
@@ -64,11 +67,17 @@ public class MainActivity extends TabActivity
             
             tabHost.setCurrentTab(2); 
             
+            MessageManager.startMessageService(me, null);
+            
         }else{
             Intent intent = new Intent(me,GuideActivity.class);
             startActivity(intent);
         }
     }
+    
+    
+    
+    
     private void setupTab(final String tag,Intent intent) {
         /*View tabview = createTabView(tabHost.getContext(), tag);
         TabSpec setContent = tabHost.newTabSpec(tag).setIndicator(tabview).setContent(intent);*/

@@ -27,6 +27,7 @@ import android.util.Log;
 public class NIOSocket {
     public Selector selector;
     public SocketChannel channel;
+    private int userId;
     public boolean pollFlag = true;
     
     public final String TAG = NIOSocket.class.getSimpleName();
@@ -48,8 +49,9 @@ public class NIOSocket {
      * @param port  连接的服务器的端口号         
      * @throws IOException
      */
-    public SocketChannel initClient(String ip,int port) throws IOException {
+    public SocketChannel initClient(String ip,int port,int userId) throws IOException {
         Log.d(TAG," socket  initClient....");
+        this.userId = userId;
         channel = SocketChannel.open();
         channel.configureBlocking(false);
         this.selector = Selector.open();
@@ -140,22 +142,21 @@ public class NIOSocket {
                     }
                     channel.configureBlocking(false);
                     
-                    /*RegistRunnable registRun = new RegistRunnable(channel);
-                    RunnableManager.regist(9, registRun);
-                    DataRunnable dataRun = new DataRunnable(channel);
-                    RunnableManager.regist(10, dataRun);//接收消息内容
-                    RunnableManager.regist(4, dataRun);//发送接收消息回馈
-                    RunnableManager.regist(5, dataRun);//发送已阅读回馈
-                    HeartBeatRunnable heartBeatBun = new HeartBeatRunnable(channel);//心跳检测
-                    RunnableManager.regist(6, heartBeatBun);//心跳发送
-                    RunnableManager.regist(7, heartBeatBun);//心跳反馈
-                    OfflineRunnable offline = new OfflineRunnable(channel);
-                    RunnableManager.regist(11, offline);
+                    RegistRunnable registRun = new RegistRunnable();
+                    RunnableManager.regist(2, registRun);
+                    HeartBeatRunnable heartBeatBun = new HeartBeatRunnable(channel);
+                    RunnableManager.regist(3, heartBeatBun);//心跳发送
+                    RunnableManager.regist(4, heartBeatBun);//心跳接收
                     
-                     
-                    //发送注册请求
-                    registRun.seendRequest2("087");*/
+                    DataRunnable dataRun = new DataRunnable();
+                    RunnableManager.regist(6, dataRun);//接收消息内容
                     
+                    OfflineRunnable offline = new OfflineRunnable();//下线通知
+                    RunnableManager.regist(7, offline);
+                    registRun.sendRequest(userId);
+                    
+                    SendMessageDealer.getSingle(channel).start();
+                    ReceiveMessageDealer.getSingle().start();
                     
                     channel.register(this.selector, SelectionKey.OP_READ);
                     
@@ -256,7 +257,12 @@ public class NIOSocket {
             Log.d("log",msg);
             //Log.d(TAG, new String(singleBuffer.array()).toString());
             singleBuffer.clear();
-            RunnableManager.parse(msg);
+            //RunnableManager.parse(msg);
+            
+            synchronized (ReceiveMessageQueue.queue) {
+            	ReceiveMessageQueue.queue.add(msg);
+            	ReceiveMessageQueue.queue.notify();
+			}
         }
         return 1;
         
@@ -277,7 +283,7 @@ public class NIOSocket {
         //String ip="192.168.84.101";
         String ip="192.168.84.98";
         int port = 8888;
-        client.initClient(ip,port);
+        client.initClient(ip,port,1);
         
         
         /*for(int i=0;i<=20;i++){

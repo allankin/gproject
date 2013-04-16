@@ -20,7 +20,7 @@ import android.text.TextUtils;
 
 public class ContactDao {
 	
-	private final static TxLogger log = new TxLogger(ContactDao.class, TxlConstants.MODULE_ID_MESSAGE);
+	private final static TxLogger log = new TxLogger(ContactDao.class, TxlConstants.MODULE_ID_CONTACT);
 	
 	
 	
@@ -49,7 +49,7 @@ public class ContactDao {
                 // 得到手机号码
                 String phoneNumber = phoneCursor.getString(0);
                 
-                log.info("getPhoneContacts... phoneNumber:"+phoneNumber);
+                //log.info("getPhoneContacts... phoneNumber:"+phoneNumber);
                 if(contactPhoneSet!=null){
                 	if(contactPhoneSet.contains(phoneNumber)){
                 		continue;
@@ -127,7 +127,7 @@ public class ContactDao {
             	ContactVo cv = new ContactVo();
             	
                 String phoneNumber = phoneCursor.getString(phoneCursor.getColumnIndex("number"));
-                log.info("getSIMContacts... phoneNumber:"+phoneNumber);
+                //log.info("getSIMContacts... phoneNumber:"+phoneNumber);
                 if(contactPhoneSet!=null){
                 	if(contactPhoneSet.contains(phoneNumber)){
                 		continue;

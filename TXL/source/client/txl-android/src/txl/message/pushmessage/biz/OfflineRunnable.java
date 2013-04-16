@@ -6,6 +6,7 @@ import org.json.JSONObject;
 
 import txl.config.Config;
 import txl.config.TxlConstants;
+import txl.log.TxLogger;
 import txl.message.pushmessage.core.MessageService;
 import android.content.Intent;
 
@@ -18,24 +19,13 @@ import android.content.Intent;
  */
 public class OfflineRunnable implements BizRunnable
 {
-    private SocketChannel channel;
-    public OfflineRunnable(SocketChannel channel){
-        this.channel = channel;
-    }
-    @Override
-    public void run()
-    {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
+	private TxLogger log = new TxLogger(OfflineRunnable.class, TxlConstants.MODULE_ID_MESSAGE);    
     public void dealReply(JSONObject jobject)
     {
- 
         Config.isKickOut = true;
         Intent intent = new Intent(TxlConstants.ACTION_OFFLINE_NOTICE);
         MessageService.context.sendBroadcast(intent);
+        log.info("dealReply... ");
     }
 
 }
