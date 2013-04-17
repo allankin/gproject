@@ -11,12 +11,18 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import txl.socket.util.Tool;
+
 
 public class NIOServer {
-	//通道管理器
+	
+    private Logger log = Logger.getLogger(NIOServer.class);
+    
+    //通道管理器
 	private Selector selector;
 	
     private List<WrapChannel> channelList = new ArrayList<WrapChannel>();
@@ -45,7 +51,7 @@ public class NIOServer {
 	 */
 	@SuppressWarnings("unchecked")
 	public void listen() throws IOException {
-		System.out.println("服务端启动成功！");
+	    log.info("服务端启动成功！");
 		// 轮询访问selector
 		while (true) {
 			//当注册的事件到达时，方法返回；否则,该方法会一直阻塞
@@ -101,7 +107,8 @@ public class NIOServer {
             count = channel.read(buffer);
             byte[] data = buffer.array();
             String msg = new String(data).trim();
-            System.out.println(msg+"   "+count);
+
+            log.info("read : "+msg+"  count: "+count);
             
             if(count == -1){
                 try
@@ -109,52 +116,37 @@ public class NIOServer {
                     channel.close();
                 } catch (IOException e1)
                 {
-                    e1.printStackTrace();
+                    log.error(Tool.getExceptionTrace(e1));
                 }
                 return;
             }
             try
             {
-               System.out.println(msg);
                 JSONObject jobj = new JSONObject(msg);
                 int bizId = jobj.optInt("b");
-                
-                
+                int sendCount = 0;
                 /* 注册流程 */
                 if(bizId==1){
-                   System.out.println(">>>>>>>>>开始处理注册流程");
                    int userId = jobj.optInt("u");
-                   System.out.println("userId:"+userId);
-                   System.out.println(">>>>>>>>>结束处理注册流程");
                    
                    String registerResp = "{\"b\":2}";
                    ByteBuffer writeBuffer = ByteBuffer.wrap(registerResp.getBytes());
-                   
                
-                   int registerRespCount = channel.write(writeBuffer);
-                   System.out.println("发送注册回馈："+registerResp+" 发送字节数 : "+registerRespCount);
-                   
+                   sendCount = channel.write(writeBuffer);
+                   log.info("发送注册回馈："+registerResp+", count : "+sendCount);
                    WrapChannel existChannel = channelExist(userId);
                    if(existChannel!=null){
                        String offlineResp = "{\"b\":7}";
-                       existChannel.channel.write(ByteBuffer.wrap(offlineResp.getBytes())); 
+                       sendCount = existChannel.channel.write(ByteBuffer.wrap(offlineResp.getBytes())); 
+                       log.info("发送下线通知："+offlineResp+", count : "+sendCount);
                    }
-                   //channel.socket().setSendBufferSize(20);
                    int i=1;
-                   while(i<2){
+                   while(i<6){
                        
                        String dataJsonStr = "{\"b\":6,\"c\":\"服务器消息内容...."+i+"\"}";
                        writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes("UTF-8"));
-                       int num = channel.write(writeBuffer);
-                       System.out.println(num);
-                       System.out.println("发送内容："+dataJsonStr+" 发送字节数："+num);
-                       /*try
-                       {
-                           Thread.sleep(50);
-                       } catch (InterruptedException e)
-                       {
-                           e.printStackTrace();
-                       }*/
+                       sendCount = channel.write(writeBuffer);
+                       log.info("发送内容："+dataJsonStr+" count："+sendCount);
                        i++;
                    }
                    
@@ -162,47 +154,38 @@ public class NIOServer {
                 }
                 /*心跳处理*/
                 else if(bizId==3){
-                    System.out.println(">>>>>>>>>开始处理心跳流程");
-                    int userId = jobj.optInt("u");
-                    System.out.println("userId:"+userId);
-                    System.out.println(">>>>>>>>>结束处理心跳流程");
-                    
                     String registerResp = "{\"b\":4}";
                     ByteBuffer writeBuffer = ByteBuffer.wrap(registerResp.getBytes());
-                    
-                    channel.write(writeBuffer);
+                    sendCount = channel.write(writeBuffer);
+                    log.info("发送心跳回馈："+registerResp+" count："+sendCount);
                 }
                 /*内容包处理*/
                 else if(bizId == 5){
-                	System.out.println("内容包："+jobj.toString());
+                    log.info("内容包："+jobj.toString());
+                	
                 }
                 
             } catch (JSONException e)
             {
-                e.printStackTrace();
+                log.error(Tool.getExceptionTrace(e));
                 try
                 {
                     channel.close();
                 } catch (IOException e1)
                 {
-                    e1.printStackTrace();
+                    log.error(Tool.getExceptionTrace(e1));
                 }
             }
             
-            
-            //System.out.println("服务端收到信息："+msg);
-            //System.out.println("服务端收到信息："+Tool.bytes2int(data));
-            //ByteBuffer outBuffer = ByteBuffer.wrap(msg.getBytes());
-            //channel.write(outBuffer);// 将消息回送给客户端
         } catch (IOException e)
         {
-            e.printStackTrace();
+            log.error(Tool.getExceptionTrace(e));
             try
             {
                 channel.close();
             } catch (IOException e1)
             {
-                e1.printStackTrace();
+                log.error(Tool.getExceptionTrace(e1));
             }
         }
         
