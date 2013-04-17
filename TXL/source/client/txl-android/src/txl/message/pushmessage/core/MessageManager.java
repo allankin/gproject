@@ -46,10 +46,12 @@ public class MessageManager
     public static void startMessageService(Context context,Integer userId) {
     	if(userId==null){
     		Account account =Account.getSingle().readUserFromFS();
-    		userId= account.userId;
+    		if(account!=null){
+    		    userId= account.userId;
+    		}
     	}
     	if(userId==null || userId ==0){
-    		log.info("startMessageService, userId ："+userId+", 未启动消息服务....");
+    		log.warn("startMessageService, userId ："+userId+", 未启动消息服务....");
     		return;
     	}
         Intent i = new Intent();
@@ -58,7 +60,7 @@ public class MessageManager
         if (!Tool.isServiceRunning(MessageService.class, context)){
         	context.startService(i);
         }else{
-        	log.info("MessageService已经启动, 不能重复启动...");
+        	log.warn("MessageService已经启动, 不能重复启动...");
         }
     }
     

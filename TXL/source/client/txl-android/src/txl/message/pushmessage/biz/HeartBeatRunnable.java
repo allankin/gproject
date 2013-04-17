@@ -9,9 +9,6 @@ import org.json.JSONObject;
 
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
-import txl.message.pushmessage.core.ReceiveMessageQueue;
-import txl.message.pushmessage.core.SendMessageQueue;
-import android.util.Log;
 
 
 /**
