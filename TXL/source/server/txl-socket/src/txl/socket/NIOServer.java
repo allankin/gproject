@@ -143,7 +143,7 @@ public class NIOServer {
                    int i=1;
                    while(i<6){
                        
-                       String dataJsonStr = "{\"b\":6,\"c\":\"服务器消息内容...."+i+"\"}";
+                       String dataJsonStr = "{\"b\":6,\"c\":\"服务器消息内容...."+i+"\",\"m\":\""+i+"\",\"sn\":\"sendName"+i+"\"}";
                        writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes("UTF-8"));
                        sendCount = channel.write(writeBuffer);
                        log.info("发送内容："+dataJsonStr+" count："+sendCount);
