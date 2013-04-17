@@ -42,7 +42,7 @@ public class MessageActivity extends TxlActivity {
 	
 	private final TxLogger  log = new TxLogger(MessageActivity.class, TxlConstants.MODULE_ID_MESSAGE);
 	
-	private Context                       mContext        = null;
+	private Context                       me        = null;
 	//private TextView headerView = null;
 	
 	
@@ -95,7 +95,7 @@ public class MessageActivity extends TxlActivity {
     
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		mContext = this;
+		me = this;
 		final LayoutInflater inflater = LayoutInflater.from(this);
 		//hScrollView = (MyHorizontalScrollView) inflater.inflate(R.layout.tab_message, null);
         setContentView(inflater.inflate(R.layout.tab_message, null));
@@ -152,7 +152,7 @@ public class MessageActivity extends TxlActivity {
 					int position, long id) {
 				SmsRecord sr = (SmsRecord)parent.getAdapter().getItem(position);
 				Intent intent = IntentUtil.getSmsDetailIntent(sr.threadId);
-				mContext.startActivity(intent);
+				me.startActivity(intent);
 			}
 		});
 		
@@ -196,7 +196,7 @@ public class MessageActivity extends TxlActivity {
 		pushMsgScrollListLayout = inflater.inflate(R.layout.pushmsg_scroll_list, null); 
 		pushMsgListView = (ListView)pushMsgScrollListLayout.findViewById(R.id.pushmsg_list);
 		if(!pushMesssageModuleLoaded){
-			PushMsgDao.loadPushMsgList(mContext,pushMsgMap);
+			PushMsgDao.getSingle(me).loadPushMsgList(me,pushMsgMap);
 		}
 		pushMsgListAdapter = new PushMsgListAdapter(this,pushMsgMap);
 		pushMsgListView.setAdapter(pushMsgListAdapter);

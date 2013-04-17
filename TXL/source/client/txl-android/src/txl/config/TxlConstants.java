@@ -96,6 +96,8 @@ public class TxlConstants
     public static final int MSG_LOGIN_OFFLINE_STATUS = 0x00014;
     public static final int MSG_LOGOUT_SUCCESS = 0x00015;
     
+    public static final int MSG_RECEIVE_PUSHMESSAGE = 0x00016;
+    
     
     public static class Toast{
         public static int LONG = 5000;

@@ -2,6 +2,7 @@ package txl;
 
 import txl.activity.R;
 import txl.call.CallRecordActivity;
+import txl.common.BadgeView;
 import txl.config.Config;
 import txl.config.ConfigParser;
 import txl.config.TxlConstants;
@@ -10,21 +11,22 @@ import txl.guide.GuideActivity;
 import txl.log.TxLogger;
 import txl.message.MessageActivity;
 import txl.message.pushmessage.core.MessageManager;
-import txl.message.pushmessage.core.MessageService;
+import txl.message.pushmessage.dao.PushMsgDao;
 import txl.setting.SettingActivity;
-import txl.util.Tool;
 import txl.util.TxlSharedPreferences;
-import android.app.Activity;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import android.widget.TabWidget;
 import android.widget.TextView;
 
 public class MainActivity extends TabActivity
@@ -32,8 +34,8 @@ public class MainActivity extends TabActivity
     private static int tabtxtsize=13;
     private TabHost tabHost;
     private  TxLogger log ;
-    private Activity me = this;
-    
+    private MainActivity me = this;
+    private BadgeView badge;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -66,7 +68,8 @@ public class MainActivity extends TabActivity
             setupTab(TxlConstants.TAB_ITEM_SETTING, intent);
             
             tabHost.setCurrentTab(2); 
-            
+            badge = new BadgeView(me, tabHost.getTabWidget(), 1);
+            badge.hide();
             MessageManager.startMessageService(me, null);
             
         }else{
@@ -168,5 +171,29 @@ public class MainActivity extends TabActivity
         super.onDestroy();
         log.info("onDestroy");
     } 
+    
+    private Handler handler = new Handler(){
+    	public void handleMessage(Message msg)
+        {
+            if(msg.what == TxlConstants.MSG_RECEIVE_PUSHMESSAGE){
+            	//int count = MessageManager.infoMap.size();
+            	int count = PushMsgDao.getSingle(me).getPushMsgCount();
+            	log.info("msg count: "+count);
+            	if(count!=0){
+            		if(!badge.isShown()){
+                		badge.show();
+                	}
+            		badge.setText(String.valueOf(count));
+            	}else{
+            		badge.hide();
+            	}
+            	
+            }
+        }
+    };
+    
+    public Handler getHandler(){
+    	return this.handler;
+    }
     
 }

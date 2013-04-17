@@ -5,16 +5,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import txl.activity.R;
-import txl.common.TxlNotification;
 import txl.common.po.Account;
+import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
+import txl.message.pushmessage.dao.PushMsgDao;
+import txl.message.pushmessage.po.PushMsg;
 import txl.message.pushmessage.po.PushMsg;
 import txl.util.Tool;
 import android.content.Context;
 import android.content.Intent;
-import android.widget.RemoteViews;
 
 /**
  * @ClassName:  MessageManager.java
@@ -31,15 +31,27 @@ public class MessageManager
     
     public static Context context;
     
-    private static TxLogger log = new TxLogger(MessageManager.class, TxlConstants.MODULE_ID_MESSAGE);         
+    private static TxLogger log = new TxLogger(MessageManager.class, TxlConstants.MODULE_ID_MESSAGE);    
+    
+    /**
+     * 处理消息
+     * @param rpm
+     */
+    public static void dealData(PushMsg rpm){
+    	PushMsgDao.getSingle(context).savePushMsg(rpm);
+    	//MessageManager.infoMap.put(rpm.msgId, rpm);
+    	Config.mainContext.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_RECEIVE_PUSHMESSAGE));
+    }
     /**
      * 发出通知
      * @param info
      */
-    public static void showNotice(final PushMsg info){
+    public static void showNotice(final PushMsg rpm){
        /* infoMap.put(info.uuId, info);
         RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.notification_notice);
         TxlNotification.sendNotification2(context, info,remoteView); */
+    	
+        
     }
     
     

@@ -1,13 +1,13 @@
 package txl.message.pushmessage.adapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Map;
 
 import txl.activity.R;
 import txl.config.TxlConstants;
-import txl.contact.dao.ContactDao;
 import txl.log.TxLogger;
 import txl.message.pushmessage.po.PushMsgRecord;
-import txl.message.sms.po.SmsRecord;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +18,8 @@ import android.widget.TextView;
 public class PushMsgListAdapter extends BaseAdapter {
 	private final static TxLogger log = new TxLogger(PushMsgListAdapter.class,
 			TxlConstants.MODULE_ID_MESSAGE);
+	
+	private SimpleDateFormat sfd = new SimpleDateFormat("MM/dd HH:mm");
 	private Context mContext;
 	public Map<Integer, PushMsgRecord> pushMsgMap;
 
@@ -67,8 +69,9 @@ public class PushMsgListAdapter extends BaseAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
  
-		holder.pushMsgNameView.setText(pm.pushMsg.name);
-		holder.pushMsgDateView.setText(pm.pushMsg.dateStr);
+		holder.pushMsgNameView.setText(pm.pushMsg.sendName);
+		String dateStr = sfd.format(new Date(pm.pushMsg.dtime.getTime()));
+		holder.pushMsgDateView.setText(dateStr);
 		holder.pushMsgContent.setText(pm.pushMsg.content);
 
 		return convertView;

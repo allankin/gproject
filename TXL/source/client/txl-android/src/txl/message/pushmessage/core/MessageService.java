@@ -51,6 +51,7 @@ public class MessageService extends Service
         
         int userId = intent.getExtras().getInt("userId");
         context = this.getApplicationContext();
+        MessageManager.context = context;
         String pushIp = Config.getInstance().getPushMessageServerIP();
         Integer port = Config.getInstance().getPushMessageServerPort();
         connectServer(pushIp,port,userId);
