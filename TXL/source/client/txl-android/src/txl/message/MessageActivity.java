@@ -6,14 +6,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import txl.MessageReceiver;
 import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.TxlHorizontalScrollView;
 import txl.common.TxlHorizontalScrollView.SizeCallback;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
+import txl.message.pushmessage.PushMessageActivity;
 import txl.message.pushmessage.adapter.PushMsgListAdapter;
 import txl.message.pushmessage.dao.PushMsgDao;
+import txl.message.pushmessage.po.PushMsg;
 import txl.message.pushmessage.po.PushMsgRecord;
 import txl.message.sms.adapter.SmsCategoryListAdapter;
 import txl.message.sms.adapter.SmsListAdapter;
@@ -22,6 +25,7 @@ import txl.message.sms.po.SmsRecord;
 import txl.util.IntentUtil;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -36,13 +40,12 @@ import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 public class MessageActivity extends TxlActivity {
 	
 	private final TxLogger  log = new TxLogger(MessageActivity.class, TxlConstants.MODULE_ID_MESSAGE);
 	
-	private Context                       me        = null;
+	private MessageActivity                       me        = null;
 	//private TextView headerView = null;
 	
 	
@@ -83,7 +86,7 @@ public class MessageActivity extends TxlActivity {
      
     private ListView pushMsgListView =null;
     private PushMsgListAdapter pushMsgListAdapter = null;
-    
+    LinearLayout pushMessageListViewPartsContainer;
     
     /************************************ PUSHMessage 模块变量  end ********************************************************/
     
@@ -107,6 +110,16 @@ public class MessageActivity extends TxlActivity {
         ArrayAdapter<String> messageTypeAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,new String[]{"短信","推送消息"});
         messageTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         messageTypeSpinner.setAdapter(messageTypeAdapter);
+        
+        
+        
+        hScrollView = (TxlHorizontalScrollView)findViewById(R.id.messageHorizontalScrollContainer);
+        messageListViewPartsContainer = (LinearLayout)findViewById(R.id.messageListViewPartsContainer);
+        //loadSmsModule(inflater);
+        
+        pushMessageListViewPartsContainer = (LinearLayout)findViewById(R.id.pushMessageListViewPartsContainer);
+        
+        //messageTypeSpinner.setSelection(0,false);
         messageTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id)
@@ -126,11 +139,9 @@ public class MessageActivity extends TxlActivity {
         });
         
         
-        hScrollView = (TxlHorizontalScrollView)findViewById(R.id.messageHorizontalScrollContainer);
-        messageListViewPartsContainer = (LinearLayout)findViewById(R.id.messageListViewPartsContainer);
-        //loadSmsModule(inflater);
-        
-		
+        MessageReceiver mr = new MessageReceiver(me);
+        IntentFilter filter = new IntentFilter(TxlConstants.ACTION_MESSAGE_RECEIVED);
+		me.registerReceiver(mr, filter);
 	}
 	/**
 	 * 加载SMS模块
@@ -139,6 +150,7 @@ public class MessageActivity extends TxlActivity {
 	public void loadSmsModule(LayoutInflater inflater){
 		/*清理操作*/
 		messageListViewPartsContainer.removeAllViews();
+		pushMessageListViewPartsContainer.setVisibility(View.INVISIBLE);
 		
 		smsScrollListLayout = inflater.inflate(R.layout.sms_scroll_list, null);
         smsCategoryListLayout = inflater.inflate(R.layout.sms_category_scroll_list, null);
@@ -190,23 +202,50 @@ public class MessageActivity extends TxlActivity {
 	public void loadPushMessageModule(LayoutInflater inflater){
 		/*清理操作*/
 		messageListViewPartsContainer.removeAllViews();
-		
+		pushMessageListViewPartsContainer.setVisibility(View.VISIBLE);
 		//headerView.setText("推送消息列表");
 		headerSlideBtn.setVisibility(View.INVISIBLE);
 		pushMsgScrollListLayout = inflater.inflate(R.layout.pushmsg_scroll_list, null); 
 		pushMsgListView = (ListView)pushMsgScrollListLayout.findViewById(R.id.pushmsg_list);
-		if(!pushMesssageModuleLoaded){
+		//if(!pushMesssageModuleLoaded){
 			PushMsgDao.getSingle(me).loadPushMsgList(me,pushMsgMap);
-		}
+		//}
 		pushMsgListAdapter = new PushMsgListAdapter(this,pushMsgMap);
 		pushMsgListView.setAdapter(pushMsgListAdapter);
-		messageListViewPartsContainer.addView(pushMsgScrollListLayout);
+		pushMsgListView.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				int contactUserId = 0;
+				PushMsgRecord record =  pushMsgMap.get(position);
+				int count = record.pushMsgRecordList.size();
+				if(record.pushMsg.type!= TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
+					contactUserId = record.pushMsg.recUserId;
+				}else{
+					contactUserId = record.pushMsg.sendUserId;
+				}
+				log.info("loadPushMessageModule .... contactUserId :"+contactUserId+",count:"+count);
+				Intent intent = new Intent(me,PushMessageActivity.class);
+				intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, contactUserId);
+				intent.putExtra(TxlConstants.INTENT_BUNDLE_COUNT, count);
+				startActivity(intent);
+			}
+		});
+		//messageListViewPartsContainer.addView(pushMsgScrollListLayout);
 		
-		pushMesssageModuleLoaded = true;
+		pushMessageListViewPartsContainer.addView(pushMsgScrollListLayout);
+		//pushMesssageModuleLoaded = true;
 	}
 	
-	
-	
+	/**
+	 * 更新推送消息listview
+	 */
+	public void refreshPushMessageModule(){
+		if(pushMsgListAdapter!=null){
+			PushMsgDao.getSingle(me).loadPushMsgList(me,pushMsgMap);
+			pushMsgListAdapter.notifyDataSetChanged();
+		}
+	}
 	
 	
 	 /**

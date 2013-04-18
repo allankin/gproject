@@ -49,6 +49,7 @@ public class PushMsgListAdapter extends BaseAdapter {
 		TextView pushMsgNameView;
 		TextView pushMsgDateView;
 		TextView pushMsgContent;
+		TextView pushMsgCount;
 	}
 
 	public View getView(int position, View convertView, ViewGroup parent) {
@@ -64,6 +65,7 @@ public class PushMsgListAdapter extends BaseAdapter {
 					.findViewById(R.id.pushmsg_date);
 			holder.pushMsgContent = (TextView) convertView
 					.findViewById(R.id.pushmsg_content);
+			holder.pushMsgCount = (TextView) convertView.findViewById(R.id.pushmsg_count);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -73,7 +75,7 @@ public class PushMsgListAdapter extends BaseAdapter {
 		String dateStr = sfd.format(new Date(pm.pushMsg.dtime.getTime()));
 		holder.pushMsgDateView.setText(dateStr);
 		holder.pushMsgContent.setText(pm.pushMsg.content);
-
+		holder.pushMsgCount.setText(String.valueOf(pm.pushMsgRecordList.size()));
 		return convertView;
 	}
 

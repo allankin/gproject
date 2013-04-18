@@ -16,7 +16,6 @@ import txl.log.TxLogger;
  * @Description: 
  * @Author JinChao
  * @Date 2013-2-27 下午2:43:24
- * @Copyright: 版权由 HundSun 拥有
  */
 public class HeartBeatRunnable implements BizRunnable
 {

@@ -171,7 +171,7 @@ public class Tool {
     	message.what = msg;
     	return message;
     }
-    public static Message genMessage(int msg,String content){
+    public static Message genMessage(int msg,Object content){
     	Message message = new Message();
     	message.what = msg;
     	message.obj = content;

@@ -10,6 +10,8 @@ import java.nio.charset.Charset;
 import java.util.Iterator;
 import java.util.Stack;
 
+import txl.config.TxlConstants;
+import txl.log.TxLogger;
 import txl.message.pushmessage.biz.DataRunnable;
 import txl.message.pushmessage.biz.HeartBeatRunnable;
 import txl.message.pushmessage.biz.OfflineRunnable;
@@ -30,8 +32,7 @@ public class NIOSocket {
     private int userId;
     public boolean pollFlag = true;
     
-    public final String TAG = NIOSocket.class.getSimpleName();
-    
+    private TxLogger log = new TxLogger(NIOSocket.class, TxlConstants.MODULE_ID_MESSAGE);
     
     public Stack<Byte> jsonStack = new Stack<Byte>();
     ByteBuffer readBuffer = ByteBuffer.allocate(1);
@@ -50,7 +51,7 @@ public class NIOSocket {
      * @throws IOException
      */
     public SocketChannel initClient(String ip,int port,int userId) throws IOException {
-        Log.d(TAG," socket  initClient....");
+        log.info(" socket  initClient....");
         this.userId = userId;
         channel = SocketChannel.open();
         channel.configureBlocking(false);
@@ -153,18 +154,26 @@ public class NIOSocket {
                     
                     OfflineRunnable offline = new OfflineRunnable();//下线通知
                     RunnableManager.regist(7, offline);
-                    registRun.sendRequest(userId);
+                    //registRun.sendRequest(userId);
+                    
+                    /*发送注册消息*/
+                    String str =  "{\"u\":" + userId + ",\"b\":1}";
+                    ByteBuffer writeBuffer = ByteBuffer.wrap(str.getBytes());
+                    channel.write(writeBuffer);
+                    
+                    
                     
                     SendMessageDealer.getSingle(channel).start();
                     ReceiveMessageDealer.getSingle().start();
                     
                     channel.register(this.selector, SelectionKey.OP_READ);
                     
+                    log.info("isConnectable .... 消息服务启动.....");
                     
-                    
-                    
-                    
-                } else if (key.isReadable()) {
+                }else if(key.isAcceptable()){
+                	log.info("isAcceptable...");
+                }
+                else if (key.isReadable()) {
                         if(-1 == read(key))
                             throw new Exception("与服务器失去连接...."); 
                 }
@@ -187,8 +196,8 @@ public class NIOSocket {
         if(count == -1){
             try
             {
-                Log.d("log", "read error：count = -1，close");
                 channel.close();
+                log.info("read error：count = -1，  close");
                 /*
                 {
                     singleBuffer.rewind();
@@ -254,14 +263,13 @@ public class NIOSocket {
             //String msg = new String(singleBuffer.array(),"utf-32").trim();
             //String msg = String.valueOf(cs.decode(singleBuffer).array()); 
             String msg = new String(singleBuffer.array(),"utf-8");
-            Log.d("log",msg);
             //Log.d(TAG, new String(singleBuffer.array()).toString());
             singleBuffer.clear();
             //RunnableManager.parse(msg);
             
             synchronized (ReceiveMessageQueue.queue) {
             	ReceiveMessageQueue.queue.add(msg);
-            	ReceiveMessageQueue.queue.notify();
+            	ReceiveMessageQueue.queue.notifyAll();
 			}
         }
         return 1;

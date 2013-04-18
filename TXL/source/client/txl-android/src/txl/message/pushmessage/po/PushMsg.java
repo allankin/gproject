@@ -14,6 +14,8 @@ public class PushMsg implements Serializable{
 	public Timestamp dtime;
 	/*1:接收   2：发送  3：草稿   */
 	public int type;
+	/*是否已读  0：未读  1：已读*/
+	public int isRead;
 	
 	public String  toJSONString(){
 		if(type==2){

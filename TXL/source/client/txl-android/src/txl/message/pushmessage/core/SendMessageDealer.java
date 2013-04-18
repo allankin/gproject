@@ -18,6 +18,7 @@ public class SendMessageDealer implements Runnable {
 	@Override
 	public void run() {
 		log.info("Thread : SendMessageDealer  is running .....");
+		this.isRunning = true;
 		while(isRunning){
 			String jsonString = null;
 			synchronized (SendMessageQueue.queue) {
@@ -64,6 +65,8 @@ public class SendMessageDealer implements Runnable {
 			Thread t = new Thread(this);
 			t.setName("SendMessageDealer");
 			t.start();
+		}else{
+			log.info("thread:  SendMessageDealer ... 不能重复启动...");
 		}
 	}
 

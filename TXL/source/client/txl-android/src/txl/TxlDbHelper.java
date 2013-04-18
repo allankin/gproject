@@ -60,7 +60,7 @@ public class TxlDbHelper extends SQLiteOpenHelper
         db.execSQL("DROP TABLE IF EXISTS txl_department");
         db.execSQL("DROP TABLE IF EXISTS txl_comp_user");
         db.execSQL("DROP TABLE IF EXISTS txl_share_user");
-        db.execSQL("DROP TABLE IF EXISTS txl_setting");
+        db.execSQL("DROP TABLE IF EXISTS txl_push_msg");
         
         db.execSQL("CREATE TABLE txl_setting (setting_id integer primary key autoincrement," +
         		"wifi_tip char(1)," +
@@ -108,6 +108,7 @@ public class TxlDbHelper extends SQLiteOpenHelper
         		"content text," +
         		"send_name varchar(20)," +
         		"type integer," +
+        		"is_read integer," +
         		"dtime timestamp)");
         
         

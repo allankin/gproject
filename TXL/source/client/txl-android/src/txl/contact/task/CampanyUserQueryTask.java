@@ -45,7 +45,6 @@ public class CampanyUserQueryTask extends NetworkAsyncTask<UserQuery,Void,List<C
 	}
 	@Override
 	protected void onPreExecute() {
-		log.info("onPreExecute...  isRunning: "+ctx.isRunning);
 		if(me.actionCode == TxlConstants.ACTION_QUERY_CODE){
 			WebLoadingTipDialog.getInstance(this.ctx).show(TxlConstants.TIP_QUERING);
 		}else if(me.actionCode == TxlConstants.ACTION_SYNC_CODE){

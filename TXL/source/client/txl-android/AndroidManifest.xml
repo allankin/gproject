@@ -54,6 +54,7 @@
         <activity android:name="txl.call.CallRecordDetailActivity" android:launchMode="singleTask"/>
         
         <activity android:name="txl.message.MessageActivity" android:launchMode="singleTask"/>
+        <activity android:name="txl.message.pushmessage.PushMessageActivity" android:launchMode="singleTask"/>
         <activity android:name=".SmsActivity" android:launchMode="singleTask"/>
         <activity android:name=".SiteActivity" android:launchMode="singleTask"/>
         <activity android:name="txl.contact.ContactActivity" />
@@ -79,5 +80,5 @@
     
     
     
-
+     
 </manifest>

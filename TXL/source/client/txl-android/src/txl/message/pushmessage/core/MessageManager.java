@@ -38,9 +38,12 @@ public class MessageManager
      * @param rpm
      */
     public static void dealData(PushMsg rpm){
+    	log.info("dealData  ... context:"+context);
     	PushMsgDao.getSingle(context).savePushMsg(rpm);
     	//MessageManager.infoMap.put(rpm.msgId, rpm);
     	Config.mainContext.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_RECEIVE_PUSHMESSAGE));
+    	Intent intent = new Intent(TxlConstants.ACTION_MESSAGE_RECEIVED);
+    	Config.mainContext.sendBroadcast(intent);
     }
     /**
      * 发出通知
@@ -55,25 +58,36 @@ public class MessageManager
     }
     
     
-    public static void startMessageService(Context context,Integer userId) {
-    	if(userId==null){
-    		Account account =Account.getSingle().readUserFromFS();
-    		if(account!=null){
-    		    userId= account.userId;
-    		}
-    	}
-    	if(userId==null || userId ==0){
-    		log.warn("startMessageService, userId ："+userId+", 未启动消息服务....");
-    		return;
-    	}
-        Intent i = new Intent();
-        i.setClass(context, MessageService.class);
-        i.putExtra("userId", userId);
-        if (!Tool.isServiceRunning(MessageService.class, context)){
-        	context.startService(i);
-        }else{
-        	log.warn("MessageService已经启动, 不能重复启动...");
-        }
+    public static void startMessageService(final Context context,final Integer _userId) {
+    	new Thread(new Runnable() {
+			@Override
+			public void run() {
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				Integer userId = _userId;
+				if(userId==null){
+					Account account =Account.getSingle().readUserFromFS();
+					if(account!=null){
+						userId= account.userId;
+					}
+				}
+				if(userId==null || userId ==0){
+					log.warn("startMessageService, userId ："+userId+", 未启动消息服务....");
+					return;
+				}
+				Intent i = new Intent();
+				i.setClass(context, MessageService.class);
+				i.putExtra("userId", userId);
+				if (!Tool.isServiceRunning(MessageService.class, context)){
+					context.startService(i);
+				}else{
+					log.warn("MessageService已经启动, 不能重复启动...");
+				}
+			}
+		}).start();
     }
     
     public static void showBox(){

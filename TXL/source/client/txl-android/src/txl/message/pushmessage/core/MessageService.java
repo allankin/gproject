@@ -85,16 +85,24 @@ public class MessageService extends Service
             public void run()
             {
                 client = new NIOSocket();
+                SocketChannel channel = null;
                 try
                 {
-                    SocketChannel channel = client.initClient(ip,port,userId);
-                    //regist(channel,userId);
-                    log.info("消息服务启动.....");
-                    
+                	channel = client.initClient(ip,port,userId);
                     client.listen();
                 }catch (Exception e)
                 {
                     e.printStackTrace();
+                    
+                    SendMessageDealer.getSingle(channel).stop();
+                    ReceiveMessageDealer.getSingle().stop();
+                    synchronized (SendMessageQueue.queue) {
+                    	SendMessageQueue.queue.notifyAll();
+					}
+                    synchronized (ReceiveMessageQueue.queue) {
+                    	ReceiveMessageQueue.queue.notifyAll();
+                    }
+                    
                     if(client.channel!=null){
                         if(!client.channel.socket().isClosed()){
                             try
@@ -124,7 +132,7 @@ public class MessageService extends Service
                     }
                     try
                     {
-                        Thread.sleep(1000);
+                        Thread.sleep(3000);
                     } catch (InterruptedException e1)
                     {
                         e1.printStackTrace();

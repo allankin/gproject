@@ -112,6 +112,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 			compUser.compId = cursor.getInt(4);
 			companyUserList.add(compUser);
 		}
+		log.info("getCompUserList .... size : "+companyUserList.size());
 		cursor.close();
 		db.close();
 		return companyUserList;

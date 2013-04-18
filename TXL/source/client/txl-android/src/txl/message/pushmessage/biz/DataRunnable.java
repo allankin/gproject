@@ -4,6 +4,7 @@ import java.sql.Timestamp;
 
 import org.json.JSONObject;
 
+import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
@@ -30,12 +31,13 @@ public class DataRunnable implements BizRunnable
         
         PushMsg rpm = new PushMsg();
         rpm.content = jobject.optString("c");
-        rpm.recUserId = jobject.optInt("u");
+        //rpm.recUserId = jobject.optInt("u");
+        rpm.recUserId = Account.getSingle().userId;
         rpm.sendName = jobject.optString("sn");
         rpm.sendUserId = jobject.optInt("s");
         rpm.msgId = jobject.optString("m");
         rpm.dtime = new Timestamp(System.currentTimeMillis());
-        rpm.type = 1;
+        rpm.type = TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE;
         log.info("receive : "+jobject.toString());
         
         MessageManager.dealData(rpm);
@@ -44,6 +46,7 @@ public class DataRunnable implements BizRunnable
     public void send(PushMsg pushMsg){
     	synchronized (SendMessageQueue.queue) {
 			SendMessageQueue.queue.add(pushMsg.toJSONString());
+			SendMessageQueue.queue.notifyAll();
 		}
     	log.info("send : "+pushMsg.toJSONString());
     }

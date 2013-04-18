@@ -7,11 +7,12 @@ import txl.log.TxLogger;
 import txl.message.pushmessage.biz.RunnableManager;
 
 public class ReceiveMessageDealer implements Runnable {
-	private TxLogger log = new TxLogger(ReceiveMessageQueue.class, TxlConstants.MODULE_ID_MESSAGE);
+	private TxLogger log = new TxLogger(ReceiveMessageDealer.class, TxlConstants.MODULE_ID_MESSAGE);
 	private boolean isRunning;
 	@Override
 	public void run() {
 		log.info("Thread : ReceiveMessageDealer  is running .....");
+		this.isRunning = true;
 		while(isRunning){
 			String jsonString = null;
 			synchronized (ReceiveMessageQueue.queue) {
@@ -51,6 +52,8 @@ public class ReceiveMessageDealer implements Runnable {
 			Thread t = new Thread(this);
 			t.setName("ReceiveMessageDealer");
 			t.start();
+		}else{
+			log.info("thread:  ReceiveMessageDealer ... 不能重复启动...");
 		}
 	}
 }

@@ -421,7 +421,6 @@ public class ContactActivity extends TxlActivity implements Handlable
     protected void onPause()
     {
         super.onPause();
-        isRunning = false;
         log.info("onPause");
         if(overlay!=null){
         	overlay.setVisibility(View.INVISIBLE);
@@ -446,7 +445,6 @@ public class ContactActivity extends TxlActivity implements Handlable
     @Override
     protected void onResume(){
         super.onResume();
-        isRunning = true;
         log.info("onResume");
         
     }

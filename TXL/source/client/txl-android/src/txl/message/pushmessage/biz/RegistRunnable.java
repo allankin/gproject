@@ -21,6 +21,7 @@ public class RegistRunnable implements BizRunnable {
 		String str = "{\"u\":" + userId + ",\"b\":1}";
 		synchronized (SendMessageQueue.queue) {
 			SendMessageQueue.queue.add(str);
+			SendMessageQueue.queue.notifyAll();
 		}
 		log.info("sendRequest: " + str);
 	}

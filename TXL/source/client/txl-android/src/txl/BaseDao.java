@@ -12,7 +12,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class BaseDao
 {
     protected SQLiteOpenHelper dbHelper;
+    protected Context context;
     public BaseDao(Context context){
+    	this.context = context;
         this.dbHelper = new TxlDbHelper(context);
     }
 }

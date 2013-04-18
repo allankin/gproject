@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>  
   
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:layout_width="fill_parent" android:layout_height="40dip" android:paddingLeft="5dp">  
+    android:layout_width="fill_parent" android:layout_height="40dip" android:paddingLeft="5dp" android:background="@color/white">  
     <!-- <ImageView android:id="@+id/contact_photo"  
         android:layout_width="40dip" android:layout_height="40dip" />  --> 
     <TextView android:id="@+id/pushmsg_name"  
@@ -16,38 +16,41 @@
 
    
     <TextView
-        android:id="@+id/pushmsg_count"
+        android:id="@+id/pushmsg_rec_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/pushmsg_name"
         android:layout_marginLeft="10dp"
-        android:layout_alignBottom="@+id/pushmsg_name"
         android:textSize="12sp" 
         android:textIsSelectable="true"
         android:textColor="@color/listview_item_text_color"
+        android:background="@drawable/bg_inbox_normal"
         />
-    <TextView
-        android:id="@+id/pushmsg_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignBottom="@+id/pushmsg_name"
-        android:textIsSelectable="true"
-        android:textSize="12sp"
-        android:textColor="@color/listview_item_text_color"
-        />
-     
-	<!-- ??? 不解，为何需要：android:layout_marginTop="20dp"  -->       
-     <TextView android:id="@+id/pushmsg_content"  
+    
+    <TextView android:id="@+id/pushmsg_me"  
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"  
         android:layout_alignParentBottom="true"
-        android:layout_marginTop="20dp"
+        android:layout_alignParentRight="true"
         android:singleLine="true"  
         android:textSize="15sp" 
         android:textIsSelectable="true"
         android:text="" 
         android:textColor="@color/listview_item_text_color"
         />
+    
+    <TextView
+        android:id="@+id/pushmsg_send_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/pushmsg_me"
+        android:layout_marginRight="10dp"
+        android:textSize="12sp" 
+        android:textIsSelectable="true"
+        android:textColor="@color/listview_item_text_color"
+        android:background="@drawable/bg_outbox_sms_normal"
+        />
+     
+     
     
 </RelativeLayout>  

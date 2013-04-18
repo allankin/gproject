@@ -9,4 +9,6 @@
     <color name="activity_background_color">#FFFFFF</color>
     <color name="listview_item_text_color">#000000</color>
     <color name="listview_item_text_gray_color">#cccccc</color>
+    <color name="tab_bg_color">#1b1e25</color>
+    <!-- <color name="tab_bg_hover_color">#fdfaf8</color> -->
 </resources>

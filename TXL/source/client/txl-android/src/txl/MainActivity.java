@@ -68,17 +68,24 @@ public class MainActivity extends TabActivity
             setupTab(TxlConstants.TAB_ITEM_SETTING, intent);
             
             tabHost.setCurrentTab(2); 
+            setTabBackground();
             badge = new BadgeView(me, tabHost.getTabWidget(), 1);
             badge.hide();
             MessageManager.startMessageService(me, null);
-            
+            showMessageBadge();
         }else{
             Intent intent = new Intent(me,GuideActivity.class);
             startActivity(intent);
         }
     }
     
-    
+    private void setTabBackground(){
+    	TabWidget tabs = this.tabHost.getTabWidget();
+    	int len = tabs.getChildCount();
+    	for(int i=0;i<len;i++){
+    		tabs.getChildAt(i).setBackgroundResource(R.drawable.bg_tab);
+    	}
+    }
     
     
     private void setupTab(final String tag,Intent intent) {
@@ -177,20 +184,23 @@ public class MainActivity extends TabActivity
         {
             if(msg.what == TxlConstants.MSG_RECEIVE_PUSHMESSAGE){
             	//int count = MessageManager.infoMap.size();
-            	int count = PushMsgDao.getSingle(me).getPushMsgCount();
-            	log.info("msg count: "+count);
-            	if(count!=0){
-            		if(!badge.isShown()){
-                		badge.show();
-                	}
-            		badge.setText(String.valueOf(count));
-            	}else{
-            		badge.hide();
-            	}
-            	
+            	showMessageBadge();
             }
         }
     };
+    
+    private void showMessageBadge(){
+    	int count = PushMsgDao.getSingle(me).getUnreadPushMsgCount();
+    	log.info("msg count: "+count);
+    	if(count!=0){
+    		if(!badge.isShown()){
+        		badge.show();
+        	}
+    		badge.setText(String.valueOf(count));
+    	}else{
+    		badge.hide();
+    	}
+    }
     
     public Handler getHandler(){
     	return this.handler;

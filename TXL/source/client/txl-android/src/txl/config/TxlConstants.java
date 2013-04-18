@@ -131,7 +131,7 @@ public class TxlConstants
     
     
     public static final String DB_NAME = "txl";
-    public static final int DB_VERSION = 8;
+    public static final int DB_VERSION = 12;
     
     
     public static final String INTENT_BUNDLE_HEADER_TITLE = "headerTitle";
@@ -141,6 +141,8 @@ public class TxlConstants
     
     public static final String INTENT_BUNDLE_DEPART = "depart";
     public static final String INTENT_BUNDLE_DEPART_ID = "departId";
+    
+    public static final String INTENT_BUNDLE_CONTACT_ID = "contactId";
     
     public static final int REQUEST_CODE_SELECT_DEPARTMENT = 0x0001;
     
@@ -171,10 +173,15 @@ public class TxlConstants
     public static final int resendCount = 3;
     public static final String ACTION_OFFLINE_NOTICE = "offline.notice";
     public static final String ACTION_OVER_RESEND_COUNT = "over.resend.count";
-    
+    public static final String ACTION_MESSAGE_RECEIVED = "ACTION_MESSAGE_RECEIVED";
     
     public static final int HEARTBEAT_REQUST_CODE = 0x003;
     public static final int HEARTBEAT_REPLY_CODE = 0x004;
+    
+    
+    public static final int PUSH_MESSAGE_TYPE_RECEIVE = 1;
+    public static final int PUSH_MESSAGE_TYPE_SEND = 2;
+    public static final int PUSH_MESSAGE_TYPE_DRAFT = 3;
     
     
     
