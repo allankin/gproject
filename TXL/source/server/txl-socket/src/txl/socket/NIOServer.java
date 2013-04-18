@@ -10,6 +10,7 @@ import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.json.JSONException;
@@ -45,6 +46,7 @@ public class NIOServer {
 		serverChannel.register(selector, SelectionKey.OP_ACCEPT);
 	}
 
+	
 	/**
 	 * 采用轮询的方式监听selector上是否有需要处理的事件，如果有，则进行处理
 	 * @throws IOException
@@ -140,14 +142,18 @@ public class NIOServer {
                        sendCount = existChannel.channel.write(ByteBuffer.wrap(offlineResp.getBytes())); 
                        log.info("发送下线通知："+offlineResp+", count : "+sendCount);
                    }
-                   int i=1;
-                   while(i<6){
-                       
-                       String dataJsonStr = "{\"b\":6,\"c\":\"服务器消息内容...."+i+"\",\"m\":\""+i+"\",\"sn\":\"sendName"+i+"\"}";
+                   int j=1;
+                   while(j<10){
+                       Random r = new Random();
+                       int i = r.nextInt(50);
+                       if(i==0 || i==7){
+                    	   i++;
+                       }
+                       String dataJsonStr = "{\"b\":6,\"c\":\"服务器消息内容...."+i+"\",\"m\":\""+i+"\",\"sn\":\"sendName"+i+"\",\"s\":"+i+"}";
                        writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes("UTF-8"));
                        sendCount = channel.write(writeBuffer);
                        log.info("发送内容："+dataJsonStr+" count："+sendCount);
-                       i++;
+                       j++;
                    }
                    
                    
