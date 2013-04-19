@@ -2,31 +2,56 @@ package txl.socket;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
+import java.nio.channels.Channel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.rmi.AlreadyBoundException;
+import java.rmi.Naming;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import org.apache.log4j.Logger;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import txl.socket.rmi.PushMessageService;
+import txl.socket.rmi.impl.PushMessageServiceImpl;
 import txl.socket.util.Tool;
 
 
 public class NIOServer {
 	
-    private Logger log = Logger.getLogger(NIOServer.class);
+    private static Logger log = Logger.getLogger(NIOServer.class);
     
     //通道管理器
 	private Selector selector;
 	
     private List<WrapChannel> channelList = new ArrayList<WrapChannel>();
+    
+    private Map<Integer,WrapChannel> channelMap = new HashMap<Integer,WrapChannel>();
+    
+    private static NIOServer nioServer;
+    private NIOServer(){
+        
+    }
+    public static NIOServer getSingle(){
+        if(nioServer==null){
+            nioServer = new NIOServer();
+        }
+        return nioServer;
+    }
+    
+    
 	/**
 	 * 获得一个ServerSocket通道，并对该通道做一些初始化的工作
 	 * @param port  绑定的端口号
@@ -53,7 +78,7 @@ public class NIOServer {
 	 */
 	@SuppressWarnings("unchecked")
 	public void listen() throws IOException {
-	    log.info("服务端启动成功！");
+	    log.info("消息服务端开始监听.... port:"+TxlConstants.SOCKET_PORT);
 		// 轮询访问selector
 		while (true) {
 			//当注册的事件到达时，方法返回；否则,该方法会一直阻塞
@@ -70,8 +95,7 @@ public class NIOServer {
 							.channel();
 					// 获得和客户端连接的通道
 					SocketChannel channel = server.accept();
-                    WrapChannel wrapChannel = new WrapChannel(channel);
-                    channelList.add(wrapChannel);
+                   
                     // 设置成非阻塞
 					channel.configureBlocking(false);
 
@@ -116,6 +140,7 @@ public class NIOServer {
                 try
                 {
                     channel.close();
+                    releaseChannel(channel);
                 } catch (IOException e1)
                 {
                     log.error(Tool.getExceptionTrace(e1));
@@ -137,10 +162,16 @@ public class NIOServer {
                    sendCount = channel.write(writeBuffer);
                    log.info("发送注册回馈："+registerResp+", count : "+sendCount);
                    WrapChannel existChannel = channelExist(userId);
+                   /*已经注册，通道存在 */
                    if(existChannel!=null){
                        String offlineResp = "{\"b\":7}";
                        sendCount = existChannel.channel.write(ByteBuffer.wrap(offlineResp.getBytes())); 
                        log.info("发送下线通知："+offlineResp+", count : "+sendCount);
+                   }
+                   /*未注册，通道不存在*/
+                   else{
+                       WrapChannel wrapChannel = new WrapChannel(channel);
+                       addChannel(wrapChannel);
                    }
                    int j=1;
                    while(j<10){
@@ -155,7 +186,6 @@ public class NIOServer {
                        log.info("发送内容："+dataJsonStr+" count："+sendCount);
                        j++;
                    }
-                   
                    
                 }
                 /*心跳处理*/
@@ -177,6 +207,7 @@ public class NIOServer {
                 try
                 {
                     channel.close();
+                    releaseChannel(channel);
                 } catch (IOException e1)
                 {
                     log.error(Tool.getExceptionTrace(e1));
@@ -189,6 +220,7 @@ public class NIOServer {
             try
             {
                 channel.close();
+                releaseChannel(channel);
             } catch (IOException e1)
             {
                 log.error(Tool.getExceptionTrace(e1));
@@ -196,6 +228,51 @@ public class NIOServer {
         }
         
 		
+	}
+	/**
+	 * 添加WrapChannel
+	 * @param channel
+	 */
+	private void addChannel(WrapChannel channel){
+	    int beforeListSize = this.channelList.size();
+	    int beforeMapSize = this.channelMap.size();
+	    this.channelList.add(channel);
+	    this.channelMap.put(channel.userId, channel);
+	    int afterListSize = this.channelList.size();
+	    int afterMapSize = this.channelMap.size();
+	    
+	    log.info("addChannel...."+channel.userId+",beforeListSize"+beforeListSize+",beforeMapSize:"+beforeMapSize+",afterListSize:"+afterListSize+",afterMapSize:"+afterMapSize);
+	}
+	/**
+	 * 释放WrapChannel
+	 * @param channel
+	 */
+	private void releaseChannel(Object channel){
+	    int beforeListSize = this.channelList.size();
+	    int beforeMapSize = this.channelMap.size();
+	    WrapChannel wc = null;
+
+	    if(channel instanceof WrapChannel){
+	        wc = (WrapChannel)channel;
+	    }else if(channel instanceof Channel){
+	        for(WrapChannel _wc : this.channelList){
+	            if(_wc.channel == channel){
+	                wc = _wc;
+	                break;
+	            }
+	        }
+	    }
+	    if(wc!=null){
+	        this.channelList.remove(wc);
+	        this.channelMap.remove(wc.userId);
+	        int afterListSize = this.channelList.size();
+	        int afterMapSize = this.channelMap.size();
+	        
+	        log.info("releaseChannel...."+wc.userId+",beforeListSize"+beforeListSize+",beforeMapSize:"+beforeMapSize+",afterListSize:"+afterListSize+",afterMapSize:"+afterMapSize);
+	    }else{
+	        log.info("WrapChannel 为 null ");
+	    }
+        
 	}
 	
 	
@@ -208,7 +285,7 @@ public class NIOServer {
 	    return null;
 	}
     
-    class WrapChannel{
+    public class WrapChannel{
         public SocketChannel channel;
         public int userId;
         public WrapChannel(SocketChannel channel){
@@ -216,20 +293,40 @@ public class NIOServer {
         }
         
     }
+    public List<WrapChannel> getChannelList()
+    {
+        return channelList;
+    }
+    
+    public void setChannelList(List<WrapChannel> channelList)
+    {
+        this.channelList = channelList;
+    }
+    
+    public Map<Integer, WrapChannel> getChannelMap()
+    {
+        return channelMap;
+    }
+    
+    public void setChannelMap(Map<Integer, WrapChannel> channelMap)
+    {
+        this.channelMap = channelMap;
+    }
+    
     
 	/**
 	 * 启动服务端测试
 	 * @throws IOException 
 	 */
-	public static void main(String[] args) throws IOException {
-		final NIOServer server = new NIOServer();
+	public static void main(String[] args){
+		final NIOServer server = NIOServer.getSingle();
         
         Runnable runnable = new Runnable(){
             public void run()
             {
                 try
                 {
-                    server.initServer(8888);
+                    server.initServer(TxlConstants.SOCKET_PORT);
                     server.listen();
                 } catch (IOException e)
                 {
@@ -238,8 +335,20 @@ public class NIOServer {
             }
             
         };
-        
         new Thread(runnable).start();
+        
+        PushMessageService pushMessageService = new PushMessageServiceImpl();
+        log.info("PushMessageService : "+pushMessageService);
+        try
+        {
+            LocateRegistry.createRegistry(TxlConstants.RMI_PORT);
+            Naming.bind("rmi://"+TxlConstants.HOST+":"+TxlConstants.RMI_PORT+"/PushMessageService", pushMessageService);
+            log.info("消息RMI开始监听.... port:"+TxlConstants.RMI_PORT);
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+            log.error(Tool.getExceptionTrace(e));
+        }  
 	}
 
 }
