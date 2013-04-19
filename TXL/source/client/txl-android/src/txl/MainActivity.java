@@ -47,7 +47,8 @@ public class MainActivity extends TabActivity
     }
     
     private void preprocess(){
-    	boolean loaded = TxlSharedPreferences.getBoolean(me, "loaded", false);
+         
+        boolean loaded = TxlSharedPreferences.getBoolean(me, "loaded", false);
         if(loaded){
             final View view = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
             setContentView(view);

@@ -17,17 +17,15 @@ public class ReceiveMessageDealer implements Runnable {
 			String jsonString = null;
 			synchronized (ReceiveMessageQueue.queue) {
 				jsonString = ReceiveMessageQueue.queue.poll();
-			}
-			/*若消息存在，则统一处理*/
-			if(jsonString!=null){
-				RunnableManager.parse(jsonString);
-			}else{
-				synchronized (ReceiveMessageQueue.queue) {
-					try {
-						ReceiveMessageQueue.queue.wait();
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+				/*若消息存在，则统一处理*/
+				if(jsonString!=null){
+				    RunnableManager.parse(jsonString);
+				}else{
+				    try {
+				        ReceiveMessageQueue.queue.wait();
+				    } catch (InterruptedException e) {
+				        e.printStackTrace();
+				    }
 				}
 			}
 		}

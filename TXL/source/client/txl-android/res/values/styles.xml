@@ -1,5 +1,10 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 	
+    <style name="TxlActivityTheme">
+	    <item name="android:windowBackground">@color/white</item>
+	    <item name="android:background">#FFFFFF</item>
+	</style>
+    
     <style name="dial_liner">
         <item name="android:orientation">horizontal</item> 
         <item name="android:layout_width">fill_parent</item> 
