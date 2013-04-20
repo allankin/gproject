@@ -9,6 +9,8 @@ public class PushMsg implements Serializable{
 	public int sendUserId;
 	public String content;
 	public String sendName;
+	/*用手机，向外发送消息时设置*/
+	public String recName;
 	public String msgId;
 	/*消息时间*/
 	public Timestamp dtime;

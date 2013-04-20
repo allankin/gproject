@@ -44,12 +44,14 @@ private final TxLogger  log = new TxLogger(PushMessageActivity.class, TxlConstan
 		Intent intent = getIntent();
 		int contactId = 0;
 		int messageCount = 0 ;
+		String contactName="";
 		if(intent!=null){
 			Bundle bundle = intent.getExtras();
 			if(bundle!=null){
 				contactId = bundle.getInt(TxlConstants.INTENT_BUNDLE_CONTACT_ID);
 				messageCount = bundle.getInt(TxlConstants.INTENT_BUNDLE_COUNT);
-				header.setText(contactId+"("+messageCount+")");
+				contactName = bundle.getString(TxlConstants.INTENT_BUNDLE_CONTACT_NAME);
+				header.setText(contactName+"("+messageCount+")");
 				
 				pushMsgList = PushMsgDao.getSingle(me).getPushMsg(contactId);
 				detailListAdapter = new PushMsgDetailListAdapter(me,pushMsgList);

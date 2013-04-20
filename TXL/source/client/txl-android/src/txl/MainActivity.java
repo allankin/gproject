@@ -17,13 +17,18 @@ import txl.util.TxlSharedPreferences;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
+import android.view.WindowManager;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
@@ -70,6 +75,9 @@ public class MainActivity extends TabActivity
             
             tabHost.setCurrentTab(2); 
             setTabBackground();
+            
+            ajustTabContent();
+            
             badge = new BadgeView(me, tabHost.getTabWidget(), 1);
             badge.hide();
             MessageManager.startMessageService(me, null);
@@ -80,6 +88,32 @@ public class MainActivity extends TabActivity
         }
     }
     
+    private void ajustTabContent(){
+    	final FrameLayout tabContent = (FrameLayout)findViewById(android.R.id.tabcontent);
+    	tabContent.postDelayed(new Runnable()
+        {
+            
+            @Override
+            public void run()
+            {
+            	WindowManager wm = (WindowManager) me.getSystemService(Context.WINDOW_SERVICE);
+            	int height = wm.getDefaultDisplay().getHeight();  
+        		DisplayMetrics metrics = me.getResources().getDisplayMetrics();
+        		Rect frame = new Rect();
+        		getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        		int statusBarHeight = frame.top;
+                 
+            	TabWidget tab = (TabWidget)findViewById(android.R.id.tabs);
+                int ftpx = tab.getHeight();
+                
+               
+                tabContent.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT,height-statusBarHeight-ftpx));
+                tabContent.invalidate();
+            }
+        },500);
+    	
+    	
+    }
     private void setTabBackground(){
     	TabWidget tabs = this.tabHost.getTabWidget();
     	int len = tabs.getChildCount();

@@ -219,15 +219,19 @@ public class MessageActivity extends TxlActivity {
 				int contactUserId = 0;
 				PushMsgRecord record =  pushMsgMap.get(position);
 				int count = record.pushMsgRecordList.size();
+				String contactName;
 				if(record.pushMsg.type!= TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
 					contactUserId = record.pushMsg.recUserId;
+					contactName = record.pushMsg.recName;
 				}else{
 					contactUserId = record.pushMsg.sendUserId;
+					contactName = record.pushMsg.sendName;
 				}
 				log.info("loadPushMessageModule .... contactUserId :"+contactUserId+",count:"+count);
 				Intent intent = new Intent(me,PushMessageActivity.class);
 				intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, contactUserId);
 				intent.putExtra(TxlConstants.INTENT_BUNDLE_COUNT, count);
+				intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME, contactName);
 				startActivity(intent);
 			}
 		});

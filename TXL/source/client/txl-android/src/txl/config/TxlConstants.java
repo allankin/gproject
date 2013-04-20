@@ -143,6 +143,8 @@ public class TxlConstants
     public static final String INTENT_BUNDLE_DEPART_ID = "departId";
     
     public static final String INTENT_BUNDLE_CONTACT_ID = "contactId";
+    public static final String INTENT_BUNDLE_CONTACT_NAME = "contactName";
+    
     
     public static final int REQUEST_CODE_SELECT_DEPARTMENT = 0x0001;
     
@@ -169,7 +171,7 @@ public class TxlConstants
     public static final int COMMDIR_SHARE_TYPE = 2;
     
     public static final int resendDuration=10000;
-    public static final int heartBeatInterval = 10000;
+    public static final int heartBeatInterval = 100000;
     public static final int resendCount = 3;
     public static final String ACTION_OFFLINE_NOTICE = "offline.notice";
     public static final String ACTION_OVER_RESEND_COUNT = "over.resend.count";

@@ -205,13 +205,15 @@ public class PushMsgDao extends BaseDao{
 	public int getUnreadPushMsgCount(){
 		String sql = "select count(*) as num from txl_push_msg where is_read = 0 and type=1 ";
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		Cursor cursor = db.rawQuery(sql, null);
 		int count =0;
-		if (cursor.moveToNext()) {
-			count = cursor.getInt(0);
+		if(db.isOpen()){
+			Cursor cursor = db.rawQuery(sql, null);
+			if (cursor.moveToNext()) {
+				count = cursor.getInt(0);
+			}
+			cursor.close();
+			db.close();
 		}
-		cursor.close();
-		db.close();
 		return count;
 	}
 	

@@ -40,7 +40,9 @@
 
         <RelativeLayout
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent" >
+            android:layout_height="fill_parent" 
+            android:id="@+id/tab_layout"
+            >
 
             <TabWidget
                 android:id="@android:id/tabs"

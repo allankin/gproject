@@ -38,7 +38,7 @@ public class NIOSocket {
     ByteBuffer readBuffer = ByteBuffer.allocate(1);
     
     ByteBuffer contentBuffer = ByteBuffer.allocate(1024);
-    ByteBuffer singleBuffer = ByteBuffer.allocate(500);
+    ByteBuffer singleBuffer = ByteBuffer.allocate(1024);
     
     
     Charset cs = Charset.forName("UTF-8");
