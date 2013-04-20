@@ -39,21 +39,7 @@ public class MessageManager
      */
     public static void dealData(PushMsg rpm){
     	log.info("dealData  ... context:"+context);
-    	boolean flag = false;
-    	while(!flag){
-    	    flag = PushMsgDao.getSingle(context).savePushMsg(rpm);
-    	    if(!flag){
-    	        try
-                {
-                    Thread.sleep(50);
-                } catch (InterruptedException e)
-                {
-                    e.printStackTrace();
-                }
-    	    }
-    	}
-    	
-    	
+    	PushMsgDao.getSingle(context).savePushMsg(rpm);
     	//MessageManager.infoMap.put(rpm.msgId, rpm);
     	Config.mainContext.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_RECEIVE_PUSHMESSAGE));
     	Intent intent = new Intent(TxlConstants.ACTION_MESSAGE_RECEIVED);

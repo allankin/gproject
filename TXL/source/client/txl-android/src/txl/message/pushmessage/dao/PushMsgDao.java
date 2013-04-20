@@ -86,34 +86,27 @@ public class PushMsgDao extends BaseDao{
 	 * 包括接收与发送消息
 	 * @param recPushMsg
 	 */
-	public boolean savePushMsg(PushMsg pushMsg){
+	public synchronized void savePushMsg(PushMsg pushMsg){
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		/*if(!db.isOpen()){
+		if(!db.isOpen()){
 			db = this.context.openOrCreateDatabase(TxlConstants.DB_NAME, Context.MODE_PRIVATE, null);
-		}*/
-		if(db.isOpen()){
-		    db.beginTransaction();
-	        ContentValues cv = new ContentValues();
-	        cv.put("msg_id", pushMsg.msgId);
-	        cv.put("rec_user_id", pushMsg.recUserId);
-	        cv.put("send_user_id", pushMsg.sendUserId);
-	        cv.put("send_name", pushMsg.sendName);
-	        cv.put("content", pushMsg.content);
-	        cv.put("type", pushMsg.type);
-	        cv.put("dtime",pushMsg.dtime.toString());
-	        cv.put("is_read", 0);
-	        long rowId = db.insert("txl_push_msg", null, cv);
-	        log.info("msg_id:"+pushMsg.msgId+",rec_user_id:"+pushMsg.recUserId+",content:"+pushMsg.content);
-	        db.setTransactionSuccessful();
-	        db.endTransaction();
-	        db.close();
-	        log.info("saveReceivePushMsg... rowId:"+rowId);
-	        return rowId!=-1;
-		}else{
-		    log.info("saveReceivePushMsg...  db not open ");
-		    return false;
 		}
-		
+		db.beginTransaction();
+		ContentValues cv = new ContentValues();
+		cv.put("msg_id", pushMsg.msgId);
+		cv.put("rec_user_id", pushMsg.recUserId);
+		cv.put("send_user_id", pushMsg.sendUserId);
+		cv.put("send_name", pushMsg.sendName);
+		cv.put("content", pushMsg.content);
+		cv.put("type", pushMsg.type);
+		cv.put("dtime",pushMsg.dtime.toString());
+		cv.put("is_read", 0);
+		db.insert("txl_push_msg", null, cv);
+		log.info("msg_id:"+pushMsg.msgId+",rec_user_id:"+pushMsg.recUserId+",content:"+pushMsg.content);
+		db.setTransactionSuccessful();
+		db.endTransaction();
+		db.close();
+		log.info("saveReceivePushMsg... ");
 	} 
 	
 	
