@@ -1,0 +1,83 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <style name="TxlActivityPadding">
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+    </style>
+    
+    <style name="TxlActivityTheme">
+	    <item name="android:windowBackground">@color/white</item>
+	    <item name="android:background">#FFFFFF</item>
+	</style>
+
+    <style name="dial_liner">
+        <item name="android:orientation">horizontal</item> 
+        <item name="android:layout_width">fill_parent</item> 
+        <item name="android:layout_height">60dp</item> 
+    </style>
+    
+    <style name="dial_grid_btn">
+        <item name="android:layout_weight">1</item> 
+        <item name="android:layout_width">0dp</item> 
+        <item name="android:layout_height">fill_parent</item> 
+    </style>    
+    
+    <style name="Txl.Skin.Widget.Spinner" parent="android:Widget">
+	     <item name="android:background">@drawable/select_dropdown</item>
+	     <item name="android:clickable">true</item>
+	</style>
+	
+    <style name="Txl.Skin.Default" parent="android:Theme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+         <item name="android:background">@color/white</item>
+    </style>
+    
+    <style name="activity_background">
+        <item name="android:background">@color/white</item>
+    </style>
+    
+    <style name="contact_action_liner">
+        <item name="android:paddingTop">8dp</item>
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginLeft">20dip</item>
+        <item name="android:layout_marginRight">20dip</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+    
+    <style name="setting_column1">
+        <item name="android:gravity">left</item> 
+        <item name="android:layout_marginRight">1px</item>
+    	<item name="android:layout_height">50dp</item>
+    	<item name="android:layout_weight">1</item>
+    	<item name="android:layout_marginBottom">1px</item>
+    	<item name="android:textColor">#333333</item>
+    	<item name="android:layout_width">0dip</item>
+    </style>
+    
+    <style name="setting_column2">
+        <item name="android:gravity">center_vertical|left</item> 
+    	<item name="android:layout_height">50dp</item>
+    	<item name="android:layout_weight">5</item>
+    	<item name="android:textColor">#333333</item>
+    	<item name="android:layout_width">0dip</item>
+    </style>
+    
+    <style name="setting_column3">
+        <item name="android:gravity">center_vertical|right</item>
+    	<item name="android:layout_height">50dp</item>
+    	<item name="android:layout_weight">1</item>
+    	<item name="android:textColor">#333333</item>
+    	<item name="android:layout_width">0dip</item>
+    </style>
+    
+    
+    
+    <style name="txl_pushmessage_detail_word_style">
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/listview_item_text_color</item>
+    </style>
+</resources>
