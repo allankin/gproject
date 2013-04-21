@@ -33,7 +33,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:cacheColorHint="@android:color/transparent"
-        android:listSelector="@android:color/transparent" >
+        android:listSelector="@android:color/transparent" 
+        style="@style/txl_list_padding"
+        >
     </ListView>
 
 </LinearLayout>

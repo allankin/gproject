@@ -8,7 +8,14 @@ package txl.socket;
  */
 public class TxlConstants
 {
-    public static final String HOST = "192.168.92.61";
+	/**
+	 * 
+	 * 192.168.92.61
+	 * 192.168.2.100
+	 * 
+	 * 
+	 */
+    public static final String HOST = "localhost";
     
     public static final int SOCKET_PORT = 8888;
     

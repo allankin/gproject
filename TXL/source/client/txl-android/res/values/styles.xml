@@ -1,9 +1,16 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
     
-    <style name="TxlActivityPadding">
+    <style name="TxlPadding">
         <item name="android:paddingLeft">5dp</item>
         <item name="android:paddingRight">5dp</item>
     </style>
+    
+    <style name="txl_list_padding">
+        <item name="android:paddingLeft">5dp</item>
+        <item name="android:paddingRight">5dp</item>
+    </style>
+    
+    
     
     <style name="TxlActivityTheme">
 	    <item name="android:windowBackground">@color/white</item>
@@ -27,6 +34,11 @@
 	     <item name="android:clickable">true</item>
 	</style>
 	
+    <style name="Txl_Skin_Widget_Header_Spinner">
+	     <item name="android:background">@drawable/header_select_dropdown</item>
+	     <item name="android:clickable">true</item>
+	</style>
+    
     <style name="Txl.Skin.Default" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -74,10 +86,20 @@
     	<item name="android:layout_width">0dip</item>
     </style>
     
-    
-    
     <style name="txl_pushmessage_detail_word_style">
-        <item name="android:textSize">20sp</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textColor">@color/listview_item_text_color</item>
     </style>
+    
+    
+    <style name="txl_header_word_style">
+        <item name="android:textSize">23sp</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    
+    <style name="txl_header_layout_style">
+    	<item name="android:layout_height">54dp</item>
+        <item name="android:background">@drawable/nav_bar_bg</item>
+    </style>
+    
 </resources>

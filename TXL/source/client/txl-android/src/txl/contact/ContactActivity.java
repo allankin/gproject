@@ -122,7 +122,7 @@ public class ContactActivity extends TxlActivity implements Handlable
         commDirContainer = (LinearLayout)findViewById(R.id.contact_commdir_container);
         
         Spinner commdirTypeSpinner = (Spinner)findViewById(R.id.commdir_type);
-		ArrayAdapter<String> commDirTypeAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,me.getResources().getStringArray(R.array.contact_commdir_type));
+		ArrayAdapter<String> commDirTypeAdapter = new ArrayAdapter<String>(this,R.layout.spinner_style,me.getResources().getStringArray(R.array.contact_commdir_type));
 		commDirTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		commdirTypeSpinner.setAdapter(commDirTypeAdapter);
 		

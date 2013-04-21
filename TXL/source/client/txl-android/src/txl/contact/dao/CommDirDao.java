@@ -33,7 +33,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 	}
 
 	public static CommDirDao getSingle(Context context) {
-		if (commDirDao == null) {
+		if (!TxlConstants.IS_DAO_SINGLE_ABLE || commDirDao == null) {
 			commDirDao = new CommDirDao(context);
 		}
 		return commDirDao;

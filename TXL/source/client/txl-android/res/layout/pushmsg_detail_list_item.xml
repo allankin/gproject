@@ -1,23 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>  
   
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:layout_width="fill_parent" android:layout_height="40dip" android:paddingLeft="5dp" android:paddingRight="5dp" android:background="@color/white">  
+    android:layout_width="fill_parent" android:layout_height="wrap_content" android:paddingBottom="18dp" android:background="@color/white">  
     <!-- <ImageView android:id="@+id/contact_photo"  
         android:layout_width="40dip" android:layout_height="40dip" />  --> 
     <TextView android:id="@+id/pushmsg_rec_content"  
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"  
         android:layout_alignParentLeft="true" 
-        android:singleLine="true"  
+        android:layout_marginRight="40dp"
         android:textIsSelectable="true"
         style="@style/txl_pushmessage_detail_word_style"
         android:background="@drawable/bg_inbox_normal"
-        />  
+        />
     <TextView
         android:id="@+id/pushmsg_send_content"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
+        android:layout_marginLeft="40dp"
         android:textIsSelectable="true"
         style="@style/txl_pushmessage_detail_word_style"
         android:background="@drawable/bg_outbox_sms_normal"

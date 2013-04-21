@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/headerbg"
-    android:layout_height="54dp"
+    style="@style/txl_header_layout_style"
     android:layout_width="fill_parent"
     >
     
@@ -18,7 +17,7 @@
     
     <Spinner
                         android:id="@+id/commdir_type"
-                        style="@style/Txl.Skin.Widget.Spinner"
+                        style="@style/Txl_Skin_Widget_Header_Spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawSelectorOnTop="true"

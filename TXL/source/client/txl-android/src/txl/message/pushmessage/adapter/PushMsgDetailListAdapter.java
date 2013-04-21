@@ -1,10 +1,11 @@
 package txl.message.pushmessage.adapter;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import txl.activity.R;
 import txl.config.TxlConstants;
-import txl.contact.po.ShareUser;
 import txl.log.TxLogger;
 import txl.message.pushmessage.po.PushMsg;
 import android.content.Context;
@@ -16,7 +17,7 @@ import android.widget.TextView;
 
 public class PushMsgDetailListAdapter extends BaseAdapter 
 {
-	
+	private SimpleDateFormat sfd = new SimpleDateFormat("MM/dd HH:mm");
 	private final static TxLogger log = new TxLogger(PushMsgDetailListAdapter.class, TxlConstants.MODULE_ID_CONTACT);
     	private Context mContext;
     	private List<PushMsg> pushMsgList;
@@ -62,14 +63,14 @@ public class PushMsgDetailListAdapter extends BaseAdapter
             }else{
             	holder = (ViewHolder)convertView.getTag();
             }
+            
+            String dateStr = sfd.format(new Date(msg.dtime.getTime()));
             if(msg.type == TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
-            	holder.nameView.setText(msg.sendName);
-            	holder.recContentView.setText(msg.content);
+            	holder.recContentView.setText(msg.content+"  "+dateStr);
             	holder.sendContentView.setVisibility(View.INVISIBLE);
             	holder.recContentView.setVisibility(View.VISIBLE);
             }else if(msg.type == TxlConstants.PUSH_MESSAGE_TYPE_SEND){
-            	holder.meView.setText("我");
-            	holder.sendContentView.setText(msg.content);
+            	holder.sendContentView.setText(msg.content+"  "+dateStr);
             	holder.recContentView.setVisibility(View.INVISIBLE);
             	holder.sendContentView.setVisibility(View.VISIBLE);
             }

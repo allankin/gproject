@@ -131,6 +131,9 @@ public class CallRecordActivity extends TxlActivity
         //int height = getWindowManager().getDefaultDisplay().getHeight();   
         int height = 530;
         dw = new DialWindow(this, width, height);
+        dw.getContentView().setFocusableInTouchMode(true);
+        
+        
         Config.tabHost.getTabWidget().getChildTabViewAt(0).setOnTouchListener(new OnTouchListener() {
 			
 			@Override
@@ -193,16 +196,7 @@ public class CallRecordActivity extends TxlActivity
 
     }
     
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if(!dw.isShowing()&&keyCode == KeyEvent.KEYCODE_MENU){
-            View rootView = getWindow().getDecorView().findViewById(android.R.id.content);
-            dw.showAtLocation(rootView, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
-        }
-        else{
-            dw.dismiss();
-        }
-        return true;
-    }
+    
     
     
     class MyListAdapter extends BaseAdapter

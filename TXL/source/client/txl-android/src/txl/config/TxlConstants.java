@@ -186,5 +186,7 @@ public class TxlConstants
     public static final int PUSH_MESSAGE_TYPE_DRAFT = 3;
     
     
+    public static final boolean IS_DAO_SINGLE_ABLE = false;
+    
     
 }

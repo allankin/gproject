@@ -1,14 +1,20 @@
 package txl;
 
+import txl.activity.R;
 import txl.call.CallRecordActivity;
+import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.contact.ContactActivity;
 import txl.log.TxLogger;
 import txl.message.MessageActivity;
 import txl.setting.SettingActivity;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Handler;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 
 public abstract class TxlActivity extends Activity {
 	public abstract Handler getHandler();
@@ -37,4 +43,31 @@ public abstract class TxlActivity extends Activity {
                 return super.onKeyUp(keyCode, event);    
         }
     }
+	
+	
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+		Class clazz = this.getClass();    
+		if(clazz.isAssignableFrom(CallRecordActivity.class)||clazz.isAssignableFrom(ContactActivity.class)){
+			getMenuInflater().inflate(R.menu.menu_common, menu);
+    		int size = menu.size();
+    		for(int i=0;i<size;i++){
+    			MenuItem item = menu.getItem(i);
+    			if(item.getItemId() == R.id.menu_setting){
+    				item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+						@Override
+						public boolean onMenuItemClick(MenuItem item) {
+							Config.tabHost.setCurrentTab(3);
+							return false;
+						}
+					});
+    			}
+    		}
+    	} 
+        return true;
+    }
+	
+	
+	
 }

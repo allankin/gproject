@@ -26,7 +26,7 @@ public class SettingDao extends BaseDao implements CacheAble
     }
     
     public static SettingDao getSingle(Context context){
-    	if(settingDao == null){
+    	if(!TxlConstants.IS_DAO_SINGLE_ABLE || settingDao == null){
     		settingDao = new SettingDao(context);
     	}
     	return settingDao;

@@ -1,19 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/nav_bar_bg"
-    android:layout_height="54dp"
     android:layout_width="fill_parent"
+    style="@style/txl_header_layout_style"
     >
-    
     
     <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="" 
-        android:textSize="25sp"
         android:layout_centerInParent="true"	
+        style="@style/txl_header_word_style"
         />
 
 </RelativeLayout>

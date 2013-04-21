@@ -2,6 +2,7 @@ package txl.message.pushmessage.biz;
 
 import org.json.JSONObject;
 
+import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import txl.message.pushmessage.core.SendMessageQueue;
@@ -15,9 +16,8 @@ import txl.message.pushmessage.core.SendMessageQueue;
 public class RegistRunnable implements BizRunnable {
 	private TxLogger log = new TxLogger(RegistRunnable.class,
 			TxlConstants.MODULE_ID_MESSAGE);
-    private int userId;
+	
 	public void sendRequest(int userId) {
-		this.userId = userId;
 		String str = "{\"u\":" + userId + ",\"b\":1}";
 		synchronized (SendMessageQueue.queue) {
 			SendMessageQueue.queue.add(str);
@@ -29,6 +29,8 @@ public class RegistRunnable implements BizRunnable {
 	public void dealReply(final JSONObject jobj) {
 		HeartBeatRunnable heartBeatRunnable = (HeartBeatRunnable) RunnableManager
 				.getRunnable(TxlConstants.HEARTBEAT_REQUST_CODE);
+		//HS_TODO: 要求保存账号信息(暂默认)
+		int userId = Account.getSingle().userId;
 		heartBeatRunnable.sendRequest(userId);
 	}
 

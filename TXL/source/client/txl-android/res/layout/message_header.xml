@@ -1,19 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?> 
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@drawable/headerbg"
-    android:layout_height="54dp"
+    style="@style/txl_header_layout_style"
     android:layout_width="fill_parent"
     >
     
-    <Button
-	            android:id="@+id/header_slide"
-	            android:layout_width="42.6dp"
-	            android:layout_height="42.6dp"
-	            android:layout_alignParentLeft="true"
-	            android:layout_centerVertical="true"
-	            android:background="@drawable/menu_unfold_ori"
-	            />		
+    
     <!-- <TextView
         android:id="@+id/header"
         android:layout_width="wrap_content"
@@ -25,11 +17,12 @@
     
     <Spinner
                         android:id="@+id/message_type"
-                        style="@style/Txl.Skin.Widget.Spinner"
+                        style="@style/Txl_Skin_Widget_Header_Spinner"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:drawSelectorOnTop="true"
                         android:layout_centerInParent="true"
+                        android:gravity="right"
                         android:prompt="@string/prompt_message_type" />
 
 </RelativeLayout>

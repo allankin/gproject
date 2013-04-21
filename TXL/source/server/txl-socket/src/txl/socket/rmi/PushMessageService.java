@@ -14,5 +14,18 @@ import txl.socket.rmi.po.SendResult;
  */
 public interface PushMessageService extends Remote 
 {
+	/**
+	 * 消息发送
+	 * @param pushMessage
+	 * @return
+	 * @throws RemoteException
+	 */
     public SendResult send(PushMessage pushMessage)throws RemoteException;
+    /**
+     * 判断用户是否在线
+     * @param userId
+     * @return
+     * @throws RemoteException
+     */
+    public boolean isOnline(Integer userId) throws RemoteException;
 }

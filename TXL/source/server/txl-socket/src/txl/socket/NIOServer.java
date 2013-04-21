@@ -28,13 +28,24 @@ import txl.socket.rmi.PushMessageService;
 import txl.socket.rmi.impl.PushMessageServiceImpl;
 import txl.socket.util.Tool;
 
-
+/**
+ * 消息服务器
+ * 
+ * HS_TODO: 
+ * 未采用多线程处理
+ * 未对channelList、 map 做同步处理
+ * 
+ * @author jinchao
+ *
+ */
 public class NIOServer {
 	
     private static Logger log = Logger.getLogger(NIOServer.class);
     
     //通道管理器
 	private Selector selector;
+	
+	
 	
     private List<WrapChannel> channelList = new ArrayList<WrapChannel>();
     
@@ -171,10 +182,11 @@ public class NIOServer {
                    /*未注册，通道不存在*/
                    else{
                        WrapChannel wrapChannel = new WrapChannel(channel);
+                       wrapChannel.userId = userId;
                        addChannel(wrapChannel);
                    }
                    int j=1;
-                   while(j<10){
+                   while(j<3){
                        Random r = new Random();
                        int i = r.nextInt(50);
                        if(i==0 || i==7){
@@ -337,10 +349,11 @@ public class NIOServer {
         };
         new Thread(runnable).start();
         
-        PushMessageService pushMessageService = new PushMessageServiceImpl();
-        log.info("PushMessageService : "+pushMessageService);
+        
         try
         {
+        	PushMessageService pushMessageService = new PushMessageServiceImpl();
+            log.info("PushMessageService : "+pushMessageService);
             LocateRegistry.createRegistry(TxlConstants.RMI_PORT);
             Naming.bind("rmi://"+TxlConstants.HOST+":"+TxlConstants.RMI_PORT+"/PushMessageService", pushMessageService);
             log.info("消息RMI开始监听.... port:"+TxlConstants.RMI_PORT);

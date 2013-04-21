@@ -9,33 +9,13 @@
     <include layout="@layout/message_header" />
 
     <LinearLayout
-         android:id="@+id/pushMessageListViewPartsContainer"
+         android:id="@+id/messageListViewPartsContainer"
          android:layout_width="fill_parent"
          android:layout_height="fill_parent"
          android:layout_margin="0px"
          android:orientation="horizontal"
          android:padding="0px" >
      </LinearLayout>
-     
- 
-    <txl.common.TxlHorizontalScrollView
-        android:id="@+id/messageHorizontalScrollContainer"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_margin="0px"
-        android:fadingEdge="none"
-        android:fadingEdgeLength="0px"
-        android:padding="0px"
-        android:scrollbars="none" >
-
-        <LinearLayout
-            android:id="@+id/messageListViewPartsContainer"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_margin="0px"
-            android:orientation="horizontal"
-            android:padding="0px" >
-        </LinearLayout>
-    </txl.common.TxlHorizontalScrollView>
+    
 
 </LinearLayout>

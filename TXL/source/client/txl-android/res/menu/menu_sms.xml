@@ -1,0 +1,27 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <item
+        android:id="@+id/menu_sms_all"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_sms_all"/>
+    
+     <item
+        android:id="@+id/menu_sms_unread"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_sms_unread"/>
+     
+     
+      <item
+        android:id="@+id/menu_sms_draft"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_sms_draft"/>
+      
+       <item
+        android:id="@+id/menu_setting"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="@string/menu_setting"/>
+
+</menu>

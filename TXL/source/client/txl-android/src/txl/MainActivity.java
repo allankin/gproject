@@ -104,7 +104,6 @@ public class MainActivity extends TabActivity
                  
             	TabWidget tab = (TabWidget)findViewById(android.R.id.tabs);
                 int ftpx = tab.getHeight();
-                
                
                 tabContent.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT,height-statusBarHeight-ftpx));
                 tabContent.invalidate();
@@ -157,13 +156,7 @@ public class MainActivity extends TabActivity
         tv.setText(text);
         return view;
     }
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.activity_main, menu);
-        return true;
-    }
+    
 
     @Override
     protected void onNewIntent (Intent intent){

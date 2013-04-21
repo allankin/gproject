@@ -22,13 +22,13 @@ public class PushMsgDao extends BaseDao{
 	private final TxLogger log = new TxLogger(PushMsgDao.class,
 			TxlConstants.MODULE_ID_MESSAGE);
 	private static PushMsgDao pushMsgDao;
-
+	
 	private PushMsgDao(Context context) {
 		super(context);
 	}
 
 	public static PushMsgDao getSingle(Context context) {
-		if (pushMsgDao == null) {
+		if (!TxlConstants.IS_DAO_SINGLE_ABLE || pushMsgDao == null) {
 			pushMsgDao = new PushMsgDao(context);
 		}
 		return pushMsgDao;

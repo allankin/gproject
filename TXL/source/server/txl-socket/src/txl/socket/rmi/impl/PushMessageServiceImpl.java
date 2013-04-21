@@ -1,10 +1,8 @@
 package txl.socket.rmi.impl;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -23,9 +21,13 @@ import txl.socket.util.Tool;
  * @Author JinChao
  * @Date 2013-4-19 下午7:20:49
  */
-public class PushMessageServiceImpl implements PushMessageService,Serializable
+public class PushMessageServiceImpl extends UnicastRemoteObject implements PushMessageService
 {
-    private static final long serialVersionUID = 1L;
+	public PushMessageServiceImpl() throws RemoteException {
+		super();
+	}
+
+	private static final long serialVersionUID = 1L;
     private static final Logger log = Logger.getLogger(PushMessageServiceImpl.class);
 
     @Override
@@ -34,7 +36,6 @@ public class PushMessageServiceImpl implements PushMessageService,Serializable
         SendResult sr = new SendResult();
 
         Map<Integer, WrapChannel> channelMap = NIOServer.getSingle().getChannelMap();
-        
         log.info(" channel size : "+channelMap.size());
         for(WrapChannel c:NIOServer.getSingle().getChannelList()){
             log.info("遍历wrapChannel: userId: "+c.userId);
@@ -71,5 +72,16 @@ public class PushMessageServiceImpl implements PushMessageService,Serializable
         }
         return sr;
     }
+
+	@Override
+	public boolean isOnline(Integer userId) throws RemoteException {
+		Map<Integer, WrapChannel> channelMap = NIOServer.getSingle().getChannelMap();
+		if(userId==null)
+			return false;
+		if(channelMap.get(userId)==null){
+			return false;
+		}
+		return true;
+	}
 
 }

@@ -6,29 +6,29 @@
 	
 	<target name="clean" > 
         <delete file="${basedir}/${JAR_NAME}" /> 
+        <delete file="${basedir}/${RMI_JAR_NAME}" /> 
     </target> 
 	
-	<!--
-	<target name="copyfiles" depends="clean"> 
-	        <copy file="${sourcedir}/gui/about.gif" todir="${targetdir}/gui" /> 
-	    </target>
-		
-		<target name="compile" depends="copyfiles"> 
-	        <javac srcdir="${sourcedir}" 
-	               destdir="${targetdir}" 
-	               encoding="UTF-8" 
-	               target="1.5"/> 
-	    </target>
-			
-	-->
     <target name="jar" depends="clean"> 
         <jar destfile="${basedir}/${JAR_NAME}" 
              basedir="${classesdir}"
              manifest="MANIFEST.MF" />
+         
+		<jar destfile="${basedir}/${RMI_JAR_NAME}" >
+			<fileset dir="${classesdir}">
+				<include name="txl/socket/rmi/PushMessageService.class"/>
+				<include name="txl/socket/rmi/po/SendResult.class"/> 
+				<include name="txl/socket/po/PushMessage.class"/> 
+				<include name="txl/socket/TxlConstants.class"/> 
+				
+			</fileset>
+		</jar>
+	 
+		
     </target>  
 	<!-- 利用pscp上传至服务器  -->
 	<target name="upload" depends="jar" description="securely upload war file to server">
-		<echo message="uploading  file to server :${SERVER1_IP}  using pscp" />
+		
 		<exec executable="pscp.exe">
 			<arg value="-v" />
 			<arg value="-pw" />
@@ -36,15 +36,18 @@
 			<arg value="${basedir}/${JAR_NAME}" />
 			<arg value="${SERVER1_USERNAME}@${SERVER1_IP}:${SERVER1_DIR}/" />
 		</exec>
-		<echo message="uploading  file to server :${SERVER2_IP}  using pscp" />
+		<echo message="uploading  file to server :${SERVER1_IP}  dir: ${SERVER1_DIR} using pscp" />
+		
 		<exec executable="pscp.exe">
 			<arg value="-v" />
 			<arg value="-pw" />
-			<arg value="${SERVER2_PWD}" />
-			<arg value="${basedir}/${JAR_NAME}" />
-			<arg value="${SERVER2_USERNAME}@${SERVER2_IP}:${SERVER2_DIR}/" />
+			<arg value="${SERVER1_PWD}" />
+			<arg value="${basedir}/${RMI_JAR_NAME}" />
+			<arg value="${SERVER1_USERNAME}@${SERVER1_IP}:${SERVER2_DIR}/" />
 		</exec>
-		<echo message="done uploading file to server using pscp" />
+		<echo message="uploading  file to server :${SERVER1_IP} dir: ${SERVER2_DIR} using pscp" />
+		
+		<!-- <copy file="${basedir}/${RMI_JAR_NAME}" tofile=""></copy> -->
 	</target>
 	
 	

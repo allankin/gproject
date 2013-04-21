@@ -1,7 +1,6 @@
 package txl.message;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,37 +8,36 @@ import java.util.Map;
 import txl.MessageReceiver;
 import txl.TxlActivity;
 import txl.activity.R;
-import txl.common.TxlHorizontalScrollView;
-import txl.common.TxlHorizontalScrollView.SizeCallback;
+import txl.common.SpinnerAdapter;
+import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import txl.message.pushmessage.PushMessageActivity;
 import txl.message.pushmessage.adapter.PushMsgListAdapter;
 import txl.message.pushmessage.dao.PushMsgDao;
-import txl.message.pushmessage.po.PushMsg;
 import txl.message.pushmessage.po.PushMsgRecord;
 import txl.message.sms.adapter.SmsCategoryListAdapter;
 import txl.message.sms.adapter.SmsListAdapter;
 import txl.message.sms.dao.SmsDao;
 import txl.message.sms.po.SmsRecord;
 import txl.util.IntentUtil;
-import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 public class MessageActivity extends TxlActivity {
 	
@@ -54,7 +52,6 @@ public class MessageActivity extends TxlActivity {
 	
 	/************************************ SMS 模块变量  start ********************************************************/
 	private ListView                      smsListView       = null;
-	private ListView                      smsCategoryListView       = null;
 	private SmsListAdapter                smsListAdapter       = null;
 	/*经过汇总后的通话记录*/
 	private Map<Integer,SmsRecord> smsRecordMap = new HashMap<Integer,SmsRecord>();
@@ -67,9 +64,7 @@ public class MessageActivity extends TxlActivity {
     
     private List<String> smsCategoryList = new ArrayList<String>();
     private View smsScrollListLayout;
-    private View smsCategoryListLayout;
     private SmsCategoryListAdapter categoryListAdapter ;
-    private Button headerSlideBtn;
     private boolean smsModuleLoaded = false;
     
     /************************************ SMS 模块变量  end ********************************************************/
@@ -86,13 +81,11 @@ public class MessageActivity extends TxlActivity {
      
     private ListView pushMsgListView =null;
     private PushMsgListAdapter pushMsgListAdapter = null;
-    LinearLayout pushMessageListViewPartsContainer;
+    
     
     /************************************ PUSHMessage 模块变量  end ********************************************************/
     
     
-    
-    private TxlHorizontalScrollView hScrollView;
     private LinearLayout messageListViewPartsContainer;
     private Spinner messageTypeSpinner ;
     
@@ -104,20 +97,19 @@ public class MessageActivity extends TxlActivity {
         setContentView(inflater.inflate(R.layout.tab_message, null));
 		//setContentView(R.layout.tab_message);
         //headerView = (TextView)findViewById(R.id.header);
-        headerSlideBtn = (Button)findViewById(R.id.header_slide);
         
         messageTypeSpinner = (Spinner)findViewById(R.id.message_type);
-        ArrayAdapter<String> messageTypeAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,new String[]{"短信","推送消息"});
+        ArrayAdapter<String> messageTypeAdapter = new ArrayAdapter<String>(
+        		this,
+        		R.layout.spinner_style,
+        		new String[]{"短信","推送消息"});
         messageTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         messageTypeSpinner.setAdapter(messageTypeAdapter);
         
         
         
-        hScrollView = (TxlHorizontalScrollView)findViewById(R.id.messageHorizontalScrollContainer);
         messageListViewPartsContainer = (LinearLayout)findViewById(R.id.messageListViewPartsContainer);
         //loadSmsModule(inflater);
-        
-        pushMessageListViewPartsContainer = (LinearLayout)findViewById(R.id.pushMessageListViewPartsContainer);
         
         //messageTypeSpinner.setSelection(0,false);
         messageTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
@@ -129,6 +121,9 @@ public class MessageActivity extends TxlActivity {
                 }else{
                 	loadPushMessageModule(inflater);
                 }
+                TextView tv = (TextView)view;
+                tv.setTextColor(me.getResources().getColor(R.color.white));
+                tv.setTextSize(25);
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent)
@@ -150,10 +145,7 @@ public class MessageActivity extends TxlActivity {
 	public void loadSmsModule(LayoutInflater inflater){
 		/*清理操作*/
 		messageListViewPartsContainer.removeAllViews();
-		pushMessageListViewPartsContainer.setVisibility(View.INVISIBLE);
-		
 		smsScrollListLayout = inflater.inflate(R.layout.sms_scroll_list, null);
-        smsCategoryListLayout = inflater.inflate(R.layout.sms_category_scroll_list, null);
 		
 		//headerView.setText("短信列表");
 		
@@ -177,22 +169,11 @@ public class MessageActivity extends TxlActivity {
 		smsListAdapter = new SmsListAdapter(this,smsRecordMap);
 		smsListView.setAdapter(smsListAdapter);
 		
-		smsCategoryListView = (ListView)smsCategoryListLayout.findViewById(R.id.sms_category_list);
 		if(!smsModuleLoaded){
 			SmsDao.loadSmsCategory(smsCategoryList);
 		}
-		categoryListAdapter = new SmsCategoryListAdapter(this,smsCategoryList,smsRecordMap,smsUnReadRecordMap,smsDraftRecordMap,smsListAdapter);
-		smsCategoryListView.setAdapter(categoryListAdapter);
-		
-		headerSlideBtn.setVisibility(View.VISIBLE);
-		if(!smsModuleLoaded){
-			headerSlideBtn.setOnClickListener(new ClickListenerForScrolling(headerSlideBtn,hScrollView, smsCategoryListLayout));
-		}
-		
-		final View[] children = new View[] { smsCategoryListLayout, smsScrollListLayout };
-        /*  Scroll to app (view[1]) when layout finished. int scrollToViewIdx = 1;*/
-        hScrollView.initViews(children, 0, new SizeCallbackForMenu(headerSlideBtn));
-        
+		 
+		messageListViewPartsContainer.addView(smsScrollListLayout);
         smsModuleLoaded = true;
 	}
 	/**
@@ -202,9 +183,7 @@ public class MessageActivity extends TxlActivity {
 	public void loadPushMessageModule(LayoutInflater inflater){
 		/*清理操作*/
 		messageListViewPartsContainer.removeAllViews();
-		pushMessageListViewPartsContainer.setVisibility(View.VISIBLE);
 		//headerView.setText("推送消息列表");
-		headerSlideBtn.setVisibility(View.INVISIBLE);
 		pushMsgScrollListLayout = inflater.inflate(R.layout.pushmsg_scroll_list, null); 
 		pushMsgListView = (ListView)pushMsgScrollListLayout.findViewById(R.id.pushmsg_list);
 		//if(!pushMesssageModuleLoaded){
@@ -237,7 +216,7 @@ public class MessageActivity extends TxlActivity {
 		});
 		//messageListViewPartsContainer.addView(pushMsgScrollListLayout);
 		
-		pushMessageListViewPartsContainer.addView(pushMsgScrollListLayout);
+		messageListViewPartsContainer.addView(pushMsgScrollListLayout);
 		//pushMesssageModuleLoaded = true;
 	}
 	
@@ -250,87 +229,43 @@ public class MessageActivity extends TxlActivity {
 			pushMsgListAdapter.notifyDataSetChanged();
 		}
 	}
+	@Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+		getMenuInflater().inflate(R.menu.menu_sms, menu);
+		int size = menu.size();
+		TxlMessageOnMenuItemClickListener listener = new TxlMessageOnMenuItemClickListener();
+		for(int i=0;i<size;i++){
+			MenuItem item = menu.getItem(i);
+			item.setOnMenuItemClickListener(listener);
+		}
+		 
+        return true;
+    }
+	
+	private class TxlMessageOnMenuItemClickListener implements OnMenuItemClickListener{
+
+		@Override
+		public boolean onMenuItemClick(MenuItem item) {
+			
+			if(item.getItemId() == R.id.menu_sms_all){
+				smsListAdapter.smsRecordMap = smsRecordMap;
+				smsListAdapter.notifyDataSetChanged();
+			}else if(item.getItemId() == R.id.menu_sms_unread){
+				smsListAdapter.smsRecordMap = smsUnReadRecordMap;
+				smsListAdapter.notifyDataSetChanged();
+			}else if(item.getItemId() == R.id.menu_sms_draft){
+				smsListAdapter.smsRecordMap = smsDraftRecordMap;
+				smsListAdapter.notifyDataSetChanged();
+			}else if(item.getItemId() == R.id.menu_setting){
+				Config.tabHost.setCurrentTab(3);
+			}
+			return false;
+		}
+		
+	}
 	
 	
-	 /**
-     * Helper for examples with a HSV that should be scrolled by a menu View's width.
-     */
-    static class ClickListenerForScrolling implements OnClickListener {
-        HorizontalScrollView scrollView;
-        View menu;
-        /**
-         * Menu must NOT be out/shown to start with.
-         */
-        boolean menuOut = false;
-        Button slideBtn;
-
-        public ClickListenerForScrolling(Button slideBtn,HorizontalScrollView scrollView, View menu) {
-            super();
-            this.scrollView = scrollView;
-            this.menu = menu;
-            this.slideBtn = slideBtn;
-        }
-
-        @Override
-        public void onClick(View v) {
-            Context context = menu.getContext();
-            String msg = "Slide " + new Date();
-            //Toast.makeText(context, msg, 1000).show();
-            //System.out.println(msg);
-
-            int menuWidth = menu.getMeasuredWidth();
-
-            // Ensure menu is visible
-            menu.setVisibility(View.VISIBLE);
-
-            if (!menuOut) {
-                // Scroll to 0 to reveal menu
-                int left = 0;
-                scrollView.smoothScrollTo(left, 0);
-                slideBtn.setBackgroundResource(R.drawable.menu_unfold_ori);
-            } else {
-                // Scroll to menuWidth so menu isn't on screen.
-                int left = menuWidth;
-                scrollView.smoothScrollTo(left, 0);
-                slideBtn.setBackgroundResource(R.drawable.menu_fold_ori);
-            }
-            menuOut = !menuOut;
-        }
-    }
-
-    /**
-     * Helper that remembers the width of the 'slide' button, so that the 'slide' button remains in view, even when the menu is
-     * showing.
-     */
-    static class SizeCallbackForMenu implements SizeCallback {
-        int btnWidth;
-        View btnSlide;
-
-        public SizeCallbackForMenu(View btnSlide) {
-            super();
-            this.btnSlide = btnSlide;
-        }
-
-        @Override
-        public void onGlobalLayout() {
-            btnWidth = btnSlide.getMeasuredWidth();
-            System.out.println("btnWidth=" + btnWidth);
-        }
-
-        @Override
-        public void getViewSize(int idx, int w, int h, int[] dims) {
-            dims[0] = w;
-            dims[1] = h;
-            final int menuIdx = 0;
-            if (idx == menuIdx) {
-                //dims[0] = w - btnWidth;
-            	dims[0] = btnWidth+20;
-            }
-        }
-    }
-    
-    
-    
     @Override
     protected void onNewIntent (Intent intent){
        log.info("onNewIntent");
