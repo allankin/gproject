@@ -102,4 +102,13 @@
         <item name="android:background">@drawable/nav_bar_bg</item>
     </style>
     
+    <style name="txl_commdir_type_radio_style">
+	   <item name="android:layout_width">80dp</item>
+	   <item name="android:layout_height">match_parent</item>
+	   <item name="android:gravity">center</item>
+	   <item name="android:height">50dp</item>
+	   <item name="android:button">@null</item>
+	   <item name="android:background">@drawable/commdir_type_radio_item</item>
+	   
+	</style>
 </resources>

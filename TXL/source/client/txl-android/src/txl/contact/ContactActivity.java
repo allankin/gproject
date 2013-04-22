@@ -55,6 +55,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -120,14 +121,19 @@ public class ContactActivity extends TxlActivity implements Handlable
         setContentView(inflater.inflate(R.layout.tab_contact, null));
         sideBar =(SideBar)findViewById(R.id.sideBar);
         commDirContainer = (LinearLayout)findViewById(R.id.contact_commdir_container);
-        
-        Spinner commdirTypeSpinner = (Spinner)findViewById(R.id.commdir_type);
-		ArrayAdapter<String> commDirTypeAdapter = new ArrayAdapter<String>(this,R.layout.spinner_style,me.getResources().getStringArray(R.array.contact_commdir_type));
-		commDirTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-		commdirTypeSpinner.setAdapter(commDirTypeAdapter);
 		
+        RadioButton personalRB = (RadioButton)findViewById(R.id.personal);
+        personalRB.setChecked(true);
+        
+        
+        
+		/*
+		Spinner commdirTypeSpinner = (Spinner)findViewById(R.id.commdir_type);
+		ArrayAdapter<String> commDirTypeAdapter = new ArrayAdapter<String>(this,R.layout.spinner_style,me.getResources().getStringArray(R.array.contact_commdir_type));
+        commDirTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);  
+		commdirTypeSpinner.setAdapter(commDirTypeAdapter);
 		commdirTypeSpinner.setSelection(0,false);
-		/*默认为个人通讯录*/
+		默认为个人通讯录
 		loadPersonalCommDir();
 		commdirTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
             @Override
@@ -144,10 +150,8 @@ public class ContactActivity extends TxlActivity implements Handlable
             @Override
             public void onNothingSelected(AdapterView<?> parent)
             {
-                
             }
-            
-        });
+        });*/
         
         
     }
