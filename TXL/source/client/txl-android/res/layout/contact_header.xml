@@ -17,24 +17,23 @@
     <RadioGroup
                 android:id="@+id/comm_dir_type"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#333333"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
                 >
-
-
-                <RadioButton
-                    android:id="@+id/personal"
-                    android:text="个人" 
-                    style="@style/txl_commdir_type_radio_style"
-                    />
+		
+		        <RadioButton
+		            android:id="@+id/personal_comdir"
+		            style="@style/txl_commdir_type_radio_style"
+		            android:text="个人" />
 
                 <RadioButton
-                    android:id="@+id/company"
+                    android:id="@+id/company_comdir"
                     style="@style/txl_commdir_type_radio_style"
                     android:text="公司" />
 
                 <RadioButton
-                    android:id="@+id/share"
+                    android:id="@+id/share_comdir"
                     style="@style/txl_commdir_type_radio_style"
                     android:text="共享" />
 

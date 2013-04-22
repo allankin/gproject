@@ -10,7 +10,9 @@ import java.util.Set;
 import txl.Handlable;
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.call.po.CallRecord;
 import txl.common.SideBar;
+import txl.common.TxlAlertDialog;
 import txl.common.TxlToast;
 import txl.common.login.LoginDialog;
 import txl.common.po.Account;
@@ -18,7 +20,6 @@ import txl.config.TxlConstants;
 import txl.contact.adapter.ContactCompanyUserListAdapter;
 import txl.contact.adapter.ContactListAdapter;
 import txl.contact.adapter.ContactShareCommDirListAdapter;
-import txl.contact.dao.CommDirDao;
 import txl.contact.dao.ContactDao;
 import txl.contact.po.CommDir;
 import txl.contact.po.CommDirQuery;
@@ -30,6 +31,7 @@ import txl.contact.task.CampanyUserQueryTask;
 import txl.contact.task.ShareCommDirQueryTask;
 import txl.log.TxLogger;
 import txl.util.ContactVoComparator;
+import txl.util.IntentUtil;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -49,14 +51,13 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.Spinner;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 
 /**
@@ -121,11 +122,10 @@ public class ContactActivity extends TxlActivity implements Handlable
         setContentView(inflater.inflate(R.layout.tab_contact, null));
         sideBar =(SideBar)findViewById(R.id.sideBar);
         commDirContainer = (LinearLayout)findViewById(R.id.contact_commdir_container);
-		
-        RadioButton personalRB = (RadioButton)findViewById(R.id.personal);
-        personalRB.setChecked(true);
-        
-        
+        CommDirTypeOnCheckedChangeListener listner = new CommDirTypeOnCheckedChangeListener();
+        RadioGroup personComDir = (RadioGroup)findViewById(R.id.comm_dir_type);
+        personComDir.setOnCheckedChangeListener(listner);
+        personComDir.check(R.id.personal_comdir);
         
 		/*
 		Spinner commdirTypeSpinner = (Spinner)findViewById(R.id.commdir_type);
@@ -155,6 +155,9 @@ public class ContactActivity extends TxlActivity implements Handlable
         
         
     }
+    
+    
+    
     
     /**
      * 加载个人通讯录
@@ -188,10 +191,42 @@ public class ContactActivity extends TxlActivity implements Handlable
 		personalListView.setOnItemClickListener(new OnItemClickListener()
 		{
 			@Override
-			public void onItemClick(AdapterView<?> adapterView, View view, int position, long id)
-			{
-				Intent dialIntent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + contactList.get(position).phone));
-				//startActivity(dialIntent);
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				log.info("position:"+position+" id: "+id);
+				final ContactVo contactVo = contactList.get(position);
+				View actionBoardView = LayoutInflater.from(me).inflate(R.layout.contact_action_board,null);
+				/*拨打电话*/
+				TextView actionCall = (TextView)actionBoardView.findViewById(R.id.contact_action_call);
+				actionCall.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						me.startActivity(IntentUtil.getCallIntent(contactVo.phone));
+						TxlAlertDialog.alert.dismiss();
+					}
+				});
+				/*发送sms*/
+				TextView actionSendSms = (TextView)actionBoardView.findViewById(R.id.contact_action_send_sms);
+				actionSendSms.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						me.startActivity(IntentUtil.getSmsSendDialogIntent("",contactVo.phone));
+						TxlAlertDialog.alert.dismiss();
+					}
+				});
+				
+				/*发送推送消息*/
+				TextView actionSendPushMessage = (TextView)actionBoardView.findViewById(R.id.contact_action_send_pushmessage);
+				actionSendPushMessage.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						//HS_TODO: 打开消息推送编辑activity
+						
+						
+						TxlAlertDialog.alert.dismiss();
+					}
+				});
+				TxlAlertDialog.show(me, actionBoardView, "", null);
 			}
 		});
 		personalListView.setOnScrollListener(new OnScrollListener() {
@@ -238,11 +273,7 @@ public class ContactActivity extends TxlActivity implements Handlable
 			getWindowManager().removeView(this.overlay);	
 			this.overlay = null;
 		}
-    	if(Account.getSingle().loginStatus != TxlConstants.ACCOUNT_IS_ONLINE){
-    		/*LoginDialog.getInstance().show(me);
-    		return;*/
-    		TxlToast.showLong(me, "网络未连接，将进入离线模式");
-    	}
+    	
     	companyUserLayout = inflater.inflate(R.layout.contact_company_commdir, commDirContainer);
     	final EditText searchTxtView = (EditText)companyUserLayout.findViewById(R.id.company_user_search);
     	
@@ -471,5 +502,22 @@ public class ContactActivity extends TxlActivity implements Handlable
         	overlay = null;
         }
     }
-    
+
+ 
+    private class CommDirTypeOnCheckedChangeListener implements OnCheckedChangeListener {
+
+		@Override
+		public void onCheckedChanged(RadioGroup group, int checkedId) {
+			if(checkedId == R.id.personal_comdir){
+				loadPersonalCommDir();
+			}else if(checkedId == R.id.share_comdir){
+				loadShareCommDir();
+			}else if(checkedId == R.id.company_comdir){
+				loadCompanyCommDir();
+			}
+		}
+ 
+
+		 
+	}
 }

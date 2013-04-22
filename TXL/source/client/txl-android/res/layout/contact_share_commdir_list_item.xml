@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>  
   
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:layout_width="fill_parent" android:layout_height="40dp" 
+    android:layout_width="fill_parent" android:layout_height="wrap_content" 
     android:descendantFocusability="blocksDescendants"
     >  
     <!-- <ImageView android:id="@+id/color_image"  
@@ -15,6 +15,7 @@
         android:textIsSelectable="true"
         android:text="dd"
         android:textColor="@color/listview_item_text_color"
+        android:layout_centerVertical="true"
         />  
     <TextView android:id="@+id/contact_share_commdir_count"  
         android:layout_width="wrap_content" 
@@ -31,9 +32,10 @@
     <Button android:layout_width="wrap_content" 
         android:layout_height="wrap_content" 
         android:layout_alignParentRight="true"
-        android:text="同"
+        android:background="@drawable/setting_icon_sms_restore"
         android:id="@+id/share_commdir_sync_btn"
         android:focusable="false"
+        android:layout_centerVertical="true"
         />
      
 </RelativeLayout>  

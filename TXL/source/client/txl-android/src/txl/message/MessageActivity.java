@@ -8,7 +8,6 @@ import java.util.Map;
 import txl.MessageReceiver;
 import txl.TxlActivity;
 import txl.activity.R;
-import txl.common.SpinnerAdapter;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
@@ -33,9 +32,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -98,6 +98,7 @@ public class MessageActivity extends TxlActivity {
 		//setContentView(R.layout.tab_message);
         //headerView = (TextView)findViewById(R.id.header);
         
+       /*
         messageTypeSpinner = (Spinner)findViewById(R.id.message_type);
         ArrayAdapter<String> messageTypeAdapter = new ArrayAdapter<String>(
         		this,
@@ -105,12 +106,6 @@ public class MessageActivity extends TxlActivity {
         		new String[]{"短信","推送消息"});
         messageTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         messageTypeSpinner.setAdapter(messageTypeAdapter);
-        
-        
-        
-        messageListViewPartsContainer = (LinearLayout)findViewById(R.id.messageListViewPartsContainer);
-        //loadSmsModule(inflater);
-        
         //messageTypeSpinner.setSelection(0,false);
         messageTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener(){
             @Override
@@ -130,8 +125,22 @@ public class MessageActivity extends TxlActivity {
             {
                 
             }
-            
         });
+        */
+        messageListViewPartsContainer = (LinearLayout)findViewById(R.id.messageListViewPartsContainer);
+        
+        RadioGroup messageType = (RadioGroup)findViewById(R.id.message_type);
+        messageType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				if(checkedId == R.id.sms){
+					loadSmsModule(inflater);
+				}else if(checkedId == R.id.pushmsg){
+					loadPushMessageModule(inflater);
+				}
+			}
+		});
+        messageType.check(R.id.sms);
         
         
         MessageReceiver mr = new MessageReceiver(me);

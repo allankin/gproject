@@ -14,8 +14,26 @@
         android:textSize="25sp"
         android:layout_centerInParent="true"	
         /> -->
-    
-    <Spinner
+    <RadioGroup
+                android:id="@+id/message_type"
+                android:layout_width="match_parent"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+		
+		        <RadioButton
+		            android:id="@+id/sms"
+		            style="@style/txl_commdir_type_radio_style"
+		            android:text="短信" />
+
+                <RadioButton
+                    android:id="@+id/pushmsg"
+                    style="@style/txl_commdir_type_radio_style"
+                    android:text="推送" />
+ 
+            </RadioGroup>
+    <!-- <Spinner
                         android:id="@+id/message_type"
                         style="@style/Txl_Skin_Widget_Header_Spinner"
                         android:layout_width="wrap_content"
@@ -23,7 +41,7 @@
                         android:drawSelectorOnTop="true"
                         android:layout_centerInParent="true"
                         android:gravity="right"
-                        android:prompt="@string/prompt_message_type" />
+                        android:prompt="@string/prompt_message_type" /> -->
 
 </RelativeLayout>
  
