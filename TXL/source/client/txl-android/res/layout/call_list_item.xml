@@ -2,6 +2,7 @@
   
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
     android:layout_width="fill_parent" android:layout_height="wrap_content" 
+    android:background="@drawable/list_item_bg"
     android:descendantFocusability="blocksDescendants">  
     <!-- <ImageView android:id="@+id/contact_photo"  
         android:layout_width="40dip" android:layout_height="40dip" />  --> 
@@ -23,7 +24,7 @@
         android:layout_toRightOf="@id/call_name"
         android:layout_alignBottom="@id/call_name"
         android:singleLine="true"
-        android:textSize="15sp" 
+        android:textSize="13sp" 
         android:textIsSelectable="true"
         android:text="057534234567"
         android:textColor="@color/listview_item_text_gray_color"

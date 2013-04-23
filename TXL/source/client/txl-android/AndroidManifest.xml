@@ -50,20 +50,18 @@
         </activity>
         
         <activity android:name="txl.MainActivity" android:launchMode="singleTask" android:screenOrientation="portrait"/>
-        <activity android:name="txl.call.CallRecordActivity" android:launchMode="singleTask" android:windowSoftInputMode="stateAlwaysHidden" android:screenOrientation="portrait"/>
-        <activity android:name="txl.call.CallRecordDetailActivity" android:launchMode="singleTask"/>
+        <activity android:name="txl.call.CallRecordActivity" android:windowSoftInputMode="stateAlwaysHidden" android:screenOrientation="portrait"/>
+        <activity android:name="txl.call.CallRecordDetailActivity" />
         
-        <activity android:name="txl.message.MessageActivity" android:launchMode="singleTask"/>
-        <activity android:name="txl.message.pushmessage.PushMessageActivity" android:launchMode="singleTask"/>
-        <activity android:name=".SmsActivity" android:launchMode="singleTask"/>
-        <activity android:name=".SiteActivity" android:launchMode="singleTask"/>
+        <activity android:name="txl.message.MessageActivity" />
+        <activity android:name="txl.message.pushmessage.PushMessageActivity"/>
         <activity android:name="txl.contact.ContactActivity" />
-        <activity android:name="txl.contact.ShareUserActivity" android:launchMode="singleTask" android:screenOrientation="portrait"/>
+        <activity android:name="txl.contact.ShareUserActivity" android:screenOrientation="portrait"/>
         <activity android:name="txl.contact.DepartmentTreeActivity"/>
         
 
-        <activity android:name="txl.setting.SettingActivity" android:launchMode="singleTask"/>
-        <activity android:name="txl.setting.SyncSettingActivity" android:launchMode="singleTask"/>
+        <activity android:name="txl.setting.SettingActivity" />
+        <activity android:name="txl.setting.SyncSettingActivity"/>
         
         <activity android:name="txl.guide.GuideActivity" />
         

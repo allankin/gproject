@@ -157,8 +157,6 @@ public class ContactActivity extends TxlActivity implements Handlable
     }
     
     
-    
-    
     /**
      * 加载个人通讯录
      */
@@ -235,7 +233,9 @@ public class ContactActivity extends TxlActivity implements Handlable
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
 				visible = true;
 				if (scrollState == ListView.OnScrollListener.SCROLL_STATE_IDLE) {
-					overlay.setVisibility(View.INVISIBLE);
+				    if(overlay!=null){
+				        overlay.setVisibility(View.INVISIBLE);
+				    }
 				}
 			}
 			
@@ -245,8 +245,10 @@ public class ContactActivity extends TxlActivity implements Handlable
 				if (visible) {
 					char firstLetter = contactList.get(firstVisibleItem).firstLetter;
 					if(firstLetter!='0'){
-						overlay.setText(String.valueOf(firstLetter));
-						overlay.setVisibility(View.VISIBLE);
+					    if(overlay!=null){
+					        overlay.setText(String.valueOf(firstLetter));
+					        overlay.setVisibility(View.VISIBLE);
+					    }
 					}
 				}
 			}
