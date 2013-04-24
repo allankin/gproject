@@ -1,7 +1,10 @@
 package txl.call;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 import txl.TxlActivity;
 import txl.activity.R;
@@ -17,6 +20,7 @@ import txl.util.IntentUtil;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -25,7 +29,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -111,8 +115,7 @@ public class CallRecordActivity extends TxlActivity
         
         int width = getWindowManager().getDefaultDisplay().getWidth()-10;       
         //int height = getWindowManager().getDefaultDisplay().getHeight();   
-        int height = 530;
-        dw = new DialWindow(this, width, height);
+        dw = new DialWindow(this, width, LayoutParams.WRAP_CONTENT);
         dw.getContentView().setFocusableInTouchMode(true);
         
         
@@ -121,7 +124,7 @@ public class CallRecordActivity extends TxlActivity
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if(event.ACTION_UP == event.getAction()){
-					dw.showAtLocation(layout, Gravity.BOTTOM|Gravity.CENTER_HORIZONTAL,0,0);
+					dw.showAtLocation(layout, Gravity.CENTER|Gravity.BOTTOM,0,0);
 				}
 				return false;
 			}
@@ -175,7 +178,14 @@ public class CallRecordActivity extends TxlActivity
     }
     
     private Handler handler = new Handler(){
-        
+        public void handleMessage(Message msg)
+        {
+            if(msg.what == TxlConstants.MSG_SEARCH_CALL_RECORD){
+                Set<Entry<Integer, CallRecord>> entry = callRecordMap.entrySet();
+                Iterator<Entry<Integer, CallRecord>>  it = entry.iterator();
+                
+            }
+        }
     };
     @Override
     public Handler getHandler()

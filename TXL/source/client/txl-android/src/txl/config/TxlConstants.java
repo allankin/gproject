@@ -95,8 +95,8 @@ public class TxlConstants
     public static final int MSG_SYNC_SHARE_COMMDIR_USER = 0x00013;
     public static final int MSG_LOGIN_OFFLINE_STATUS = 0x00014;
     public static final int MSG_LOGOUT_SUCCESS = 0x00015;
-    
     public static final int MSG_RECEIVE_PUSHMESSAGE = 0x00016;
+    public static final int MSG_SEARCH_CALL_RECORD = 0x00017;
     
     
     public static class Toast{

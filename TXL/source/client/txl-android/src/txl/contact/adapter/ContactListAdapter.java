@@ -21,7 +21,7 @@ public class ContactListAdapter extends BaseAdapter implements SectionIndexer
 	
 	private final static TxLogger log = new TxLogger(ContactListAdapter.class, TxlConstants.MODULE_ID_BASE);
     	private Context mContext;
-    	private List<ContactVo> contactList;
+    	public List<ContactVo> contactList;
     	private Map<Character,Integer> firstLetterMap = new HashMap<Character,Integer>();
         public ContactListAdapter(Context context,List<ContactVo> contactList)
         {

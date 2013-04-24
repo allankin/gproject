@@ -1,5 +1,7 @@
 package txl.contact.po;
 
+import java.util.List;
+
 public class ContactVo {
 	/*联系人姓名*/
 	public String displayName;
@@ -9,5 +11,7 @@ public class ContactVo {
 	public String firstLetterSet;
 	/*首字母*/
 	public char firstLetter;
+	public String sortKey;
+	public List<String> phoneList;
 	//public String firstChineseLetter;
 }

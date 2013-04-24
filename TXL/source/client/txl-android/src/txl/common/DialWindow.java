@@ -1,7 +1,10 @@
 package txl.common;
 
+import txl.TxlActivity;
 import txl.activity.R;
+import txl.config.TxlConstants;
 import txl.util.IntentUtil;
+import txl.util.Tool;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
@@ -23,7 +26,7 @@ import android.widget.Toast;
 public class DialWindow extends PopupWindow {
 	private LayoutInflater inflater;
 	private View layout;
-	private Context context;
+	private TxlActivity context;
 	private ToneGenerator mToneGenerator;
 	private EditText phoneNumberView;
 	private boolean mDTMFToneEnabled;
@@ -35,7 +38,7 @@ public class DialWindow extends PopupWindow {
 
 	
 
-	public DialWindow(Activity context, int width, int height) {
+	public DialWindow(TxlActivity context, int width, int height) {
 		super(context);
 		this.context = context;
 		inflater = LayoutInflater.from(this.context);
@@ -272,5 +275,7 @@ public class DialWindow extends PopupWindow {
 		// mHaptic.vibrate();
 		KeyEvent event = new KeyEvent(KeyEvent.ACTION_DOWN, keyCode);
 		phoneNumberView.onKeyDown(keyCode, event);
+		context.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_SEARCH_CALL_RECORD));
+		
 	}
 }

@@ -49,7 +49,7 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="txl.MainActivity" android:launchMode="singleTask" android:screenOrientation="portrait"/>
+        <activity android:name="txl.MainActivity" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask" android:screenOrientation="portrait"/>
         <activity android:name="txl.call.CallRecordActivity" android:windowSoftInputMode="stateAlwaysHidden" android:screenOrientation="portrait"/>
         <activity android:name="txl.call.CallRecordDetailActivity" />
         

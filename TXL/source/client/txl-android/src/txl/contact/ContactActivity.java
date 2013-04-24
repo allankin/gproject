@@ -10,7 +10,6 @@ import java.util.Set;
 import txl.Handlable;
 import txl.TxlActivity;
 import txl.activity.R;
-import txl.call.po.CallRecord;
 import txl.common.SideBar;
 import txl.common.TxlAlertDialog;
 import txl.common.TxlToast;
@@ -34,11 +33,13 @@ import txl.util.ContactVoComparator;
 import txl.util.IntentUtil;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.PixelFormat;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -53,9 +54,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
@@ -90,6 +91,10 @@ public class ContactActivity extends TxlActivity implements Handlable
     private boolean visible;
     private boolean personalCommDirLoaded = false;
     private View personalLayout;
+    EditText contactSearch;
+    ImageView btnClearSearch;
+    public List<ContactVo> searchList = new ArrayList<ContactVo>();
+    
     /************************************* 公司通讯录 变量 *****************************************************/
     private boolean companyCommDirLoaded = false;
     private List<CompanyUser> companyUserList;
@@ -178,6 +183,58 @@ public class ContactActivity extends TxlActivity implements Handlable
     	
     	
 		personalLayout = inflater.inflate(R.layout.contact_personal_commdir, commDirContainer);
+		contactSearch = (EditText) findViewById(R.id.contact_search);
+		btnClearSearch = (ImageView) findViewById(R.id.btn_clean_search);
+        btnClearSearch.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                log.info("btnClearSearch click ....");
+                contactSearch.setText("");
+                btnClearSearch.setVisibility(View.GONE);
+                personalContactListAdapter.contactList = contactList;
+                updateSearchHint();
+                //personalContactListAdapter.isShowNum = false;
+                personalContactListAdapter.notifyDataSetChanged();
+                personalListView.invalidate();
+            }
+        });
+		
+        
+        contactSearch.addTextChangedListener(new TextWatcher() {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //  Log.i("text changed", "start=" + start + "before" + before);
+                if (s.length() != 0) {
+                    btnClearSearch.setVisibility(View.VISIBLE);
+                    sideBar.setVisibility(View.GONE);
+                    overlay.setVisibility(View.GONE);
+                    ContactDao.getSearchUser(me,searchList,s.toString());
+                    personalContactListAdapter.contactList = searchList;
+                    //personalContactListAdapter.isShowNum = true;
+                } else {
+                    btnClearSearch.setVisibility(View.GONE);
+                    personalContactListAdapter.contactList = contactList;
+                    sideBar.setVisibility(View.VISIBLE);
+                    overlay.setVisibility(View.VISIBLE);
+                    //personalContactListAdapter.isShowNum = false;
+                }
+                updateSearchHint();
+                personalContactListAdapter.notifyDataSetChanged();
+                personalListView.invalidate();      
+            }
+            
+            public void beforeTextChanged(CharSequence s, int start, int count,
+                    int after) {
+                // TODO Auto-generated method stub
+                //Log.i("before text changed", "start=" + start );
+                
+            }
+            
+            public void afterTextChanged(Editable s) {
+                // TODO Auto-generated method stub
+                
+                
+            }
+        });
+        
 		personalListView = (ListView) personalLayout.findViewById(R.id.contact_list); 
 		/** 得到手机通讯录联系人信息 **/
 		ContactDao.getPhoneContacts(this,contactList,contactPhoneSet);
@@ -263,7 +320,11 @@ public class ContactActivity extends TxlActivity implements Handlable
 		}
 		
     }
-    
+    public void updateSearchHint(){
+        Resources res = getResources();
+        String text = String.format(res.getString(R.string.contact_search_hint_text), personalContactListAdapter.getCount());     
+        contactSearch.setHint(text);
+    }
     
     /**
      * 加载公司通讯录
