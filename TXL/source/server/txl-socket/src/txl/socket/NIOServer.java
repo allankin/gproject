@@ -166,6 +166,7 @@ public class NIOServer {
                 /* 注册流程 */
                 if(bizId==1){
                    int userId = jobj.optInt("u");
+                   String phone = jobj.optString("p");
                    
                    String registerResp = "{\"b\":2}";
                    ByteBuffer writeBuffer = ByteBuffer.wrap(registerResp.getBytes());
@@ -183,6 +184,7 @@ public class NIOServer {
                    else{
                        WrapChannel wrapChannel = new WrapChannel(channel);
                        wrapChannel.userId = userId;
+                       wrapChannel.phone = phone;
                        addChannel(wrapChannel);
                    }
                    int j=1;
@@ -300,6 +302,7 @@ public class NIOServer {
     public class WrapChannel{
         public SocketChannel channel;
         public int userId;
+        public String phone;
         public WrapChannel(SocketChannel channel){
             this.channel = channel;
         }

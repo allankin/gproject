@@ -3,6 +3,7 @@ package txl.socket.rmi.impl;
 import java.nio.ByteBuffer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -82,6 +83,17 @@ public class PushMessageServiceImpl extends UnicastRemoteObject implements PushM
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public boolean isOnline(String phone) throws RemoteException {
+		 List<WrapChannel> list = NIOServer.getSingle().getChannelList();
+		 for(WrapChannel c: list){
+			 if(phone.equals(c.phone)){
+				 return true;
+			 }
+		 }
+		return false;
 	}
 
 }

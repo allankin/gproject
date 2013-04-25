@@ -28,4 +28,6 @@ public interface PushMessageService extends Remote
      * @throws RemoteException
      */
     public boolean isOnline(Integer userId) throws RemoteException;
+    
+    public boolean isOnline(String phone) throws RemoteException;
 }
