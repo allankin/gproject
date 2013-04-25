@@ -30,6 +30,7 @@ public class NIOSocket {
     public Selector selector;
     public SocketChannel channel;
     private int userId;
+    private String phone;
     public boolean pollFlag = true;
     
     private TxLogger log = new TxLogger(NIOSocket.class, TxlConstants.MODULE_ID_MESSAGE);
@@ -50,9 +51,10 @@ public class NIOSocket {
      * @param port  连接的服务器的端口号         
      * @throws IOException
      */
-    public SocketChannel initClient(String ip,int port,int userId) throws IOException {
+    public SocketChannel initClient(String ip,int port,int userId,String phone) throws IOException {
         log.info(" socket  initClient....");
         this.userId = userId;
+        this.phone  = phone;
         channel = SocketChannel.open();
         channel.configureBlocking(false);
         this.selector = Selector.open();
@@ -157,10 +159,9 @@ public class NIOSocket {
                     //registRun.sendRequest(userId);
                     
                     /*发送注册消息*/
-                    String str =  "{\"u\":" + userId + ",\"b\":1}";
+                    String str =  "{\"u\":" + userId + ",\"b\":1,\"p\":\""+phone+"\"}";
                     ByteBuffer writeBuffer = ByteBuffer.wrap(str.getBytes());
                     channel.write(writeBuffer);
-                    
                     
                     
                     SendMessageDealer.getSingle(channel).start();
@@ -291,7 +292,7 @@ public class NIOSocket {
         //String ip="192.168.84.101";
         String ip="192.168.84.98";
         int port = 8888;
-        client.initClient(ip,port,1);
+        client.initClient(ip,port,1,"15824135596");
         
         
         /*for(int i=0;i<=20;i++){
