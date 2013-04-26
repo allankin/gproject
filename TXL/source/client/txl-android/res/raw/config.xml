@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
     <!--  host="192.168.92.61" port="8080" protocal="http" path="" -->
-	<updateFileServer url="http://192.168.92.61:8080/maw-home2JSGD/upgrade.xml">
-	    
+	<updateFileServer url="">
 	</updateFileServer>
-	
 	<!-- 
 	192.168.2.100
 	192.168.92.61

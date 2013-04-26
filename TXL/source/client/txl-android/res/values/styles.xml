@@ -83,7 +83,7 @@
     	<item name="android:layout_height">50dp</item>
     	<item name="android:layout_weight">1</item>
     	<item name="android:textColor">#333333</item>
-    	<item name="android:layout_width">0dip</item>
+    	<item name="android:layout_width">0d ip</item>
     </style>
     
     <style name="txl_pushmessage_detail_word_style">
@@ -109,6 +109,10 @@
 	   <item name="android:height">50dp</item>
 	   <item name="android:button">@null</item>
 	   <item name="android:background">@drawable/commdir_type_radio_item</item>
-	   
+	</style>
+	
+	<style name="Theme.Start" parent="android:Theme">  
+		<item name="android:windowBackground">@drawable/synergy_welcome_480_800</item>  
+		<item name="android:windowNoTitle">true</item>  
 	</style>
 </resources>

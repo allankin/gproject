@@ -79,7 +79,7 @@ public class MainActivity extends TabActivity
             
             badge = new BadgeView(me, tabHost.getTabWidget(), 1);
             badge.hide();
-            MessageManager.startMessageService(me, null);
+            MessageManager.startMessageService(me, null,null);
             showMessageBadge();
         }else{
             Intent intent = new Intent(me,GuideActivity.class);

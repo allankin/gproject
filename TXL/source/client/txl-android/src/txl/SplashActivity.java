@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +49,13 @@ public class SplashActivity extends Activity
         setContentView(R.layout.splashlanch);
         Config.launcher = this;
         ConfigParser.init(this);
+        String url = Config.getInstance().getUpgradeFileServer();
+        if(url==null || url.trim().length()==0){
+            delayedTime = 3000;
+            findViewById(R.id.progress).setVisibility(View.GONE);
+            findViewById(R.id.splash_message).setVisibility(View.GONE);
+        }
+        
         log = new TxLogger(SplashActivity.class, TxlConstants.MODULE_ID_SPLASHSCREEN);
         
         new TxlDbHelper(this).getWritableDatabase().close();

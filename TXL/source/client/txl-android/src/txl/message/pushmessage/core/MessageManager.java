@@ -58,7 +58,7 @@ public class MessageManager
     }
     
     
-    public static void startMessageService(final Context context,final Integer _userId) {
+    public static void startMessageService(final Context context,final Integer _userId,final String _phone) {
     	new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -68,11 +68,18 @@ public class MessageManager
 					e.printStackTrace();
 				}
 				Integer userId = _userId;
+				String phone = _phone;
 				if(userId==null){
 					Account account =Account.getSingle().readUserFromFS();
 					if(account!=null){
 						userId= account.userId;
 					}
+				}
+				if(phone == null){
+				    Account account =Account.getSingle().readUserFromFS();
+                    if(account!=null){
+                        phone= account.phone;
+                    }
 				}
 				if(userId==null || userId ==0){
 					log.warn("startMessageService, userId ："+userId+", 未启动消息服务....");
@@ -81,6 +88,9 @@ public class MessageManager
 				Intent i = new Intent();
 				i.setClass(context, MessageService.class);
 				i.putExtra("userId", userId);
+				if(phone!=null){
+				    i.putExtra("phone", phone);
+				}
 				if (!Tool.isServiceRunning(MessageService.class, context)){
 					context.startService(i);
 				}else{
