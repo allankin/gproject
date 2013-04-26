@@ -72,7 +72,7 @@ public class MainActivity extends TabActivity
             intent = new Intent().setClass(this, SettingActivity.class);
             setupTab(TxlConstants.TAB_ITEM_SETTING, intent);
             
-            tabHost.setCurrentTab(2); 
+            tabHost.setCurrentTab(1); 
             setTabBackground();
             
             ajustTabContent();
@@ -104,13 +104,16 @@ public class MainActivity extends TabActivity
                  
             	TabWidget tab = (TabWidget)findViewById(android.R.id.tabs);
                 int ftpx = tab.getHeight();
-               
-                tabContent.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT,height-statusBarHeight-ftpx));
+                int tabContentHeight = height-statusBarHeight-ftpx;
+                
+                log.info("height: "+height+" width:"+wm.getDefaultDisplay().getWidth()
+                		+", heightPixels:"+metrics.heightPixels+", widthPixels:"+metrics.widthPixels
+                		+",tabContentHeight:"+tabContentHeight+",tabHeight:"+ftpx);
+                TxlConstants.tabContentHeight = tabContentHeight;
+                tabContent.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.FILL_PARENT,tabContentHeight));
                 tabContent.invalidate();
             }
         },500);
-    	
-    	
     }
     private void setTabBackground(){
     	TabWidget tabs = this.tabHost.getTabWidget();

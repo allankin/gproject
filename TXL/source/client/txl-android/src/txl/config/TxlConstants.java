@@ -188,5 +188,6 @@ public class TxlConstants
     
     public static final boolean IS_DAO_SINGLE_ABLE = false;
     
+    public static int tabContentHeight = 0;
     
 }

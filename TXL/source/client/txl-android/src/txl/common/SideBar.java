@@ -17,9 +17,17 @@ public class SideBar extends View {
     private char[] l;  
     private SectionIndexer sectionIndexter = null;  
     private ListView list;  
-    private final int m_nItemHeight = 22;  
+    private int itemHeight = 22;  
     private Context context;
-    private Handlable handlable;
+    public int getItemHeight() {
+		return itemHeight;
+	}
+
+
+	public void setItemHeight(int itemHeight) {
+		this.itemHeight = itemHeight;
+	}
+	private Handlable handlable;
     private boolean hasDone;
     
     public SideBar(Context context) {  
@@ -60,7 +68,7 @@ public class SideBar extends View {
     public boolean onTouchEvent(MotionEvent event) {  
         super.onTouchEvent(event);  
         int i = (int) event.getY();  
-        int idx = i / m_nItemHeight;  
+        int idx = i / itemHeight;  
         if (idx >= l.length) {  
             idx = l.length - 1;  
         } else if (idx < 0) {  
@@ -102,7 +110,7 @@ public class SideBar extends View {
         paint.setTextAlign(Paint.Align.CENTER);  
         float widthCenter = getMeasuredWidth() / 2;  
         for (int i = 0; i < l.length; i++) {  
-            canvas.drawText(String.valueOf(l[i]), widthCenter, m_nItemHeight + (i * m_nItemHeight), paint);  
+            canvas.drawText(String.valueOf(l[i]), widthCenter, itemHeight + (i * itemHeight), paint);  
         }  
         super.onDraw(canvas);  
     }  

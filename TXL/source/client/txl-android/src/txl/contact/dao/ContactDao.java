@@ -312,6 +312,7 @@ public class ContactDao {
             if (show) {
                 contact.displayName = name;
                 contact.sortKey = sortKey;
+                contact.phone = number;
                 phoneList.add(number);
                 contact.phoneList = phoneList;          
                 add2List(searchList,contact);

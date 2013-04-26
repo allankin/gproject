@@ -126,6 +126,14 @@ public class ContactActivity extends TxlActivity implements Handlable
         inflater = LayoutInflater.from(this);
         setContentView(inflater.inflate(R.layout.tab_contact, null));
         sideBar =(SideBar)findViewById(R.id.sideBar);
+        //View layout = findViewById(R.id.header_layout);
+        
+        /*根据实际分辨率设置间距*/
+        double itemHeight = (TxlConstants.tabContentHeight - 54*1.5)/26;
+        log.info("itemHeight:"+itemHeight);
+        sideBar.setItemHeight((int)itemHeight);
+        sideBar.invalidate();
+        
         commDirContainer = (LinearLayout)findViewById(R.id.contact_commdir_container);
         CommDirTypeOnCheckedChangeListener listner = new CommDirTypeOnCheckedChangeListener();
         RadioGroup personComDir = (RadioGroup)findViewById(R.id.comm_dir_type);
