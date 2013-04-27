@@ -6,8 +6,9 @@
 	<!-- 
 	192.168.2.100
 	192.168.92.61
+	111.1.45.158
 	 -->
-	<pushMessageServer host="111.1.45.158" port="8888">
+	<pushMessageServer host="192.168.2.100" port="8888">
 	    
 	</pushMessageServer>
 	

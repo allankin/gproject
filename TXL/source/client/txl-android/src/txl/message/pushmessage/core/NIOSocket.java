@@ -31,6 +31,7 @@ public class NIOSocket {
     public SocketChannel channel;
     private int userId;
     private String phone;
+    private String name;
     public boolean pollFlag = true;
     
     private TxLogger log = new TxLogger(NIOSocket.class, TxlConstants.MODULE_ID_MESSAGE);
@@ -51,10 +52,11 @@ public class NIOSocket {
      * @param port  连接的服务器的端口号         
      * @throws IOException
      */
-    public SocketChannel initClient(String ip,int port,int userId,String phone) throws IOException {
-        log.info(" socket  initClient....");
+    public SocketChannel initClient(String ip,int port,int userId,String phone,String name) throws IOException {
+        log.info(" socket  initClient....ip:"+ip+",port:"+port+",userId:"+userId+",phone:"+phone);
         this.userId = userId;
         this.phone  = phone;
+        this.name = name;
         channel = SocketChannel.open();
         channel.configureBlocking(false);
         this.selector = Selector.open();
@@ -292,7 +294,7 @@ public class NIOSocket {
         //String ip="192.168.84.101";
         String ip="192.168.84.98";
         int port = 8888;
-        client.initClient(ip,port,1,"15824135596");
+        client.initClient(ip,port,1,"15824135596","name");
         
         
         /*for(int i=0;i<=20;i++){

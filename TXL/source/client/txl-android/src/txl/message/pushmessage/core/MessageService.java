@@ -51,11 +51,13 @@ public class MessageService extends Service
         
         int userId = intent.getExtras().getInt("userId");
         String phone = intent.getExtras().getString("phone");
+        String name = intent.getExtras().getString("name");
+        
         context = this.getApplicationContext();
         MessageManager.context = context;
         String pushIp = Config.getInstance().getPushMessageServerIP();
         Integer port = Config.getInstance().getPushMessageServerPort();
-        connectServer(pushIp,port,userId,phone);
+        connectServer(pushIp,port,userId,phone,name);
         return START_NOT_STICKY;
     }
     
@@ -78,7 +80,7 @@ public class MessageService extends Service
         registRun.sendRequest(userId);*/
     }
     
-    public void connectServer(final String ip,final int port,final int userId,final String phone){
+    public void connectServer(final String ip,final int port,final int userId,final String phone,final String name){
         
         new Thread(new Runnable()
         {
@@ -89,7 +91,7 @@ public class MessageService extends Service
                 SocketChannel channel = null;
                 try
                 {
-                	channel = client.initClient(ip,port,userId,phone);
+                	channel = client.initClient(ip,port,userId,phone,name);
                     client.listen();
                 }catch (Exception e)
                 {
@@ -140,7 +142,7 @@ public class MessageService extends Service
                     }
                     if(!Config.isKickOut){
                         log.info("re connectServer...");
-                        connectServer(ip, port,userId,phone);
+                        connectServer(ip, port,userId,phone,name);
                     }
                 }
             }

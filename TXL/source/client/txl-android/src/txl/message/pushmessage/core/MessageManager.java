@@ -58,7 +58,7 @@ public class MessageManager
     }
     
     
-    public static void startMessageService(final Context context,final Integer _userId,final String _phone) {
+    public static void startMessageService(final Context context,final Integer _userId,final String _phone,final String _name) {
     	new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -69,16 +69,21 @@ public class MessageManager
 				}
 				Integer userId = _userId;
 				String phone = _phone;
+				String name = _name;
+				Account account =Account.getSingle().readUserFromFS();
 				if(userId==null){
-					Account account =Account.getSingle().readUserFromFS();
 					if(account!=null){
 						userId= account.userId;
 					}
 				}
 				if(phone == null){
-				    Account account =Account.getSingle().readUserFromFS();
                     if(account!=null){
                         phone= account.phone;
+                    }
+				}
+				if(name == null){
+                    if(account!=null){
+                    	name= account.name;
                     }
 				}
 				if(userId==null || userId ==0){

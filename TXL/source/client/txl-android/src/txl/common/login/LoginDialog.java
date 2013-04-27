@@ -231,7 +231,7 @@ public class LoginDialog {
 						userRet.saveUserToFS();
 					}
 					
-					MessageManager.startMessageService(ctx, userRet.userId, userRet.phone);
+					MessageManager.startMessageService(ctx, userRet.userId, userRet.phone,userRet.name);
 				}
 			}catch(Exception e){
 				this.dealNetworkException(e,null);
