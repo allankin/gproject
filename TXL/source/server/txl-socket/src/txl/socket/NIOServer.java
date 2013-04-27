@@ -2,16 +2,13 @@ package txl.socket;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
 import java.nio.ByteBuffer;
 import java.nio.channels.Channel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
-import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,8 +16,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Stack;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -50,6 +50,11 @@ public class NIOServer {
     private List<WrapChannel> channelList = new ArrayList<WrapChannel>();
     
     private Map<Integer,WrapChannel> channelMap = new HashMap<Integer,WrapChannel>();
+    
+    
+    public Stack<Byte> jsonStack = new Stack<Byte>();
+    ByteBuffer readBuffer = ByteBuffer.allocate(1);
+    ByteBuffer singleBuffer = ByteBuffer.allocate(1024);
     
     private static NIOServer nioServer;
     private NIOServer(){
@@ -136,110 +141,146 @@ public class NIOServer {
 	public void read(SelectionKey key){
 		// 服务器可读取消息:得到事件发生的Socket通道
 		SocketChannel channel = (SocketChannel) key.channel();
-		// 创建读取的缓冲区
-		ByteBuffer buffer = ByteBuffer.allocate(1024);
-		int count;
-        try
-        {
-            count = channel.read(buffer);
-            byte[] data = buffer.array();
-            String msg = new String(data).trim();
-
-            log.info("read : "+msg+"  count: "+count);
-            
-            if(count == -1){
-                try
-                {
-                    channel.close();
-                    releaseChannel(channel);
-                } catch (IOException e1)
-                {
-                    log.error(Tool.getExceptionTrace(e1));
-                }
-                return;
-            }
-            try
-            {
-                JSONObject jobj = new JSONObject(msg);
-                int bizId = jobj.optInt("b");
-                int sendCount = 0;
-                /* 注册流程 */
-                if(bizId==1){
-                   int userId = jobj.optInt("u");
-                   String phone = jobj.optString("p");
-                   
-                   String registerResp = "{\"b\":2}";
-                   ByteBuffer writeBuffer = ByteBuffer.wrap(registerResp.getBytes());
-               
-                   sendCount = channel.write(writeBuffer);
-                   log.info("发送注册回馈："+registerResp+", count : "+sendCount);
-                   WrapChannel existChannel = channelExist(userId);
-                   /*已经注册，通道存在 */
-                   if(existChannel!=null){
-                       String offlineResp = "{\"b\":7}";
-                       sendCount = existChannel.channel.write(ByteBuffer.wrap(offlineResp.getBytes())); 
-                       log.info("发送下线通知："+offlineResp+", count : "+sendCount);
-                   }
-                   /*未注册，通道不存在*/
-                   else{
-                       WrapChannel wrapChannel = new WrapChannel(channel);
-                       wrapChannel.userId = userId;
-                       wrapChannel.phone = phone;
-                       addChannel(wrapChannel);
-                   }
-                   int j=1;
-                   while(j<3){
-                       Random r = new Random();
-                       int i = r.nextInt(50);
-                       if(i==0 || i==7){
-                    	   i++;
-                       }
-                       String dataJsonStr = "{\"b\":6,\"c\":\"服务器消息内容...."+i+"\",\"m\":\""+i+"\",\"sn\":\"sendName"+i+"\",\"s\":"+i+"}";
-                       writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes("UTF-8"));
-                       sendCount = channel.write(writeBuffer);
-                       log.info("发送内容："+dataJsonStr+" count："+sendCount);
-                       j++;
-                   }
-                   
-                }
-                /*心跳处理*/
-                else if(bizId==3){
-                    String registerResp = "{\"b\":4}";
-                    ByteBuffer writeBuffer = ByteBuffer.wrap(registerResp.getBytes());
-                    sendCount = channel.write(writeBuffer);
-                    log.info("发送心跳回馈："+registerResp+" count："+sendCount);
-                }
-                /*内容包处理*/
-                else if(bizId == 5){
-                    log.info("内容包："+jobj.toString());
-                	
-                }
-                
-            } catch (JSONException e)
-            {
-                log.error(Tool.getExceptionTrace(e));
-                try
-                {
-                    channel.close();
-                    releaseChannel(channel);
-                } catch (IOException e1)
-                {
-                    log.error(Tool.getExceptionTrace(e1));
-                }
-            }
-            
-        } catch (IOException e)
-        {
-            log.error(Tool.getExceptionTrace(e));
-            try
-            {
-                channel.close();
-                releaseChannel(channel);
-            } catch (IOException e1)
-            {
-                log.error(Tool.getExceptionTrace(e1));
-            }
-        }
+		
+		readBuffer.clear();
+	    int count;
+		try {
+			count = channel.read(readBuffer);
+			if(count == -1){
+	            try
+	            {
+	                channel.close();
+	                log.info("read error：count = -1，  close");
+	            } catch (IOException e1)
+	            {
+	                e1.printStackTrace();
+	                log.error(Tool.getExceptionTrace(e1));
+	            }
+	            return;
+	            //return -1; 
+	        }
+	        readBuffer.rewind();
+	        byte b = readBuffer.get(); 
+	        
+	        // {开始
+	        if(b==123){
+	            jsonStack.push(b);
+	          
+	            singleBuffer.put(b);
+	        }else if(b==125){ // }结束
+	           jsonStack.pop();
+	           singleBuffer.put(b);
+	        }else {
+	           singleBuffer.put(b); 
+	        }
+		    
+	        if(jsonStack.isEmpty()){
+	            singleBuffer.rewind();
+	            String msg = new String(singleBuffer.array(),"utf-8");
+	            singleBuffer.clear();
+	            
+	            
+	            try
+	            {
+	                JSONObject jobj = new JSONObject(msg);
+	                int bizId = jobj.optInt("b");
+	                int sendCount = 0;
+	                /* 注册流程 */
+	                if(bizId==1){
+	                   int userId = jobj.optInt("u");
+	                   String phone = jobj.optString("p");
+	                   String name = jobj.optString("n");
+	                   
+	                   String registerResp = "{\"b\":2}";
+	                   ByteBuffer writeBuffer = ByteBuffer.wrap(registerResp.getBytes());
+	               
+	                   sendCount = channel.write(writeBuffer);
+	                   log.info("发送注册回馈："+registerResp+", count : "+sendCount);
+	                   WrapChannel existChannel = channelExist(userId);
+	                   /*已经注册，通道存在 */
+	                   if(existChannel!=null){
+	                       String offlineResp = "{\"b\":7}";
+	                       sendCount = existChannel.channel.write(ByteBuffer.wrap(offlineResp.getBytes())); 
+	                       log.info("发送下线通知："+offlineResp+", count : "+sendCount);
+	                   }
+	                   /*未注册，通道不存在*/
+	                   else{
+	                       WrapChannel wrapChannel = new WrapChannel(channel);
+	                       wrapChannel.userId = userId;
+	                       wrapChannel.phone = phone;
+	                       wrapChannel.name = name;
+	                       addChannel(wrapChannel);
+	                   }
+	                   int j=1;
+	                   while(j<3){
+	                       Random r = new Random();
+	                       int i = r.nextInt(50);
+	                       if(i==0 || i==7){
+	                    	   i++;
+	                       }
+	                       String dataJsonStr = "{\"b\":6,\"c\":\"服务器消息内容...."+i+"\",\"m\":\""+i+"\",\"sn\":\"sendName"+i+"\",\"s\":"+i+"}";
+	                       writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes("UTF-8"));
+	                       sendCount = channel.write(writeBuffer);
+	                       log.info("发送内容："+dataJsonStr+" count："+sendCount);
+	                       j++;
+	                   }
+	                   
+	                }
+	                /*心跳处理*/
+	                else if(bizId==3){
+	                    String registerResp = "{\"b\":4}";
+	                    ByteBuffer writeBuffer = ByteBuffer.wrap(registerResp.getBytes());
+	                    sendCount = channel.write(writeBuffer);
+	                    log.info("发送心跳回馈："+registerResp+" count："+sendCount);
+	                }
+	                /*内容包处理*/
+	                else if(bizId == 5){
+	                    log.info("内容包："+jobj.toString());
+	                    int userId = jobj.optInt("u");
+	                    WrapChannel curChannel = this.channelMap.get(userId);
+	                    String name = curChannel.name;
+	                    JSONArray recIdArray = jobj.getJSONArray("r");
+	                    String content = jobj.getString("c");
+	                    if(recIdArray!=null){
+	                    	for(int i=0,len=recIdArray.length();i<len;i++){
+	                    		int recId = recIdArray.getInt(i);
+	                    		WrapChannel wrapChannel = this.channelMap.get(recId);
+	                    		String uuid = Tool.genUUID();
+	                    		if(wrapChannel!=null){
+	                    			String dataJsonStr = "{\"b\":6,\"c\":\""+content+""+i+"\",\"m\":\""+uuid+"\",\"sn\":\""+name+"\",\"s\":"+userId+"}";
+	                    			// HS_TODO: 可以优化,公用ByteBuffer
+	                    			ByteBuffer writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes());
+	                    			sendCount = wrapChannel.channel.write(writeBuffer);
+	                    			log.info("发送内容："+dataJsonStr+" count："+sendCount);
+	                    		}
+	                    	}
+	                    }
+	                    
+	                    
+	                }
+	                
+	            } catch (JSONException e)
+	            {
+	                log.error(Tool.getExceptionTrace(e));
+	                try
+	                {
+	                    channel.close();
+	                    releaseChannel(channel);
+	                } catch (IOException e1)
+	                {
+	                    log.error(Tool.getExceptionTrace(e1));
+	                }
+	            }
+	            
+	        }
+			
+			
+		} catch (IOException e2) {
+			e2.printStackTrace();
+			log.error(Tool.getExceptionTrace(e2));
+		}
+	   
+	     
         
 		
 	}
@@ -303,6 +344,7 @@ public class NIOServer {
         public SocketChannel channel;
         public int userId;
         public String phone;
+        public String name;
         public WrapChannel(SocketChannel channel){
             this.channel = channel;
         }

@@ -2,6 +2,7 @@ package txl.socket.util;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.UUID;
 
 /**
  * @ClassName:  Tool.java
@@ -20,4 +21,8 @@ public class Tool
         }
         return "No Exception";
     }
+    
+    public static String genUUID(){
+		return UUID.randomUUID().toString().replaceAll("-", "");
+	}
 }
