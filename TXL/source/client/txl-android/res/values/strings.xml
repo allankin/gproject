@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">HaoMaTong</string>
+    <string name="app_name">单位通信录</string>
     <string name="hello_world">Hello world!</string>
     
 	<string name="prompt_message_type">选择消息类别</string>
