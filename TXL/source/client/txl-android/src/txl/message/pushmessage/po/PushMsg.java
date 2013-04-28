@@ -3,6 +3,8 @@ package txl.message.pushmessage.po;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import txl.config.TxlConstants;
+
 public class PushMsg implements Serializable{
 	private static final long serialVersionUID = 1L;
 	public int recUserId;
@@ -20,9 +22,11 @@ public class PushMsg implements Serializable{
 	public int isRead;
 	
 	public String  toJSONString(){
-		if(type==2){
-			return "{\"b\":5,\"r:\":["+this.recUserId+"],\"c\":\""+content+"\"}";
-		} 
+		if(type==TxlConstants.PUSH_MESSAGE_TYPE_SEND){
+			return "{\"b\":"+TxlConstants.BIZID_REQUEST_DATA+",\"u\":"+this.sendUserId+",\"r\":["+this.recUserId+"],\"c\":\""+content+"\"}";
+		}else if(type==TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
+			
+		}
 		return "";
 	}
 }

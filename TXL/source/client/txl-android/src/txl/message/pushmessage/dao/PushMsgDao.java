@@ -146,6 +146,28 @@ public class PushMsgDao extends BaseDao{
 	}
 	
 	
+	public PushMsg getPushMsgByMsgId(String msgId){
+		PushMsg pushMsg =null;
+		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read from txl_push_msg where msg_id='"+msgId+"'";
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+		Cursor cursor = db.rawQuery(sql, null);
+		if(cursor.moveToNext()) {
+			pushMsg = new PushMsg();
+			pushMsg.msgId = cursor.getString(0);
+			pushMsg.recUserId = cursor.getInt(1);
+			pushMsg.sendUserId = cursor.getInt(2);
+			pushMsg.sendName = cursor.getString(3);
+			pushMsg.content = cursor.getString(4);
+			pushMsg.type = cursor.getInt(5);
+			pushMsg.dtime =  Timestamp.valueOf(cursor.getString(6));
+			pushMsg.isRead = cursor.getInt(7);
+			log.info("getPushMsgByMsgId ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
+					pushMsg.sendUserId+",sendName:"+pushMsg.sendName+",content:"
+					+pushMsg.content+",isRead:"+pushMsg.isRead+",type:"+pushMsg.type);
+		}
+		return pushMsg;
+	}
+	
 	/**
 	 * 根据msgId，更新消息是否已读
 	 * (接收消息可用)
@@ -158,6 +180,7 @@ public class PushMsgDao extends BaseDao{
         ContentValues cv = new ContentValues();
         cv.put("is_read", isRead);
         int row = db.update("txl_push_msg", cv, "msg_id=?", new String[]{msgId});
+        db.close();
         return row==1;
 	}
 	/**
@@ -171,6 +194,7 @@ public class PushMsgDao extends BaseDao{
         ContentValues cv = new ContentValues();
         cv.put("is_read", isRead);
         int row = db.update("txl_push_msg", cv, "send_user_id=?", new String[]{String.valueOf(userId)});
+        db.close();
         return row>=1;
 	}
 	/**

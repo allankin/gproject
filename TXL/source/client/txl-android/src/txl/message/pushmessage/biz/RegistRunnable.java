@@ -18,7 +18,7 @@ public class RegistRunnable implements BizRunnable {
 			TxlConstants.MODULE_ID_MESSAGE);
 	
 	public void sendRequest(int userId) {
-		String str = "{\"u\":" + userId + ",\"b\":1}";
+		String str = "{\"u\":" + userId + ",\"b\":"+TxlConstants.BIZID_REQUEST_REGIST+"}";
 		synchronized (SendMessageQueue.queue) {
 			SendMessageQueue.queue.add(str);
 			SendMessageQueue.queue.notifyAll();
@@ -28,7 +28,7 @@ public class RegistRunnable implements BizRunnable {
 
 	public void dealReply(final JSONObject jobj) {
 		HeartBeatRunnable heartBeatRunnable = (HeartBeatRunnable) RunnableManager
-				.getRunnable(TxlConstants.HEARTBEAT_REQUST_CODE);
+				.getRunnable(TxlConstants.BIZID_REQUEST_HEARTBEAT);
 		//HS_TODO: 要求保存账号信息(暂默认)
 		int userId = Account.getSingle().userId;
 		heartBeatRunnable.sendRequest(userId);

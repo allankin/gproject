@@ -12,6 +12,7 @@
         android:textSize="15sp"  
         android:textIsSelectable="true"
         android:textColor="@color/listview_item_text_color"
+        android:focusable="false"
         />  
 
    
@@ -25,6 +26,7 @@
         android:textSize="12sp" 
         android:textIsSelectable="true"
         android:textColor="@color/listview_item_text_color"
+        android:focusable="false"
         />
     <TextView
         android:id="@+id/pushmsg_date"
@@ -35,6 +37,7 @@
         android:textIsSelectable="true"
         android:textSize="12sp"
         android:textColor="@color/listview_item_text_color"
+        android:focusable="false"
         />
      
 	<!-- ??? 不解，为何需要：android:layout_marginTop="20dp"  -->       
@@ -48,6 +51,7 @@
         android:textIsSelectable="true"
         android:text="" 
         android:textColor="@color/listview_item_text_color"
+        android:focusable="false"
         />
     
 </RelativeLayout>  

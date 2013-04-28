@@ -37,6 +37,7 @@ public class ReceiveMessageDealer implements Runnable {
 	
 	public void stop(){
 		this.isRunning = false;
+		dealer = null;
 	}
 	
 	private static ReceiveMessageDealer dealer ;

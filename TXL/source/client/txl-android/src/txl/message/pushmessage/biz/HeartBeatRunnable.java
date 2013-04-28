@@ -49,7 +49,7 @@ public class HeartBeatRunnable implements BizRunnable
                        continue;
                     }
                     
-                    String str = "{\"u\":"+userId+",\"b\":3}";
+                    String str = "{\"u\":"+userId+",\"b\":"+TxlConstants.BIZID_REQUEST_HEARTBEAT+"}";
                     ByteBuffer writeBuffer = ByteBuffer.wrap(str.getBytes());
                     try {
 						int count = channel.write(writeBuffer);

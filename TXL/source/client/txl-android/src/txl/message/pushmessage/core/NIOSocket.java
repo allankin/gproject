@@ -148,21 +148,24 @@ public class NIOSocket {
                     channel.configureBlocking(false);
                     
                     RegistRunnable registRun = new RegistRunnable();
-                    RunnableManager.regist(2, registRun);
+                    RunnableManager.regist(TxlConstants.BIZID_REQUEST_REGIST, registRun);
+                    RunnableManager.regist(TxlConstants.BIZID_RESPONSE_REGIST, registRun);
                     HeartBeatRunnable heartBeatBun = new HeartBeatRunnable(channel);
-                    RunnableManager.regist(3, heartBeatBun);//心跳发送
-                    RunnableManager.regist(4, heartBeatBun);//心跳接收
+                    RunnableManager.regist(TxlConstants.BIZID_REQUEST_HEARTBEAT, heartBeatBun);//心跳发送
+                    RunnableManager.regist(TxlConstants.BIZID_RESPONSE_HEARTBEAT, heartBeatBun);//心跳接收
                     
                     DataRunnable dataRun = new DataRunnable();
-                    RunnableManager.regist(6, dataRun);//接收消息内容
+                    RunnableManager.regist(TxlConstants.BIZID_RESPONSE_DATA, dataRun);//接收消息内容
+                    RunnableManager.regist(TxlConstants.BIZID_REQUEST_DATA, dataRun);
+                    
                     
                     OfflineRunnable offline = new OfflineRunnable();//下线通知
-                    RunnableManager.regist(7, offline);
+                    RunnableManager.regist(TxlConstants.BIZID_RESPONSE_OFFLINE, offline);
                     //registRun.sendRequest(userId);
                     
                     /*发送注册消息*/
-                    String str =  "{\"u\":" + userId + ",\"b\":1,\"p\":\""+phone+"\"}";
-                    ByteBuffer writeBuffer = ByteBuffer.wrap(str.getBytes());
+                    String str =  "{\"u\":" + userId + ",\"b\":1,\"p\":\""+phone+"\",\"n\":\""+name+"\"}";
+                    ByteBuffer writeBuffer = ByteBuffer.wrap(str.getBytes("UTF-8"));
                     channel.write(writeBuffer);
                     
                     

@@ -145,6 +145,8 @@ public class TxlConstants
     public static final String INTENT_BUNDLE_CONTACT_ID = "contactId";
     public static final String INTENT_BUNDLE_CONTACT_NAME = "contactName";
     
+    public static final String INTENT_BUNDLE_MSG_ID = "msgId";
+    
     
     public static final int REQUEST_CODE_SELECT_DEPARTMENT = 0x0001;
     
@@ -171,14 +173,11 @@ public class TxlConstants
     public static final int COMMDIR_SHARE_TYPE = 2;
     
     public static final int resendDuration=10000;
-    public static final int heartBeatInterval = 100000;
+    public static final int heartBeatInterval = 1000000;
     public static final int resendCount = 3;
     public static final String ACTION_OFFLINE_NOTICE = "offline.notice";
     public static final String ACTION_OVER_RESEND_COUNT = "over.resend.count";
     public static final String ACTION_MESSAGE_RECEIVED = "ACTION_MESSAGE_RECEIVED";
-    
-    public static final int HEARTBEAT_REQUST_CODE = 0x003;
-    public static final int HEARTBEAT_REPLY_CODE = 0x004;
     
     
     public static final int PUSH_MESSAGE_TYPE_RECEIVE = 1;
@@ -189,5 +188,24 @@ public class TxlConstants
     public static final boolean IS_DAO_SINGLE_ABLE = false;
     
     public static int tabContentHeight = 0;
+    
+    /*注册响应包*/
+    public static final int BIZID_RESPONSE_REGIST = 2;
+    /*心跳响应包*/
+    public static final int BIZID_RESPONSE_HEARTBEAT = 4;
+    /*内容响应包*/
+    public static final int BIZID_RESPONSE_DATA = 6;
+    /*下线响应包*/
+    public static final int BIZID_RESPONSE_OFFLINE = 7;
+    
+    
+    /*注册请求包*/
+    public static final int BIZID_REQUEST_REGIST = 1 ;
+    /*心跳请求包*/
+    public static final int BIZID_REQUEST_HEARTBEAT = 3;
+    /*内容请求包(发送包)*/
+    public static final int BIZID_REQUEST_DATA = 5;
+    
+    
     
 }

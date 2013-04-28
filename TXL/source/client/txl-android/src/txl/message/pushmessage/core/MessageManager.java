@@ -43,6 +43,8 @@ public class MessageManager
     	//MessageManager.infoMap.put(rpm.msgId, rpm);
     	Config.mainContext.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_RECEIVE_PUSHMESSAGE));
     	Intent intent = new Intent(TxlConstants.ACTION_MESSAGE_RECEIVED);
+    	intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, rpm.sendUserId);
+    	intent.putExtra(TxlConstants.INTENT_BUNDLE_MSG_ID, rpm.msgId);
     	Config.mainContext.sendBroadcast(intent);
     }
     /**
@@ -95,6 +97,9 @@ public class MessageManager
 				i.putExtra("userId", userId);
 				if(phone!=null){
 				    i.putExtra("phone", phone);
+				}
+				if(name!=null){
+				    i.putExtra("name", name);
 				}
 				if (!Tool.isServiceRunning(MessageService.class, context)){
 					context.startService(i);

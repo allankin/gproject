@@ -7,7 +7,10 @@ import java.util.Map;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.util.Log;
+
 import txl.config.TxlConstants;
+import txl.log.TxLogger;
 
 /**
  * @ClassName:  RunnableManager.java
@@ -18,7 +21,7 @@ import txl.config.TxlConstants;
 public class RunnableManager
 {
     private static Map<Integer,BizRunnable> runnableMap = new HashMap<Integer,BizRunnable>();
-    
+    private static TxLogger log = new TxLogger(RunnableManager.class, TxlConstants.MODULE_ID_MESSAGE);
     
     public static void regist(Integer comId,BizRunnable br){
         runnableMap.put(comId, br);
@@ -30,26 +33,27 @@ public class RunnableManager
     public static void parse(String msg){
         try
         {
-            JSONObject jobj = new JSONObject(msg);
+        	log.info("RunnableManager parse msg: "+msg);
+        	JSONObject jobj = new JSONObject(msg);
             int bizId = jobj.optInt("b");
             BizRunnable br = runnableMap.get(bizId);
             /*注册响应包*/
-            if(bizId == 2){
+            if(bizId == TxlConstants.BIZID_RESPONSE_REGIST){
             	RegistRunnable rr = (RegistRunnable)br;
             	rr.dealReply(jobj);
             }
             /*心跳响应包*/
-            else if(bizId == 4){
+            else if(bizId == TxlConstants.BIZID_RESPONSE_HEARTBEAT){
             	HeartBeatRunnable hbr = (HeartBeatRunnable)br;
             	hbr.dealReply(jobj);
             }
             /*内容响应包*/
-            else if(bizId == 6){
+            else if(bizId == TxlConstants.BIZID_RESPONSE_DATA){
             	DataRunnable dr = (DataRunnable)br;
             	dr.receive(jobj);
             }
             /*下线通知包*/
-            else if(bizId == 7){
+            else if(bizId == TxlConstants.BIZID_RESPONSE_OFFLINE){
             	OfflineRunnable or = (OfflineRunnable)br;
             	or.dealReply(jobj);
             }

@@ -46,7 +46,7 @@ public class MessageActivity extends TxlActivity {
 	private MessageActivity                       me        = null;
 	//private TextView headerView = null;
 	
-	
+	private MessageReceiver mr;
 	
 	
 	
@@ -143,7 +143,7 @@ public class MessageActivity extends TxlActivity {
         messageType.check(R.id.sms);
         
         
-        MessageReceiver mr = new MessageReceiver(me);
+        mr = new MessageReceiver(me);
         IntentFilter filter = new IntentFilter(TxlConstants.ACTION_MESSAGE_RECEIVED);
 		me.registerReceiver(mr, filter);
 	}
@@ -320,6 +320,7 @@ public class MessageActivity extends TxlActivity {
     protected void onDestroy()
     {
         super.onDestroy();
+        me.unregisterReceiver(mr);
         log.info("onDestroy");
     }
     

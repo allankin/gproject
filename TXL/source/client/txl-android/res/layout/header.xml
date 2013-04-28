@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     style="@style/txl_header_layout_style"
+    android:id="@+id/header_layout"
     >
     
     <TextView

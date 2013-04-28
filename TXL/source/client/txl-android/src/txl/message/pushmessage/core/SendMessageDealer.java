@@ -12,7 +12,7 @@ public class SendMessageDealer implements Runnable {
 	private TxLogger log = new TxLogger(SendMessageDealer.class, TxlConstants.MODULE_ID_MESSAGE);
 	private boolean isRunning;
 	private SocketChannel channel; 
-	public SendMessageDealer(SocketChannel channel){
+	private SendMessageDealer(SocketChannel channel){
         this.channel = channel;
     }
 	@Override
@@ -49,6 +49,9 @@ public class SendMessageDealer implements Runnable {
 	
 	public void stop(){
 		this.isRunning = false;
+		/*需要设为null,否则重连时后,得到的dealer中的channel为null*/
+		dealer = null;
+		
 	}
 	
 	private static SendMessageDealer dealer ;

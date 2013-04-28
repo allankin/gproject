@@ -11,6 +11,7 @@
            android:layout_height="wrap_content" 
            android:cacheColorHint="@android:color/transparent"
            style="@style/txl_list_padding"
+           android:descendantFocusability="blocksDescendants"
            >
  
    	</ListView>
