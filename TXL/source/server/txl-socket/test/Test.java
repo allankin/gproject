@@ -13,11 +13,10 @@ import org.apache.log4j.Logger;
  */
 public class Test
 {
-    static Logger log = Logger.getLogger(Test.class);
     
     public static void main(String[] args)
     {
-        log.info("ssssssssssssss");
+    	System.out.println("ssssssssssss");
         String ss=null;
         try{
             ss.toString();
@@ -25,8 +24,6 @@ public class Test
             StringWriter sw = new StringWriter();
             PrintWriter pw = new PrintWriter(sw);
             e.printStackTrace(pw);
-            String msg= "  stack error: "+sw.toString();
-            log.error(sw.toString());
         }
     }
     

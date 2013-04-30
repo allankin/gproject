@@ -93,7 +93,7 @@ public class NIOServer {
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	public void listen() throws IOException {
+	public void listen() throws Exception {
 	    log.info("消息服务端开始监听.... port:"+TxlConstants.SOCKET_PORT);
 		// 轮询访问selector
 		while (true) {
@@ -126,8 +126,13 @@ public class NIOServer {
 					
 					// 获得了可读的事件
 				} else if (key.isReadable()) {
-				    read(key);
+					if(-1 == read(key)){
+						log.info("失去客户端连接...."); 
+						key.cancel();
+					}
+					
 				}
+				
 
 			}
 
@@ -138,7 +143,7 @@ public class NIOServer {
 	 * @param key
 	 * @throws IOException 
 	 */
-	public void read(SelectionKey key){
+	public int read(SelectionKey key){
 		// 服务器可读取消息:得到事件发生的Socket通道
 		SocketChannel channel = (SocketChannel) key.channel();
 		
@@ -150,14 +155,13 @@ public class NIOServer {
 	            try
 	            {
 	                channel.close();
+	                releaseChannel(channel);
 	                log.info("read error：count = -1，  close");
 	            } catch (IOException e1)
 	            {
-	                e1.printStackTrace();
 	                log.error(Tool.getExceptionTrace(e1));
 	            }
-	            return;
-	            //return -1; 
+	            return -1; 
 	        }
 	        readBuffer.rewind();
 	        byte b = readBuffer.get(); 
@@ -178,7 +182,7 @@ public class NIOServer {
 	            singleBuffer.rewind();
 	            String msg = new String(singleBuffer.array(),"utf-8");
 	            singleBuffer.clear();
-	            
+	            log.info("msg :"+msg);
 	            
 	            try
 	            {
@@ -202,21 +206,30 @@ public class NIOServer {
 	                       String offlineResp = "{\"b\":7}";
 	                       sendCount = existChannel.channel.write(ByteBuffer.wrap(offlineResp.getBytes())); 
 	                       log.info("发送下线通知："+offlineResp+", count : "+sendCount);
+	                       try {
+							Thread.sleep(50);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+	                       existChannel.channel.close();
+	                       releaseChannel(existChannel);
 	                   }
-	                   /*未注册，通道不存在*/
-	                   else{
-	                       WrapChannel wrapChannel = new WrapChannel(channel);
-	                       wrapChannel.userId = userId;
-	                       wrapChannel.phone = phone;
-	                       wrapChannel.name = name;
-	                       addChannel(wrapChannel);
-	                   }
+	                   
+                       WrapChannel wrapChannel = new WrapChannel(channel);
+                       wrapChannel.userId = userId;
+                       wrapChannel.phone = phone;
+                       wrapChannel.name = name;
+                       addChannel(wrapChannel);
+	                   
 	                   int j=1;
-	                   while(j<3){
+	                   while(j<8){
 	                       Random r = new Random();
 	                       int i = r.nextInt(50);
 	                       if(i==0 || i==7){
 	                    	   i++;
+	                       }
+	                       if(i>25){
+	                    	   i = 44;
 	                       }
 	                       String dataJsonStr = "{\"b\":6,\"c\":\"服务器消息内容...."+i+"\",\"m\":\""+i+"\",\"sn\":\"sendName"+i+"\",\"s\":"+i+"}";
 	                       writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes("UTF-8"));
@@ -247,9 +260,9 @@ public class NIOServer {
 	                    		WrapChannel wrapChannel = this.channelMap.get(recId);
 	                    		String uuid = Tool.genUUID();
 	                    		if(wrapChannel!=null){
-	                    			String dataJsonStr = "{\"b\":6,\"c\":\""+content+""+i+"\",\"m\":\""+uuid+"\",\"sn\":\""+name+"\",\"s\":"+userId+"}";
+	                    			String dataJsonStr = "{\"b\":6,\"c\":\""+content+"\",\"m\":\""+uuid+"\",\"sn\":\""+name+"\",\"s\":"+userId+"}";
 	                    			// HS_TODO: 可以优化,公用ByteBuffer
-	                    			ByteBuffer writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes());
+	                    			ByteBuffer writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes("UTF-8"));
 	                    			sendCount = wrapChannel.channel.write(writeBuffer);
 	                    			log.info("发送内容："+dataJsonStr+" count："+sendCount);
 	                    		}
@@ -276,11 +289,12 @@ public class NIOServer {
 			
 			
 		} catch (IOException e2) {
-			e2.printStackTrace();
 			log.error(Tool.getExceptionTrace(e2));
+			releaseChannel(channel);
+			return -1;
 		}
 	   
-	     
+	    return 1;
         
 		
 	}
@@ -385,9 +399,9 @@ public class NIOServer {
                 {
                     server.initServer(TxlConstants.SOCKET_PORT);
                     server.listen();
-                } catch (IOException e)
+                } catch (Exception e)
                 {
-                    e.printStackTrace();
+                    log.info(Tool.getExceptionTrace(e));
                 }
             }
             
@@ -404,7 +418,6 @@ public class NIOServer {
             log.info("消息RMI开始监听.... port:"+TxlConstants.RMI_PORT);
         } catch (Exception e)
         {
-            e.printStackTrace();
             log.error(Tool.getExceptionTrace(e));
         }  
 	}

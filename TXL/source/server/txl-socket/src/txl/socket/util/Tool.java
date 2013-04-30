@@ -25,4 +25,5 @@ public class Tool
     public static String genUUID(){
 		return UUID.randomUUID().toString().replaceAll("-", "");
 	}
+    
 }
