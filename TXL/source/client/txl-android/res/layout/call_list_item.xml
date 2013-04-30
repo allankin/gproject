@@ -12,8 +12,7 @@
         android:layout_alignParentLeft="true" 
         android:singleLine="true"  
         android:textSize="15sp"  
-        android:textIsSelectable="true"
-        android:text="刘先生"
+        android:focusable="false"
         android:textColor="@color/listview_item_text_color"
         />  
 
@@ -25,8 +24,7 @@
         android:layout_alignBottom="@id/call_name"
         android:singleLine="true"
         android:textSize="13sp" 
-        android:textIsSelectable="true"
-        android:text="057534234567"
+        android:focusable="false"
         android:textColor="@color/listview_item_text_gray_color"
         />
     
@@ -36,8 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:singleLine="true"
-        android:text="4/2 21:30"
-        android:textIsSelectable="true"
+        android:focusable="false"
         android:textColor="@color/listview_item_text_gray_color"
         android:textSize="13sp" />
      
@@ -56,8 +53,7 @@
         android:layout_centerVertical="true"
         android:singleLine="true"  
         android:textSize="15sp" 
-        android:textIsSelectable="true"
-        android:text="5" 
+        android:focusable="false"
         android:textColor="@color/listview_item_text_gray_color"
         />
     

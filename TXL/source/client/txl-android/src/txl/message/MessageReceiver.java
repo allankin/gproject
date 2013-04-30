@@ -1,7 +1,6 @@
-package txl;
+package txl.message;
 
 import txl.config.TxlConstants;
-import txl.message.MessageActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;

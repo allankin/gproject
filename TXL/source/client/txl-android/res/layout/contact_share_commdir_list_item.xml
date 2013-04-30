@@ -2,6 +2,7 @@
   
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
     android:layout_width="fill_parent" android:layout_height="wrap_content" 
+    android:background="@drawable/list_item_bg"
     android:descendantFocusability="blocksDescendants"
     >  
     <!-- <ImageView android:id="@+id/color_image"  
@@ -12,7 +13,7 @@
         android:layout_alignParentLeft="true" 
         android:singleLine="true"  
         android:textSize="20sp"  
-        android:textIsSelectable="true"
+        android:focusable="false"
         android:text="dd"
         android:textColor="@color/listview_item_text_color"
         android:layout_centerVertical="true"
@@ -22,7 +23,7 @@
         android:layout_height="wrap_content"  
         android:singleLine="true"  
         android:textSize="15sp"
-        android:textIsSelectable="true"
+        android:focusable="false"
         android:layout_toRightOf="@id/contact_share_commdir_name"
         android:layout_marginLeft="10dp"
         android:textColor="@color/listview_item_text_gray_color"

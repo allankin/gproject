@@ -10,6 +10,7 @@ import txl.contact.ContactActivity;
 import txl.guide.GuideActivity;
 import txl.log.TxLogger;
 import txl.message.MessageActivity;
+import txl.message.MessageReceiver;
 import txl.message.pushmessage.core.MessageManager;
 import txl.message.pushmessage.dao.PushMsgDao;
 import txl.setting.SettingActivity;
@@ -17,6 +18,7 @@ import txl.util.TxlSharedPreferences;
 import android.app.TabActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -24,11 +26,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
@@ -41,6 +41,8 @@ public class MainActivity extends TabActivity
     private  TxLogger log ;
     private MainActivity me = this;
     private BadgeView badge;
+    
+    private TxlReceiver txlReceiver;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -48,7 +50,11 @@ public class MainActivity extends TabActivity
         ConfigParser.init(me);
         log = new TxLogger(MainActivity.class, TxlConstants.MODULE_ID_SPLASHSCREEN);
         preprocess();
-         
+        
+        
+        txlReceiver = new TxlReceiver(me);
+        IntentFilter filter = new IntentFilter(TxlConstants.ACTION_OFFLINE_NOTICE);
+		me.registerReceiver(txlReceiver, filter);
     }
     
     private void preprocess(){
@@ -206,6 +212,7 @@ public class MainActivity extends TabActivity
     protected void onDestroy()
     {
         super.onDestroy();
+        me.unregisterReceiver(txlReceiver);
         log.info("onDestroy");
     } 
     

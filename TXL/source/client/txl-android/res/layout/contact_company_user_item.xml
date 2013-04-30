@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>  
   
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"  
-    android:layout_width="fill_parent" android:layout_height="40dp"  android:paddingLeft="5dp">  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_bg"
+    android:descendantFocusability="blocksDescendants"  
+    android:paddingLeft="5dp">  
     <!-- <ImageView android:id="@+id/color_image"  
         android:layout_width="40dip" android:layout_height="40dip" /> -->  
     <TextView android:id="@+id/contact_name"  
@@ -10,8 +14,6 @@
         android:layout_alignParentLeft="true" 
         android:singleLine="true"  
         android:textSize="20sp"  
-        android:textIsSelectable="true"
-        android:text="dd"
         android:textColor="@color/listview_item_text_color"
         />  
     <TextView android:id="@+id/contact_phone"  
@@ -20,8 +22,6 @@
         android:layout_alignParentBottom="true"  
         android:singleLine="true"  
         android:textSize="15sp"
-        android:textIsSelectable="true"
-        android:text="23435435656"
         android:layout_marginTop="20dp"
         android:textColor="@color/listview_item_text_gray_color"
         />  

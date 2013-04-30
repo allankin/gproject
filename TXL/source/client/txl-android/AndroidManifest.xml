@@ -76,6 +76,13 @@
 		      <category android:name="android.intent.category.DEFAULT" />   
 		   </intent-filter> 
 		</service>
+		<!-- <receiver
+	       android:name="txl.TxlReceiver"
+	       android:exported="false" >
+	       <intent-filter>
+	           <action android:name="offline.notice" />
+	       </intent-filter>
+	    </receiver> -->
     </application>
     
     

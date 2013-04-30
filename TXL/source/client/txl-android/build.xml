@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <project name="ant" default="deploy" basedir=".">
     <!-- ANT环境变量 -->  
     <property environment="env" />  
@@ -207,14 +207,14 @@
             <arg value="-keystore" />  
             <arg value="${keystore-file}" />  
             <arg value="-storepass" />  
-            <arg value="hundsun" />  
+            <arg value="txl123456" />  
             <arg value="-keypass" />  
-            <arg value="hundsun" />  
+            <arg value="txl123456" />  
             <arg value="-signedjar" />  
             <arg value="${out-signed-package-ospath}" />  
             <arg value="${out-unsigned-package-ospath}"/>  
             <!-- 不要忘了证书的别名 -->  
-            <arg value="hsmaw"/>  
+            <arg value="tongxinlu"/>  
         </exec>  
     </target>  
     
@@ -230,14 +230,13 @@
 	</target>  
     
     <!-- 发布 -->  
-    <target name="release" depends="zipalign">  
+    <target name="release" depends="zipalign">  <!--  -->
         <!-- 删除未签证apk -->  
         <delete file="${out-unsigned-package-ospath}"/> 
     	<!-- 删除已签证未优化apk --> 
     	<delete file="${out-signed-package-ospath}"/>
         <echo>APK is released. path:${out-signed-package-ospath}</echo>  
     	<copy file="${zipalign-package-ospath}" todir="${COPY_TO}"></copy>
-    	<copy file="${zipalign-package-ospath}" todir="${COPY_TO2}"></copy>
     	<echo>APK is been copied. path:${COPY_TO}</echo>  
     </target>  
     
@@ -248,12 +247,12 @@
 		<exec executable="pscp.exe">
 			<arg value="-v" />
 			<arg value="-pw" />
-			<arg value="hundsun" />
+			<arg value="${SERVER1_PWD}" />
 			<arg value="${zipalign-package-ospath}" />
 			<arg value="${SERVER1_USERNAME}@${SERVER1_IP}:${SERVER1_DIR}/" />
 		</exec>
 		<echo message="done uploading file to server using pscp" />
 	</target>
 	  
-	<target name="deploy" depends="release"></target>
+	<target name="deploy" depends="upload"></target>
 </project>  

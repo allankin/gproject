@@ -3,7 +3,6 @@ package txl.message.pushmessage;
 import java.sql.Timestamp;
 import java.util.List;
 
-import txl.MessageReceiver;
 import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.po.Account;
@@ -48,11 +47,12 @@ private final TxLogger  log = new TxLogger(PushMessageActivity.class, TxlConstan
 	private Button pushMsgSendBtn;
 	private int contactId;
 	private MessageDetailReceiver mr;
+	private ListView pushMsgDetailListView;
 	
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pushmsg_detail_list);
-		ListView pushMsgDetailListView = (ListView)findViewById(R.id.pushmsg_detail_list);
+		pushMsgDetailListView = (ListView)findViewById(R.id.pushmsg_detail_list);
 		ajustListView(pushMsgDetailListView);
 		TextView header = (TextView)findViewById(R.id.header);
 		header.setText("");
@@ -86,6 +86,8 @@ private final TxLogger  log = new TxLogger(PushMessageActivity.class, TxlConstan
 				if(flag){
 					Config.mainContext.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_RECEIVE_PUSHMESSAGE));
 				}
+				
+				pushMsgDetailListView.setSelection(detailListAdapter.getCount()-1);
 			}
 		}
 		
@@ -114,6 +116,7 @@ private final TxLogger  log = new TxLogger(PushMessageActivity.class, TxlConstan
 					PushMsgDao.getSingle(me).savePushMsg(pushMsg);
 					pushMsgList.add(pushMsg);
 					detailListAdapter.notifyDataSetChanged();
+					pushMsgDetailListView.setSelection(detailListAdapter.getCount()-1);
 					pushMsgInput.setText("");
 					InputMethodManager imm =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);  
 					imm.hideSoftInputFromWindow(pushMsgInput.getWindowToken(), 0);  
@@ -192,6 +195,7 @@ private final TxLogger  log = new TxLogger(PushMessageActivity.class, TxlConstan
 	            		if(pm!=null){
 	            			me.pushMsgList.add(pm);
 	            			me.detailListAdapter.notifyDataSetChanged();
+	            			me.pushMsgDetailListView.setSelection(me.detailListAdapter.getCount()-1);
 	            		}
 	            	}
 	            }
