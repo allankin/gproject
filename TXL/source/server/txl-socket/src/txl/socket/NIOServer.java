@@ -54,7 +54,7 @@ public class NIOServer {
     
     public Stack<Byte> jsonStack = new Stack<Byte>();
     ByteBuffer readBuffer = ByteBuffer.allocate(1);
-    ByteBuffer singleBuffer = ByteBuffer.allocate(1024);
+    ByteBuffer singleBuffer = ByteBuffer.allocate(1025);
     
     private static NIOServer nioServer;
     private NIOServer(){
