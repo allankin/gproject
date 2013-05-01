@@ -66,7 +66,7 @@ public class CallRecordAdapter extends BaseAdapter
                 holder.callNameView = (TextView) convertView.findViewById(R.id.call_name);
                 holder.callPhoneView = (TextView) convertView.findViewById(R.id.call_phone);
                 holder.callDateView = (TextView)convertView.findViewById(R.id.call_date);
-                holder.countView = (TextView)convertView.findViewById(R.id.call_count);
+                //holder.countView = (TextView)convertView.findViewById(R.id.call_count);
                 holder.statusBtnView = (Button)convertView.findViewById(R.id.call_statusBtn);
                 holder.statusBtnView.setOnClickListener(callRecordDetailClickListener);
                 convertView.setTag(holder);
@@ -80,17 +80,19 @@ public class CallRecordAdapter extends BaseAdapter
             // 绘制联系人号码
             holder.callPhoneView.setText(cr.phoneNumber);
             holder.callDateView.setText(cr.time);
-            holder.countView.setText(String.valueOf(cr.count));
+            holder.statusBtnView.setText("  "+cr.count);
+            
+            //holder.countView.setText(String.valueOf(cr.count));
             int callStatusResId = R.drawable.ic_calllog_incomming_normal;
             switch (cr.type) {
                 case CallLog.Calls.INCOMING_TYPE:
-                    callStatusResId = R.drawable.ic_calllog_incomming_normal;
+                    callStatusResId = R.drawable.btn_call_incoming;
                     break;
                 case CallLog.Calls.OUTGOING_TYPE:
-                    callStatusResId = R.drawable.ic_calllog_outgoing_nomal;
+                    callStatusResId = R.drawable.btn_call_outgoing;
                     break;
                 case CallLog.Calls.MISSED_TYPE:
-                    callStatusResId = R.drawable.ic_calllog_missed_normal;
+                    callStatusResId = R.drawable.btn_call_missed;
                     break;
                 default:
                     break;
