@@ -3,6 +3,7 @@ package txl.socket.rmi.impl;
 import java.nio.ByteBuffer;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -94,6 +95,21 @@ public class PushMessageServiceImpl extends UnicastRemoteObject implements PushM
 			 }
 		 }
 		return false;
+	}
+
+	@Override
+	public Map<Integer, Boolean> isOnline(List<Integer> userIdList)
+			throws RemoteException {
+		Map<Integer, Boolean> map = new HashMap<Integer, Boolean>();
+		if(userIdList!=null){
+			for(Integer userId:userIdList){
+				boolean isOnline = this.isOnline(userId);
+				map.put(userId, isOnline);
+			}
+		}else{
+			return null;
+		}
+		return map;
 	}
 
 }

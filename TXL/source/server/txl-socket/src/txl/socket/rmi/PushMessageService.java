@@ -2,6 +2,8 @@ package txl.socket.rmi;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Map;
 
 import txl.socket.po.PushMessage;
 import txl.socket.rmi.po.SendResult;
@@ -30,4 +32,12 @@ public interface PushMessageService extends Remote
     public boolean isOnline(Integer userId) throws RemoteException;
     
     public boolean isOnline(String phone) throws RemoteException;
+    
+    /**
+     *
+     * @param userIdList
+     * @return
+     * @throws RemoteException
+     */
+    public Map<Integer,Boolean> isOnline(List<Integer> userIdList) throws RemoteException;
 }

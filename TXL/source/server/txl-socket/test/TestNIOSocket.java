@@ -162,9 +162,8 @@ public class TestNIOSocket {
      */
     public static void main(String[] args){
         final TestNIOSocket client = new TestNIOSocket();
-        //String ip="192.168.84.98"; //"localhost"
-        //String ip="192.168.84.101";
-        String ip="192.168.2.100";
+        // 192.168.2.100 
+        String ip="111.1.45.158";
         int userId = 44;
         int port = 8888;
         new Thread(new Runnable() {
