@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class HttpClientUtil
 {
     private final static TxLogger  log = new TxLogger(HttpClientUtil.class, TxlConstants.MODULE_ID_BASE);
     /*缓存DefaultHttpClient */
-    private static DefaultHttpClient client;
+    private static Map<String,DefaultHttpClient> clientMap = new HashMap<String, DefaultHttpClient>();
     
     /**
      * 
@@ -66,15 +67,21 @@ public class HttpClientUtil
             post.getParams().setParameter(HttpConnectionParams.CONNECTION_TIMEOUT, TxlConstants.HTTP_CONNECTION_TIMEOUT);
             post.getParams().setParameter(HttpConnectionParams.SO_TIMEOUT,TxlConstants.HTTP_SO_TIMEOUT);
             post.setEntity(entitydata);
-            if(client==null){
-                client = new DefaultHttpClient() ;
+            String webAppContext = getWebAppContext(path);
+            if(webAppContext !=null){
+            	DefaultHttpClient client = clientMap.get(webAppContext);
+                if(client==null){
+                    client = new DefaultHttpClient() ;
+                    clientMap.put(webAppContext, client);
+                }
+                HttpResponse response = client.execute(post);
+                
+                if(response.getStatusLine().getStatusCode()==200){
+                    HttpEntity entity = response.getEntity();
+                    body = EntityUtils.toString(entity, enc);    
+                }
             }
-            HttpResponse response = client.execute(post);
             
-            if(response.getStatusLine().getStatusCode()==200){
-                HttpEntity entity = response.getEntity();
-                body = EntityUtils.toString(entity, enc);    
-            }
             
         } 
         catch(ConnectTimeoutException e){
@@ -102,4 +109,14 @@ public class HttpClientUtil
     public static String httpPostUTF8(String path, Map<String, String> params)throws ConnectTimeoutException, HttpHostConnectException{
         return httpPost(path, params, "utf-8");
     } 
+    
+    private static String getWebAppContext(String url){
+    	for(String webAppContext:TxlConstants.WEB_APP_CONTEXTS){
+    		if(url.contains(webAppContext)){
+    			return webAppContext;
+    		}
+    	}
+    	log.info("没有对请求的url 配置webAppContext");
+    	return null;
+    }
 }

@@ -2,6 +2,7 @@ package txl.contact.task;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -69,6 +70,7 @@ public class CampanyUserQueryTask extends NetworkAsyncTask<UserQuery,Void,List<C
 		try {
 			String body = HttpClientUtil.httpPostUTF8(TxlConstants.SEARCH_COMPANY_USER_URL, postParams);
 			JSONObject json = new JSONObject(body.toString());
+			StringBuilder userIdBuilder = new StringBuilder();
 			if(json.optInt("status")!=-1){
 				JSONArray array = json.getJSONArray("users");
 				if(array!=null){
@@ -80,13 +82,48 @@ public class CampanyUserQueryTask extends NetworkAsyncTask<UserQuery,Void,List<C
 						user.compId = userJson.optInt("compId");
 						user.userPhone = userJson.optString("userPhone");
 						user.name = userJson.optString("name");
+						user.position = userJson.optString("position");
+						user.compTel = userJson.optString("msn");
+						user.virtualTel = userJson.optString("virtualTel");
+						user.homeTel = userJson.optString("homeTel");
+						user.email = userJson.optString("email");
+						user.qq = userJson.optString("qq");
+						user.msn = userJson.optString("msn");
+					 
 						userList.add(user);
+						userIdBuilder.append(user.userId+",");
 					}
 				}
 				if(this.actionCode == TxlConstants.ACTION_SYNC_CODE){
 					CommDirDao.getSingle(ctx).deleteCompanyUser();
 					CommDirDao.getSingle(this.ctx).saveCompanyUser(userList);
 				}
+				else if(this.actionCode == TxlConstants.ACTION_QUERY_CODE){
+					postParams.clear();
+					postParams.put("userIdStr", userIdBuilder.toString());
+					body = HttpClientUtil.httpPostUTF8(TxlConstants.URL_USER_ISONLINE, postParams);
+					JSONArray jsonArray = new JSONArray(body);
+					Map<Integer,Boolean> map = new HashMap<Integer, Boolean>();
+					for(int i=0,len=jsonArray.length();i<len;i++){
+						JSONObject jo = jsonArray.optJSONObject(i);
+						for (Iterator<String> keys = jo.keys(); keys.hasNext();) {
+			                String key = keys.next();
+			                map.put(Integer.parseInt(key), jo.optBoolean(key));
+						}
+					}
+					for(CompanyUser user:userList){
+						user.isOnline = map.get(user.userId);
+					}
+					/*for(int i=0,len=userList.size();i<len;i++){
+						CompanyUser user = userList.get(i);
+						user.isOnline = map.get(user.userId);
+						userList.set(i, user);
+					}*/
+					/*释放map*/
+					map = null;
+					
+				}
+				
 			}else{
 				sessionTimeout = true;
 			}

@@ -22,5 +22,7 @@ public abstract class User implements Serializable
     public int dirId;
     public String name;
     public String userPhone;
-    public int compId;    
+    public int compId;
+    /*是否在线*/
+    public boolean isOnline;
 }

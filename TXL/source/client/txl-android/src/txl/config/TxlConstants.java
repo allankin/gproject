@@ -111,6 +111,11 @@ public class TxlConstants
     
     public static String TXLMAIN_HOST = "111.1.45.158";   //192.168.2.100 111.1.45.158
     public static int WEB_PORT = 80;//8080  80
+    
+    public static String WEB_APP_CONTEXT_TXLMAIN = "txlmain-manage";
+    public static String WEB_APP_CONTEXT_TXLSHARE = "txlshare-manage";
+    public static String[] WEB_APP_CONTEXTS = {WEB_APP_CONTEXT_TXLMAIN,WEB_APP_CONTEXT_TXLSHARE};
+    
     public static String LOGIN_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileLogin.txl";
     public static String LOGOUT_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileLogout.txl";
     public static String FIND_BACK_PASSWORD_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileFindBackPassword.naf";
@@ -119,6 +124,8 @@ public class TxlConstants
     public static String SEARCH_DEPARTMENT_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/department/mobileSearch.txl";
     public static String SEARCH_COMPANY_USER_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/s/mobileSearch.txl";
 
+    public static String URL_USER_ISONLINE = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/user/isOnline.txl";
+    
     
     
     public static String TXLSHARE_HOST = TXLMAIN_HOST;

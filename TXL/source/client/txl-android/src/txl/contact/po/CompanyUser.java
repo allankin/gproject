@@ -10,4 +10,12 @@ package txl.contact.po;
 public class CompanyUser extends User
 {
     public int depId;
+    public String position;
+    public String compTel;
+    public String virtualTel;
+    public String homeTel;
+    public String email;
+    public String qq;
+    public String msn;
+    
 }

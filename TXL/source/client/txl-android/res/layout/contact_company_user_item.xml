@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/list_item_bg"
     android:descendantFocusability="blocksDescendants"  
-    android:paddingLeft="5dp">  
+    >  
     <!-- <ImageView android:id="@+id/color_image"  
         android:layout_width="40dip" android:layout_height="40dip" /> -->  
     <TextView android:id="@+id/contact_name"  
@@ -14,8 +14,20 @@
         android:layout_alignParentLeft="true" 
         android:singleLine="true"  
         android:textSize="20sp"  
+        android:focusable="false"
         android:textColor="@color/listview_item_text_color"
         />  
+        
+    <ImageView android:id="@+id/user_state_image" 
+        android:src="@drawable/state_offline" 
+        android:layout_toRightOf="@id/contact_name"
+        android:layout_height="wrap_content" 
+        android:layout_marginLeft="10dp"
+        android:layout_width="wrap_content"
+        android:focusable="false"
+        android:layout_marginTop="8dp"
+        />    
+        
     <TextView android:id="@+id/contact_phone"  
         android:layout_width="wrap_content" 
         android:layout_height="wrap_content"  
@@ -23,6 +35,17 @@
         android:singleLine="true"  
         android:textSize="15sp"
         android:layout_marginTop="20dp"
+        android:focusable="false"
         android:textColor="@color/listview_item_text_gray_color"
         />  
+        
+    <TextView android:id="@+id/contact_position"  
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"  
+        android:layout_alignParentRight="true"  
+        android:singleLine="true"  
+        android:textSize="15sp"
+        android:focusable="false"
+        android:textColor="@color/listview_item_text_gray_color"
+        />
 </RelativeLayout>  

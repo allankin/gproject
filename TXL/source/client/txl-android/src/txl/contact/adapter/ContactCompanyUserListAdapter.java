@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class ContactCompanyUserListAdapter extends BaseAdapter 
@@ -54,18 +55,28 @@ public class ContactCompanyUserListAdapter extends BaseAdapter
             	holder = new ViewHolder();
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.contact_company_user_item, null);
                 holder.nameView = (TextView) convertView.findViewById(R.id.contact_name);
+                holder.userStateImageView = (ImageView)convertView.findViewById(R.id.user_state_image);
                 holder.phoneView = (TextView) convertView.findViewById(R.id.contact_phone);
+                holder.contactPositionView = (TextView) convertView.findViewById(R.id.contact_position);
+                
                 convertView.setTag(holder);
             }else{
             	holder = (ViewHolder)convertView.getTag();
             }
             holder.nameView.setText(cv.name);
             holder.phoneView.setText(cv.userPhone);
+            if(cv.isOnline){
+            	holder.userStateImageView.setImageResource(R.drawable.state_online);
+            }else{
+            	holder.userStateImageView.setImageResource(R.drawable.state_offline);
+            }
             return convertView;
         }
         
         class ViewHolder{
         	TextView nameView;
             TextView phoneView;
+            ImageView userStateImageView;
+            TextView contactPositionView;
         }
     }

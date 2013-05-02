@@ -92,7 +92,10 @@ public class CommDirDao extends BaseDao implements CacheAble{
 	 * @return
 	 */
 	public List<CompanyUser> getCompUserList(String name, Integer depId) {
-		StringBuilder sql = new StringBuilder("select user_id,dep_id,name,user_phone,comp_id from txl_comp_user where 1=1 ");
+		StringBuilder sql = new StringBuilder("select user_id,dep_id,name,user_phone,comp_id, " +
+				"position,comp_tel,virtual_tel,home_tel,email," +
+				"qq,msn " +
+				"from txl_comp_user where 1=1 ");
 		if (depId!=null && depId != 0) {
 			sql.append(" and dep_id="+depId);
 		}
@@ -110,6 +113,14 @@ public class CommDirDao extends BaseDao implements CacheAble{
 			compUser.name = cursor.getString(2);
 			compUser.userPhone = cursor.getString(3);
 			compUser.compId = cursor.getInt(4);
+			
+			compUser.position = cursor.getString(5);
+			compUser.compTel = cursor.getString(6);
+			compUser.virtualTel = cursor.getString(7);
+			compUser.homeTel = cursor.getString(8);
+			compUser.email = cursor.getString(9);
+			compUser.qq = cursor.getString(10);
+			compUser.msn = cursor.getString(11);
 			companyUserList.add(compUser);
 		}
 		log.info("getCompUserList .... size : "+companyUserList.size());
@@ -124,7 +135,10 @@ public class CommDirDao extends BaseDao implements CacheAble{
 	 * @return
 	 */
 	public List<CompanyUser> getCompUserList() {
-		String sql = "select user_id,dep_id,name,user_phone,comp_id from txl_comp_user ";
+		String sql = "select user_id,dep_id,name,user_phone,comp_id, " +
+				"position,comp_tel,virtual_tel,home_tel,email," +
+				"qq,msn " +
+				"from txl_comp_user ";
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 		List<CompanyUser> companyUserList = new ArrayList<CompanyUser>();
@@ -135,6 +149,14 @@ public class CommDirDao extends BaseDao implements CacheAble{
 			compUser.name = cursor.getString(2);
 			compUser.userPhone = cursor.getString(3);
 			compUser.compId = cursor.getInt(4);
+			compUser.position = cursor.getString(5);
+			compUser.compTel = cursor.getString(6);
+			compUser.virtualTel = cursor.getString(7);
+			compUser.homeTel = cursor.getString(8);
+			compUser.email = cursor.getString(9);
+			compUser.qq = cursor.getString(10);
+			compUser.msn = cursor.getString(11);
+			
 			companyUserList.add(compUser);
 		}
 		cursor.close();
@@ -318,7 +340,13 @@ public class CommDirDao extends BaseDao implements CacheAble{
 			cv.put("dep_id", user.depId);
 			cv.put("comp_id", user.compId);
 			cv.put("name", user.name);
-			cv.put("user_phone", user.userPhone);
+			cv.put("position", user.position);
+			cv.put("comp_tel", user.compTel);
+			cv.put("virtual_tel", user.virtualTel);
+			cv.put("home_tel", user.homeTel);
+			cv.put("email", user.email);
+			cv.put("qq", user.qq);
+			cv.put("msn", user.msn);
 			db.insert("txl_comp_user", null, cv);
 		}
 		db.setTransactionSuccessful();

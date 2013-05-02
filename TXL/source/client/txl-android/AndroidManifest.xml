@@ -58,6 +58,8 @@
         <activity android:name="txl.message.MessageActivity" />
         <activity android:name="txl.message.pushmessage.PushMessageActivity" android:windowSoftInputMode = "adjustPan"/>
         <activity android:name="txl.contact.ContactActivity" />
+        <activity android:name="txl.contact.CompanyUserDetailActivity" />
+        
         <activity android:name="txl.contact.ShareUserActivity" android:screenOrientation="portrait"/>
         <activity android:name="txl.contact.DepartmentTreeActivity"/>
         
