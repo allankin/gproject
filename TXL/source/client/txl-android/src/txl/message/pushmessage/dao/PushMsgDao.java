@@ -165,6 +165,7 @@ public class PushMsgDao extends BaseDao{
 					pushMsg.sendUserId+",sendName:"+pushMsg.sendName+",content:"
 					+pushMsg.content+",isRead:"+pushMsg.isRead+",type:"+pushMsg.type);
 		}
+		cursor.close();
 		return pushMsg;
 	}
 	

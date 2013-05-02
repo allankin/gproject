@@ -47,7 +47,10 @@ public class SplashActivity extends Activity
         super.onCreate(savedInstanceState);
         
         setContentView(R.layout.splashlanch);
+        /*设置异常处理类*/
+        CrashHandler.getInstance().init(this);
         Config.launcher = this;
+        /*解析配置文件*/
         ConfigParser.init(this);
         String url = Config.getInstance().getUpgradeFileServer();
         if(url==null || url.trim().length()==0){
