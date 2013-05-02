@@ -17,6 +17,12 @@ public class Tool
                StringWriter sw = new StringWriter();
                PrintWriter pw = new PrintWriter(sw);
                e.printStackTrace(pw);
+               Throwable cause = e.getCause();  
+               while (cause != null) {  
+                   cause.printStackTrace(pw);  
+                   cause = cause.getCause();  
+               } 
+               pw.close(); 
                return sw.toString();
         }
         return "No Exception";
