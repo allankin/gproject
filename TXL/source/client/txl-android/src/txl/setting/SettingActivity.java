@@ -171,7 +171,7 @@ public class SettingActivity extends TxlActivity {
 		});
 		
 		
-		Spinner dialModeSpinner = (Spinner)findViewById(R.id.setting_dial_mode_btn);
+		/*Spinner dialModeSpinner = (Spinner)findViewById(R.id.setting_dial_mode_btn);
 		ArrayAdapter<String> dialModeAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,me.getResources().getStringArray(R.array.setting_dial_mode_array));
 		dialModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		dialModeSpinner.setAdapter(dialModeAdapter);
@@ -193,7 +193,7 @@ public class SettingActivity extends TxlActivity {
                 
             }
             
-        });
+        });*/
         
 	}
 	@Override
