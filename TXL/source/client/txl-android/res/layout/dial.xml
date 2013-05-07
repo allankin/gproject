@@ -16,8 +16,8 @@
 	         android:layout_height="fill_parent"
 	         android:layout_width="0dp"
 	         />   
-        	
-	      <ImageButton 
+         	
+	     <ImageView 
 	          android:id="@+id/dial_delBtn" 
 	          android:layout_width="wrap_content" 
 	          android:layout_height="wrap_content" 
@@ -25,7 +25,6 @@
 	         />       
 	</LinearLayout>
 	
-	`
 	
 	<!-- <LinearLayout style="@style/dial_liner">
 	    <Button
@@ -128,7 +127,7 @@
 	
 	<LinearLayout style="@style/dial_liner">
 	     
-	    <ImageButton
+	    <ImageView
 	          android:id="@+id/dial_stretchBtn" 
 	          android:layout_width="wrap_content" 
 	          android:layout_height="wrap_content" 

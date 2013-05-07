@@ -113,7 +113,7 @@ public class CallRecordActivity extends TxlActivity
         	
 		});
         
-        int width = getWindowManager().getDefaultDisplay().getWidth()-10;       
+        int width = getWindowManager().getDefaultDisplay().getWidth();       
         //int height = getWindowManager().getDefaultDisplay().getHeight();   
         dw = new DialWindow(this, width, LayoutParams.WRAP_CONTENT);
         dw.getContentView().setFocusableInTouchMode(true);

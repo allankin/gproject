@@ -5,7 +5,6 @@ import txl.activity.R;
 import txl.config.TxlConstants;
 import txl.util.IntentUtil;
 import txl.util.Tool;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
@@ -21,6 +20,7 @@ import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -71,7 +71,7 @@ public class DialWindow extends PopupWindow {
             }
         });  
 		
-		ImageButton stretchBtnView = (ImageButton) layout
+		ImageView stretchBtnView = (ImageView) layout
 				.findViewById(R.id.dial_stretchBtn);
 		stretchBtnView.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -83,7 +83,7 @@ public class DialWindow extends PopupWindow {
 			}
 		});
 
-		ImageButton delBtnView = (ImageButton) layout.findViewById(R.id.dial_delBtn);
+		ImageView delBtnView = (ImageView) layout.findViewById(R.id.dial_delBtn);
 
 		delBtnView.setOnClickListener(new View.OnClickListener() {
 			@Override

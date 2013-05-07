@@ -21,7 +21,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="dd" 
-	        android:textSize="25sp"
+	        android:textSize="20sp"
 	        android:textColor="@color/white"
 	        android:layout_alignParentLeft="true"
 	        />
@@ -30,7 +30,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="15824135596" 
-	        android:textSize="25sp"
+	        android:textSize="20sp"
 	        android:textColor="@color/white"
 	        android:layout_toRightOf="@id/call_name"
 	        android:layout_marginLeft="20dp"
@@ -40,7 +40,7 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:text="23" 
-	        android:textSize="25sp"
+	        android:textSize="15sp"
 	        android:textColor="@color/white"
 	        android:layout_alignParentRight="true"
 	        />
