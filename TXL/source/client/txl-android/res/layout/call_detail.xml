@@ -4,6 +4,7 @@
     android:id="@+id/tab_phone"
     android:layout_width="match_parent" 
     android:layout_height="match_parent"
+    android:background="@color/activity_background_color"
     android:orientation="vertical"
     >
     
@@ -48,8 +49,11 @@
         	android:id="@+id/call_list_detail" 
         	android:layout_width="wrap_content"   
             android:layout_height="wrap_content"   
-            android:cacheColorHint="@android:color/transparent"  
+            android:cacheColorHint="@android:color/transparent"
             style="@style/txl_list_padding"
+            android:divider="@color/list_divider_color"
+            android:dividerHeight="1dp"
+            android:drawSelectorOnTop="false"
             >  
     </ListView>
 </LinearLayout>

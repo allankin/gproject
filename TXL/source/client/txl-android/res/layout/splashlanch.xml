@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
-    android:background="@drawable/synergy_welcome_480_800"
+    android:background="@drawable/start_page"
     android:orientation="vertical" >
 
     <TextView

@@ -10,7 +10,7 @@
     <ListView
            android:id="@+id/pushmsg_detail_list"
            android:layout_width="match_parent"
-           android:layout_height="wrap_content" 
+           android:layout_height="fill_parent" 
            android:cacheColorHint="@android:color/transparent"
            android:divider="@null"
            style="@style/txl_list_padding"
@@ -21,6 +21,7 @@
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="54dp"
+        android:gravity="bottom"
         >
         <EditText
 	        android:id="@+id/pushmsg_input"

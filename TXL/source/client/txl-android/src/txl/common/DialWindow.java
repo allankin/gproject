@@ -20,6 +20,7 @@ import android.view.View.OnKeyListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.PopupWindow;
 import android.widget.Toast;
 
@@ -70,7 +71,7 @@ public class DialWindow extends PopupWindow {
             }
         });  
 		
-		Button stretchBtnView = (Button) layout
+		ImageButton stretchBtnView = (ImageButton) layout
 				.findViewById(R.id.dial_stretchBtn);
 		stretchBtnView.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -82,7 +83,7 @@ public class DialWindow extends PopupWindow {
 			}
 		});
 
-		Button delBtnView = (Button) layout.findViewById(R.id.dial_delBtn);
+		ImageButton delBtnView = (ImageButton) layout.findViewById(R.id.dial_delBtn);
 
 		delBtnView.setOnClickListener(new View.OnClickListener() {
 			@Override

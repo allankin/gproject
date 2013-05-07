@@ -48,7 +48,7 @@ public class SplashActivity extends Activity
         
         setContentView(R.layout.splashlanch);
         /*设置异常处理类*/
-        CrashHandler.getInstance().init(this);
+        //CrashHandler.getInstance().init(this);
         Config.launcher = this;
         /*解析配置文件*/
         ConfigParser.init(this);

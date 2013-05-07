@@ -1,4 +1,4 @@
-<resources xmlns:android="http://schemas.android.com/apk/res/android">
+<resources>
     
     <style name="TxlPadding">
         <item name="android:paddingLeft">5dp</item>
@@ -20,7 +20,7 @@
     <style name="dial_liner">
         <item name="android:orientation">horizontal</item> 
         <item name="android:layout_width">fill_parent</item> 
-        <item name="android:layout_height">60dp</item> 
+        <item name="android:layout_height">wrap_content</item> 
     </style>
     
     <style name="dial_grid_btn">
@@ -42,7 +42,22 @@
     <style name="Txl.Skin.Default" parent="android:Theme">
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowContentOverlay">@null</item>
-         <item name="android:background">@color/white</item>
+        <item name="android:background">@color/white</item>
+        
+        <item name="key0">@drawable/keyboard_0</item>
+        <item name="key1">@drawable/keyboard_1</item>
+        <item name="key2">@drawable/keyboard_2</item>
+        <item name="key3">@drawable/keyboard_3</item>
+        <item name="key4">@drawable/keyboard_4</item>
+        <item name="key5">@drawable/keyboard_5</item>
+        <item name="key6">@drawable/keyboard_6</item>
+        <item name="key7">@drawable/keyboard_7</item>
+        <item name="key8">@drawable/keyboard_8</item>
+        <item name="key9">@drawable/keyboard_9</item>
+        <item name="key_bg">@drawable/key_bg_s</item>
+        <item name="key_star">@drawable/keyboard_star</item>
+        <item name="key_hash">@drawable/keyboard_hash</item>
+        
     </style>
     
     <style name="activity_background">
@@ -112,7 +127,7 @@
 	</style>
 	
 	<style name="Theme.Start" parent="android:Theme">  
-		<item name="android:windowBackground">@drawable/synergy_welcome_480_800</item>  
+		<item name="android:windowBackground">@drawable/start_page</item>  
 		<item name="android:windowNoTitle">true</item>  
 	</style>
 </resources>

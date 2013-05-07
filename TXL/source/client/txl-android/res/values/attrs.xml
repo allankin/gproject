@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<attr name="key0" format="reference" />
+    <attr name="key1" format="reference" />
+    <attr name="key2" format="reference" />
+    <attr name="key3" format="reference" />
+    <attr name="key4" format="reference" />
+    <attr name="key5" format="reference" />
+    <attr name="key6" format="reference" />
+    <attr name="key7" format="reference" />
+    <attr name="key8" format="reference" />
+    <attr name="key9" format="reference" />
+    <attr name="key_bg" format="reference" />
+    <attr name="key_star" format="reference" />
+    <attr name="key_hash" format="reference" />
+</resources>

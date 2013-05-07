@@ -16,16 +16,18 @@
 	         android:layout_height="fill_parent"
 	         android:layout_width="0dp"
 	         />   
-	     <Button
-	            android:id="@+id/dial_delBtn"
-	            android:layout_weight="1"
-	            android:layout_width="0dp"
-	            android:layout_height="fill_parent"
-	            android:text="删除"
-	            />	         
+        	
+	      <ImageButton 
+	          android:id="@+id/dial_delBtn" 
+	          android:layout_width="wrap_content" 
+	          android:layout_height="wrap_content" 
+	          android:src="@drawable/keyboard_backspace_s" 
+	         />       
 	</LinearLayout>
 	
-	<LinearLayout style="@style/dial_liner">
+	`
+	
+	<!-- <LinearLayout style="@style/dial_liner">
 	    <Button
 	            android:id="@+id/dial_1Btn"
 	            style="@style/dial_grid_btn"
@@ -97,21 +99,47 @@
 	            style="@style/dial_grid_btn"
 	            android:text="#"
 	            />
-	</LinearLayout>
+	</LinearLayout> -->
+	
+	
+	<TableLayout   android:layout_width="fill_parent" android:layout_height="fill_parent" android:stretchColumns="*">
+        <TableRow android:layout_weight="1.0">
+            <ImageView android:id="@+id/dial_1Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_1" android:layout_weight="1.0" />
+            <ImageView android:id="@+id/dial_2Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_2" android:layout_weight="1.0" />
+            <ImageView android:id="@+id/dial_3Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_3" android:layout_weight="1.0" />
+        </TableRow>
+        <TableRow android:layout_weight="1.0">
+            <ImageView android:id="@+id/dial_4Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_4" android:layout_weight="1.0" />
+            <ImageView android:id="@+id/dial_5Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_5" android:layout_weight="1.0" />
+            <ImageView android:id="@+id/dial_6Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_6" android:layout_weight="1.0" />
+        </TableRow>
+        <TableRow android:layout_weight="1.0">
+            <ImageView android:id="@+id/dial_7Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_7" android:layout_weight="1.0" />
+            <ImageView android:id="@+id/dial_8Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_8" android:layout_weight="1.0" />
+            <ImageView android:id="@+id/dial_9Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_9" android:layout_weight="1.0" />
+        </TableRow>
+        <TableRow android:layout_weight="1.0">
+            <ImageView android:id="@+id/dial_xinBtn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_star" android:layout_weight="1.0" />
+            <ImageView android:id="@+id/dial_0Btn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_0" android:layout_weight="1.0" />
+            <ImageView android:id="@+id/dial_jinBtn" android:background="@drawable/key_bg_s" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/keyboard_hash" android:layout_weight="1.0" />
+        </TableRow>
+    </TableLayout>
+	
 	
 	<LinearLayout style="@style/dial_liner">
-	    <Button
-	            android:id="@+id/dial_stretchBtn"
-	            android:layout_weight="1"
-	            android:layout_width="0dp"
-	            android:layout_height="fill_parent"
-	            android:text="隐藏"
-	            />
+	     
+	    <ImageButton
+	          android:id="@+id/dial_stretchBtn" 
+	          android:layout_width="wrap_content" 
+	          android:layout_height="wrap_content" 
+	          android:src="@drawable/keyboard_hide_s" 
+	         />  
 	    <Button android:id="@+id/dial_callBtn" 
 	        android:layout_weight="2"
 	        android:layout_width="0dp"
 	        android:layout_height="fill_parent"
 	        android:text="呼叫">
+            
 	    </Button>
 	</LinearLayout>
 	

@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -111,35 +112,45 @@ public class CallRecordDetailActivity extends Activity {
         public View getView(int position, View convertView, ViewGroup parent)
         {
         	
-            
+            ViewHolder holder =null;
             if (convertView == null || position < callRecordCount)
             {
+                holder = new ViewHolder();
                 convertView = LayoutInflater.from(mContext).inflate(R.layout.call_detail_item, null);
-                callDateView = (TextView)convertView.findViewById(R.id.call_date);
-                statusBtnView = (Button)convertView.findViewById(R.id.call_statusBtn);
-                durationView = (TextView)convertView.findViewById(R.id.call_duration);
-            } 
+                holder.callDateView = (TextView)convertView.findViewById(R.id.call_date);
+                holder.statusView = (ImageView)convertView.findViewById(R.id.call_statusBtn);
+                holder.durationView = (TextView)convertView.findViewById(R.id.call_duration);
+            }else{
+                holder = (ViewHolder) convertView.getTag();
+            }
             
             CallRecord cr = crList.get(position);
-            callDateView.setText(cr.time);
-            String statusStr="";
+            holder.callDateView.setText(cr.time);
+            int callStatusResId = R.drawable.call_log_type_in;
             switch (cr.type) {
-				case CallLog.Calls.INCOMING_TYPE:
-					statusStr = "来电";
-					break;
-				case CallLog.Calls.OUTGOING_TYPE:
-					statusStr = "拨打";
-					break;
-				case CallLog.Calls.MISSED_TYPE:
-					statusStr ="未接";
-					break;
-				default:
-					break;
-			}
-            
-            statusBtnView.setText(statusStr);
-            durationView.setText(cr.getDurationString());
+                case CallLog.Calls.INCOMING_TYPE:
+                    callStatusResId = R.drawable.call_log_type_in;
+                    break;
+                case CallLog.Calls.OUTGOING_TYPE:
+                    callStatusResId = R.drawable.call_log_type_out;
+                    break;
+                case CallLog.Calls.MISSED_TYPE:
+                    callStatusResId = R.drawable.call_log_type_miss;
+                    break;
+                default:
+                    break;
+            }
+           
+            holder.statusView.setBackgroundResource(callStatusResId);
+            //statusBtnView.setText(statusStr);
+            holder.durationView.setText(cr.getDurationString());
             return convertView;
+        }
+        
+        private class ViewHolder {
+            TextView callDateView = null;
+            ImageView statusView = null;
+            TextView durationView = null;
         }
 
     }

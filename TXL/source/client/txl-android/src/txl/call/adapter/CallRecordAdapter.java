@@ -80,7 +80,7 @@ public class CallRecordAdapter extends BaseAdapter
             // 绘制联系人号码
             holder.callPhoneView.setText(cr.phoneNumber);
             holder.callDateView.setText(cr.time);
-            holder.statusBtnView.setText("  "+cr.count);
+            holder.statusBtnView.setText("   "+cr.count);
             
             //holder.countView.setText(String.valueOf(cr.count));
             int callStatusResId = R.drawable.ic_calllog_incomming_normal;
@@ -103,7 +103,7 @@ public class CallRecordAdapter extends BaseAdapter
         }
 
   
-        private class ViewHolder {
+    private class ViewHolder {
         TextView callNameView = null;
         TextView callPhoneView = null;
         TextView callDateView = null;

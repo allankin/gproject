@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"  
         android:layout_alignParentLeft="true" 
         android:singleLine="true"  
-        android:textSize="15sp"  
+        android:textSize="@dimen/list_item_normal_text_size"  
         android:focusable="false"
         android:textColor="@color/listview_item_text_color"
         />  
@@ -23,7 +23,7 @@
         android:layout_toRightOf="@id/call_name"
         android:layout_alignBottom="@id/call_name"
         android:singleLine="true"
-        android:textSize="13sp" 
+        android:textSize="@dimen/list_item_small_text_size" 
         android:focusable="false"
         android:textColor="@color/listview_item_text_gray_color"
         />
@@ -36,7 +36,7 @@
         android:singleLine="true"
         android:focusable="false"
         android:textColor="@color/listview_item_text_gray_color"
-        android:textSize="13sp" />
+        android:textSize="@dimen/list_item_small_text_size" />
      
      <Button
          android:gravity="left|center_vertical"

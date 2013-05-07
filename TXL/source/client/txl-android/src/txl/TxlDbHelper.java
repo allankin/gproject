@@ -90,13 +90,13 @@ public class TxlDbHelper extends SQLiteOpenHelper
         		"dep_id integer," +
         		"comp_id integer," +
         		"name varchar(20)," +
-        		"user_phone varchar(20)" +
-        		"position varchar(20)" +
-        		"comp_tel varchar(100)" +
-        		"virtual_tel varchar(100)" +
-        		"home_tel varchar(100)" +
-        		"email varchar(100)" +
-        		"qq varchar(100)" +
+        		"user_phone varchar(20)," +
+        		"position varchar(20)," +
+        		"comp_tel varchar(100)," +
+        		"virtual_tel varchar(100)," +
+        		"home_tel varchar(100)," +
+        		"email varchar(100)," +
+        		"qq varchar(100)," +
         		"msn varchar(100)" +
         		")");
        
