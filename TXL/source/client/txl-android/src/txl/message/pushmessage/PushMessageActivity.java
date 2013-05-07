@@ -141,7 +141,7 @@ private final TxLogger  log = new TxLogger(PushMessageActivity.class, TxlConstan
             	View header = findViewById(R.id.header_layout);
             	int height = TxlConstants.tabContentHeight-header.getHeight();
             	pushMsgDetailListView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT,height));
-            	pushMsgDetailListView.scrollBy(0, 300);
+            	pushMsgDetailListView.scrollBy(0, 150);
             }
         },500);
 	}
