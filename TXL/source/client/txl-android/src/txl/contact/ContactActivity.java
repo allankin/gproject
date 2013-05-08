@@ -10,8 +10,9 @@ import java.util.Set;
 import txl.Handlable;
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.common.ActionBoard;
+import txl.common.ActionBoard.ActionContact;
 import txl.common.SideBar;
-import txl.common.TxlAlertDialog;
 import txl.common.TxlToast;
 import txl.common.login.LoginDialog;
 import txl.common.po.Account;
@@ -30,7 +31,6 @@ import txl.contact.task.CampanyUserQueryTask;
 import txl.contact.task.ShareCommDirQueryTask;
 import txl.log.TxLogger;
 import txl.util.ContactVoComparator;
-import txl.util.IntentUtil;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -258,38 +258,9 @@ public class ContactActivity extends TxlActivity implements Handlable
 					int position, long id) {
 				log.info("position:"+position+" id: "+id);
 				final ContactVo contactVo = contactList.get(position);
-				View actionBoardView = LayoutInflater.from(me).inflate(R.layout.contact_action_board,null);
-				/*拨打电话*/
-				TextView actionCall = (TextView)actionBoardView.findViewById(R.id.contact_action_call);
-				actionCall.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						me.startActivity(IntentUtil.getCallIntent(contactVo.phone));
-						TxlAlertDialog.alert.dismiss();
-					}
-				});
-				/*发送sms*/
-				TextView actionSendSms = (TextView)actionBoardView.findViewById(R.id.contact_action_send_sms);
-				actionSendSms.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						me.startActivity(IntentUtil.getSmsSendDialogIntent("",contactVo.phone));
-						TxlAlertDialog.alert.dismiss();
-					}
-				});
-				
-				/*发送推送消息*/
-				TextView actionSendPushMessage = (TextView)actionBoardView.findViewById(R.id.contact_action_send_pushmessage);
-				actionSendPushMessage.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						//HS_TODO: 打开消息推送编辑activity
-						
-						
-						TxlAlertDialog.alert.dismiss();
-					}
-				});
-				TxlAlertDialog.show(me, actionBoardView, "", null);
+				ActionContact ac = new ActionBoard.ActionContact();
+				ac.phone = contactVo.phone;
+				ActionBoard.show(me, ac);
 			}
 		});
 		personalListView.setOnScrollListener(new OnScrollListener() {

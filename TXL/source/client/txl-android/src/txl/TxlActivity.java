@@ -9,18 +9,31 @@ import txl.log.TxLogger;
 import txl.message.MessageActivity;
 import txl.setting.SettingActivity;
 import android.app.Activity;
-import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 
 public abstract class TxlActivity extends Activity {
 	public abstract Handler getHandler();
 	
 	private final TxLogger log = new TxLogger(TxlActivity.class, TxlConstants.MODULE_ID_BASE);
 	public boolean isRunning;
+	@Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+		Window window=getWindow();
+		WindowManager.LayoutParams wl = window.getAttributes();
+		wl.flags=WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON;
+		wl.alpha=1.0f;//这句就是设置窗口里控件的透明度的．０.０全透明．１.０不透明．
+		window.setAttributes(wl);
+		super.onCreate(savedInstanceState);
+		
+    }
 	public boolean onKeyUp(int keyCode, KeyEvent event)
     {
         

@@ -11,8 +11,10 @@ import txl.activity.R;
 import txl.call.adapter.CallRecordAdapter;
 import txl.call.dao.CallRecordDao;
 import txl.call.po.CallRecord;
+import txl.common.ActionBoard;
 import txl.common.DialWindow;
 import txl.common.TxlAlertDialog;
+import txl.common.ActionBoard.ActionContact;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
@@ -76,39 +78,10 @@ public class CallRecordActivity extends TxlActivity
 					int position, long id) {
 				log.info("position:"+position+" id: "+id);
 				final CallRecord callRecord = callRecordMap.get(position);
-				View actionBoardView = LayoutInflater.from(me).inflate(R.layout.contact_action_board,null);
-				/*拨打电话*/
-				TextView actionCall = (TextView)actionBoardView.findViewById(R.id.contact_action_call);
-				actionCall.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						me.startActivity(IntentUtil.getCallIntent(callRecord.phoneNumber));
-						TxlAlertDialog.alert.dismiss();
-					}
-				});
-				/*发送sms*/
-				TextView actionSendSms = (TextView)actionBoardView.findViewById(R.id.contact_action_send_sms);
-				actionSendSms.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						me.startActivity(IntentUtil.getSmsSendDialogIntent("",callRecord.phoneNumber));
-						TxlAlertDialog.alert.dismiss();
-					}
-				});
 				
-				
-				/*发送推送消息*/
-				TextView actionSendPushMessage = (TextView)actionBoardView.findViewById(R.id.contact_action_send_pushmessage);
-				actionSendPushMessage.setOnClickListener(new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						//HS_TODO: 打开消息推送编辑activity
-						
-						
-						TxlAlertDialog.alert.dismiss();
-					}
-				});
-				TxlAlertDialog.show(me, actionBoardView, "", null);
+				ActionContact ac = new ActionBoard.ActionContact();
+				ac.phone = callRecord.phoneNumber;
+				ActionBoard.show(me, ac);
 			}
         	
 		});

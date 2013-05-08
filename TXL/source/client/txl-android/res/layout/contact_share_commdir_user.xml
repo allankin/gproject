@@ -3,7 +3,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical"
-    android:background="@color/activity_background_color" >
+    android:background="@color/activity_background_color" 
+    android:focusable="true"
+	android:focusableInTouchMode="true"
+    >
 
     <include
         android:layout_alignParentTop="true"
@@ -11,11 +14,12 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" >
+        android:layout_height="40dp" 
+        >
 
         <EditText
         android:id="@+id/share_commdir_user_search"
-        android:layout_width="150dp"
+        android:layout_width="250dp"
         android:layout_height="40dp"
         android:textSize="15sp" />
 

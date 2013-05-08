@@ -15,11 +15,4 @@
         android:id="@+id/contact_action_send_sms"
         android:text="发送短信"
         />
-    
-     <TextView
-         style="@style/contact_action_liner"
-        android:id="@+id/contact_action_send_pushmessage"
-        android:text="发送推送消息"
-       /> 
-        
 </LinearLayout>

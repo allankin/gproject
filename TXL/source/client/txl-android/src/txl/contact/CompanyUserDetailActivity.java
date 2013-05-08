@@ -7,12 +7,15 @@ import txl.contact.dao.CommDirDao;
 import txl.contact.po.CompanyUser;
 import txl.contact.po.Department;
 import txl.log.TxLogger;
+import txl.message.pushmessage.PushMessageActivity;
+import txl.message.pushmessage.dao.PushMsgDao;
 import txl.util.IntentUtil;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
@@ -50,6 +53,17 @@ private final TxLogger  log = new TxLogger(CompanyUserDetailActivity.class, TxlC
 			    TextView emailTv = (TextView)findViewById(R.id.company_user_email);
 			    TextView msnTv = (TextView)findViewById(R.id.company_user_msn);
 			    TextView qqTv = (TextView)findViewById(R.id.company_user_qq);
+			    
+			    Button pushMsgBtn = (Button)findViewById(R.id.pushmsg_btn);
+			    pushMsgBtn.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						Intent intent = new Intent(me,PushMessageActivity.class);
+						intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, user.userId);
+						intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME, user.name);
+						startActivity(intent);
+					}
+				});
 			    
 			    nameTv.setText(user.name);
 			    Department depart = CommDirDao.getSingle(me).getDepartByDepId(user.depId);
@@ -90,6 +104,8 @@ private final TxLogger  log = new TxLogger(CompanyUserDetailActivity.class, TxlC
             for(String compTel:compTels){
                 TextView tv = new TextView(me);
                 tv.setText(compTel);
+                tv.setTextColor(me.getResources().getColor(R.color.black));
+                tv.setTextSize(20);
                 tv.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT));
                 telLayout.addView(tv);
                 final String tel = compTel;

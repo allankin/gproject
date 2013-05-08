@@ -5,7 +5,10 @@ import java.util.List;
 
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.call.po.CallRecord;
+import txl.common.ActionBoard;
 import txl.common.TxlToast;
+import txl.common.ActionBoard.ActionContact;
 import txl.config.TxlConstants;
 import txl.contact.adapter.ContactShareUserListAdapter;
 import txl.contact.po.CommDirUserQuery;
@@ -19,10 +22,12 @@ import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 /**
  * 显示某个共享通讯录的用户列表
  * @author jinchao
@@ -68,16 +73,20 @@ private final TxLogger  log = new TxLogger(ShareUserActivity.class, TxlConstants
 		ListView contactListView = (ListView)findViewById(R.id.contact_list);
 		contactListView.setAdapter(csla);
 		
-		contactListView.setOnLongClickListener(new OnLongClickListener() {
+		contactListView.setOnItemClickListener(new OnItemClickListener() {
+
 			@Override
-			public boolean onLongClick(View v) {
-				//ContactShareUserListAdapter.ViewHolder viewHolder = (ContactShareUserListAdapter.ViewHolder)v.getTag();
-				TextView phoneView = (TextView)v.findViewById(R.id.contact_phone);
-				String phone = phoneView.getText().toString();
-				TxlToast.showShort(me,phone);
-				return false;
+			public void onItemClick(AdapterView<?> parent, View view,
+					int position, long id) {
+				log.info("position:"+position+" id: "+id);
+				final ShareUser user = shareUserList.get(position);
+				ActionContact ac = new ActionBoard.ActionContact();
+				ac.phone = user.userPhone;
+				ActionBoard.show(me, ac);
 			}
+        	
 		});
+		 
 	}
 	private void query(final int dirId){
 		EditText searchTextView = (EditText)findViewById(R.id.share_commdir_user_search);

@@ -51,16 +51,16 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="txl.MainActivity" android:windowSoftInputMode="adjustPan" android:launchMode="singleTask" android:screenOrientation="portrait"/>
+        <activity android:name="txl.MainActivity"  android:windowSoftInputMode="adjustPan" android:launchMode="singleTask" android:screenOrientation="portrait"/>
         <activity android:name="txl.call.CallRecordActivity" android:windowSoftInputMode="stateAlwaysHidden" android:screenOrientation="portrait"/>
         <activity android:name="txl.call.CallRecordDetailActivity" />
         
         <activity android:name="txl.message.MessageActivity" />
         <activity android:name="txl.message.pushmessage.PushMessageActivity" android:windowSoftInputMode = "adjustPan"/>
-        <activity android:name="txl.contact.ContactActivity" />
+        <activity android:name="txl.contact.ContactActivity"/>
         <activity android:name="txl.contact.CompanyUserDetailActivity" />
         
-        <activity android:name="txl.contact.ShareUserActivity" android:screenOrientation="portrait"/>
+        <activity android:name="txl.contact.ShareUserActivity" android:screenOrientation="portrait" android:windowSoftInputMode ="stateHidden"/>
         <activity android:name="txl.contact.DepartmentTreeActivity"/>
         
 
