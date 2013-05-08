@@ -153,6 +153,7 @@ public class TxlConstants
     public static final String INTENT_BUNDLE_CONTACT_NAME = "contactName";
     
     public static final String INTENT_BUNDLE_MSG_ID = "msgId";
+    public static final String INTENT_BUNDLE_COMPANY_USER = "companyUser";
     
     
     public static final int REQUEST_CODE_SELECT_DEPARTMENT = 0x0001;

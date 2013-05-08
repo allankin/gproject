@@ -380,6 +380,18 @@ public class ContactActivity extends TxlActivity implements Handlable
         contactCompanyUserListAdapter =  new ContactCompanyUserListAdapter(me,companyUserList);
         companyUserListView.setAdapter(contactCompanyUserListAdapter);
         
+        companyUserListView.setOnItemClickListener(new OnItemClickListener(){
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
+            {
+                CompanyUser user = companyUserList.get(position);
+                Intent intent = new Intent(me,CompanyUserDetailActivity.class);
+                intent.putExtra(TxlConstants.INTENT_BUNDLE_COMPANY_USER, user);
+                startActivity(intent);
+            }
+            
+        });
         
         Button searchBtn = (Button)companyUserLayout.findViewById(R.id.company_search_btn);
     	searchBtn.setOnClickListener(new OnClickListener()

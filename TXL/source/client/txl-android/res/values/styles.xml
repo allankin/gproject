@@ -75,6 +75,25 @@
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>
     
+    <style name="contact_company_user_detail_column_1">
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1.5</item>
+        <item name="android:gravity">right|center_vertical</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+        
+    </style>
+    <style name="contact_company_user_detail_column_2">
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_height">30dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">2</item>
+        <item name="android:gravity">left</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+    
     <style name="setting_column1">
         <item name="android:gravity">left</item> 
         <item name="android:layout_marginRight">1px</item>

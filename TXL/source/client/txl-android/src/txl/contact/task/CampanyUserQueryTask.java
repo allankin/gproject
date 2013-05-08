@@ -83,7 +83,7 @@ public class CampanyUserQueryTask extends NetworkAsyncTask<UserQuery,Void,List<C
 						user.userPhone = userJson.optString("userPhone");
 						user.name = userJson.optString("name");
 						user.position = userJson.optString("position");
-						user.compTel = userJson.optString("msn");
+						user.compTel = userJson.optString("compTel");
 						user.virtualTel = userJson.optString("virtualTel");
 						user.homeTel = userJson.optString("homeTel");
 						user.email = userJson.optString("email");

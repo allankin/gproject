@@ -84,6 +84,22 @@ public class CommDirDao extends BaseDao implements CacheAble{
 		db.close();
 		return departmentList;
 	}
+	public Department getDepartByDepId(int depId) {
+        String sql = "select dep_id,dep_name,dep_parent_id from txl_department  where dep_id="+depId;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        Department depart = null;
+        if(cursor.moveToNext()) {
+            depart = new Department();
+            depart.depId = cursor.getInt(0);
+            depart.depName = cursor.getString(1);
+            depart.depParentId = cursor.getInt(2);
+            log.info(" getDepartByDepId  : depId: "+depId+",depName: "+depart.depName);
+        }
+        cursor.close();
+        db.close();
+        return depart;
+    }
 
 	/**
 	 * 根据部门id获取公司通讯录用户
@@ -128,7 +144,34 @@ public class CommDirDao extends BaseDao implements CacheAble{
 		db.close();
 		return companyUserList;
 	}
-
+	public CompanyUser getCompUserByUserId(int userId){
+	    String sql = "select user_id,dep_id,name,user_phone,comp_id, " +
+                "position,comp_tel,virtual_tel,home_tel,email," +
+                "qq,msn " +
+                "from txl_comp_user where user_id="+userId;
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        CompanyUser compUser =null ;
+        if (cursor.moveToNext()) {
+            compUser = new CompanyUser();
+            compUser.userId = cursor.getInt(0);
+            compUser.depId = cursor.getInt(1);
+            compUser.name = cursor.getString(2);
+            compUser.userPhone = cursor.getString(3);
+            compUser.compId = cursor.getInt(4);
+            compUser.position = cursor.getString(5);
+            compUser.compTel = cursor.getString(6);
+            compUser.virtualTel = cursor.getString(7);
+            compUser.homeTel = cursor.getString(8);
+            compUser.email = cursor.getString(9);
+            compUser.qq = cursor.getString(10);
+            compUser.msn = cursor.getString(11);
+        }
+        cursor.close();
+        db.close();
+        return compUser;
+	}
+	
 	/**
 	 * 获取公司所有用户信息
 	 * 
