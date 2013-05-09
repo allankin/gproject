@@ -33,7 +33,7 @@ public class ActionBoard {
 				TxlAlertDialog.alert.dismiss();
 			}
 		});
-		
+		//TxlAlertDialog.show(me, R.layout.contact_action_board);
 		TxlAlertDialog.show(me, actionBoardView, "", null);
 	}
 	

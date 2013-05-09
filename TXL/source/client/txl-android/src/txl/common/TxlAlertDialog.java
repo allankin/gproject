@@ -1,5 +1,8 @@
 package txl.common;
+import txl.activity.R;
 import txl.config.Config;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.view.View;
@@ -83,6 +86,12 @@ public class TxlAlertDialog
    }
    public static void show(Context context,View view,String buttons, DialogInvoker invoker){
        show(context, title, null,view, buttons,invoker);   
+   }
+   
+   public static void show(Activity activity,int layout){
+	   Dialog dialog = new Dialog(activity, R.style.dialog);  
+       dialog.setContentView(layout);  
+       dialog.show();  
    }
    /**
     

@@ -12,5 +12,7 @@
     <color name="tab_bg_color">#1b1e25</color>
     <color name="list_divider_color">#D8E1E7</color>
     
+	
+	<color name="window_bgcolor">#ffffff</color>
     <!-- <color name="tab_bg_hover_color">#fdfaf8</color> -->
 </resources>

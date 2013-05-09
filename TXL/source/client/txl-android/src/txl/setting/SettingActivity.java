@@ -45,7 +45,7 @@ public class SettingActivity extends TxlActivity {
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		Resources res = getResources();
-        Drawable drawable = res.getDrawable(R.drawable.window_bgcolor);
+        Drawable drawable = res.getDrawable(R.color.window_bgcolor);
         this.getWindow().setBackgroundDrawable(drawable);
 		
 		setContentView(R.layout.tab_setting);

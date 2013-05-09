@@ -2,17 +2,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="0dp"
+    android:layout_margin="0dp"
+    android:background="@color/white"
+    >
 
-    <TextView 
-       	style="@style/contact_action_liner"
+    <TextView
+        style="@style/contact_action_liner"
         android:id="@+id/contact_action_call"
-        android:text="拨打电话"
-        />
+        android:background="@drawable/bg_action_board_item"
+        android:text="拨打电话" />
      
     <TextView
         style="@style/contact_action_liner"
         android:id="@+id/contact_action_send_sms"
+        android:background="@drawable/bg_action_board_item"
         android:text="发送短信"
         />
 </LinearLayout>
