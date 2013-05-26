@@ -151,6 +151,7 @@ private final TxLogger  log = new TxLogger(SyncSettingActivity.class, TxlConstan
 	        if(msg.what == TxlConstants.MSG_LOAD_DEPARTMENT){
 	        	UserQuery uq = new UserQuery();
 	        	uq.compId = Account.getSingle().compId;
+	        	/*同步公司通讯录用户*/
 	        	new CampanyUserQueryTask(me,TxlConstants.ACTION_SYNC_CODE).execute(uq);
 	        }else if(msg.what == TxlConstants.MSG_SYNC_SHARE_COMMDIR_USER){
             	TxlToast.showShort(me, "共享通讯录同步成功!");

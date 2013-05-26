@@ -116,6 +116,8 @@ public class TxlDbHelper extends SQLiteOpenHelper
         		"send_name varchar(20)," +
         		"type integer," +
         		"is_read integer," +
+        		"pushmsg_type_name varchar(20),"+
+        		"pushmsg_url varchar(200),"+
         		"dtime timestamp)");
         
         

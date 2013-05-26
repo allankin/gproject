@@ -18,7 +18,7 @@ import txl.util.Tool;
 
 /**
  * @ClassName:  DataRunnable.java
- * @Description: 
+ * @Description: 为文本消息处理器
  * @Author JinChao
  * @Date 2013-2-25 下午2:56:14
  */

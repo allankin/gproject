@@ -15,6 +15,7 @@ import txl.log.TxLogger;
 import txl.message.pushmessage.biz.DataRunnable;
 import txl.message.pushmessage.biz.HeartBeatRunnable;
 import txl.message.pushmessage.biz.OfflineRunnable;
+import txl.message.pushmessage.biz.PushDataClassifiedRunnable;
 import txl.message.pushmessage.biz.RegistRunnable;
 import txl.message.pushmessage.biz.RunnableManager;
 
@@ -158,6 +159,9 @@ public class NIOSocket {
                     RunnableManager.regist(TxlConstants.BIZID_RESPONSE_DATA, dataRun);//接收消息内容
                     RunnableManager.regist(TxlConstants.BIZID_REQUEST_DATA, dataRun);
                     
+                    
+                    PushDataClassifiedRunnable dataClassifiedRun = new PushDataClassifiedRunnable();
+                    RunnableManager.regist(TxlConstants.BIZID_RESPONSE_CLASSIFIED_PUSHDATA, dataClassifiedRun);
                     
                     OfflineRunnable offline = new OfflineRunnable();//下线通知
                     RunnableManager.regist(TxlConstants.BIZID_RESPONSE_OFFLINE, offline);

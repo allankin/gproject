@@ -99,6 +99,8 @@ public class PushMsgDao extends BaseDao{
 		cv.put("send_name", pushMsg.sendName);
 		cv.put("content", pushMsg.content);
 		cv.put("type", pushMsg.type);
+		cv.put("pushmsg_type_name", pushMsg.pushMsgTypeName);
+		cv.put("pushmsg_url", pushMsg.pushMsgUrl);
 		cv.put("dtime",pushMsg.dtime.toString());
 		cv.put("is_read", 0);
 		db.insert("txl_push_msg", null, cv);
@@ -116,7 +118,7 @@ public class PushMsgDao extends BaseDao{
 	 * @return
 	 */
 	public List<PushMsg> getPushMsg(Integer contactId){
-		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read from txl_push_msg ";
+		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url from txl_push_msg ";
 		if(contactId!=null && contactId!=0){
 			sql +=" where rec_user_id = "+contactId+" or send_user_id = "+contactId;
 		}
@@ -133,10 +135,13 @@ public class PushMsgDao extends BaseDao{
 			pushMsg.type = cursor.getInt(5);
 			pushMsg.dtime =  Timestamp.valueOf(cursor.getString(6));
 			pushMsg.isRead = cursor.getInt(7);
+			pushMsg.pushMsgTypeName = cursor.getString(8);
+			pushMsg.pushMsgUrl = cursor.getString(9);
 			pushMsgList.add(pushMsg);
 			log.info("getPushMsg ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
 					pushMsg.sendUserId+",sendName:"+pushMsg.sendName+",content:"
-					+pushMsg.content+",isRead:"+pushMsg.isRead+",type:"+pushMsg.type);
+					+pushMsg.content+",isRead:"+pushMsg.isRead+",type:"+pushMsg.type+",pushMsgTypeName:"+pushMsg.pushMsgTypeName+
+					",pushMsgUrl:"+pushMsg.pushMsgUrl);
 		}
 		
 		log.info("getPushMsg  size: "+pushMsgList.size());
@@ -148,7 +153,7 @@ public class PushMsgDao extends BaseDao{
 	
 	public PushMsg getPushMsgByMsgId(String msgId){
 		PushMsg pushMsg =null;
-		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read from txl_push_msg where msg_id='"+msgId+"'";
+		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url from txl_push_msg where msg_id='"+msgId+"'";
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 		if(cursor.moveToNext()) {
@@ -161,9 +166,12 @@ public class PushMsgDao extends BaseDao{
 			pushMsg.type = cursor.getInt(5);
 			pushMsg.dtime =  Timestamp.valueOf(cursor.getString(6));
 			pushMsg.isRead = cursor.getInt(7);
-			log.info("getPushMsgByMsgId ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
+			pushMsg.pushMsgTypeName = cursor.getString(8);
+			pushMsg.pushMsgUrl = cursor.getString(9);
+			log.info("getPushMsg ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
 					pushMsg.sendUserId+",sendName:"+pushMsg.sendName+",content:"
-					+pushMsg.content+",isRead:"+pushMsg.isRead+",type:"+pushMsg.type);
+					+pushMsg.content+",isRead:"+pushMsg.isRead+",type:"+pushMsg.type+",pushMsgTypeName:"+pushMsg.pushMsgTypeName+
+					",pushMsgUrl:"+pushMsg.pushMsgUrl);
 		}
 		cursor.close();
 		return pushMsg;

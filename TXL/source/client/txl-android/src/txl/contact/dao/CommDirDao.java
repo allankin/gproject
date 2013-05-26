@@ -45,7 +45,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 	 * @return
 	 */
 	public CommDir getCompanyCommDir() {
-		String sql = "select dir_id,name,type from  txl_comm_dir  where type=1";
+		String sql = "select dir_id,name,type from  txl_comm_dir  where type="+TxlConstants.COMMDIR_TYPE_COMMPANY;
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 		CommDir commDir = null;
@@ -53,7 +53,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 			commDir = new CommDir();
 			commDir.dirId = cursor.getInt(0);
 			commDir.name = cursor.getString(1);
-			commDir.type = 1;
+			commDir.type = TxlConstants.COMMDIR_TYPE_COMMPANY;
 			commDir.departList = this.getDepartList();
 		}
 		cursor.close();
@@ -250,7 +250,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 	 * @return
 	 */
 	public List<CommDir> getShareCommDirList(String name) {
-		String sql = "select dir_id,name,type from  txl_comm_dir  where type==2 ";
+		String sql = "select dir_id,name,type from  txl_comm_dir  where type="+TxlConstants.COMMDIR_SHARE_TYPE;
 		if(name!=null && name.length()>0){
 			sql +=" and name like '%"+name+"%'";
 		}
@@ -262,7 +262,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 			commDir = new CommDir();
 			commDir.dirId = cursor.getInt(0);
 			commDir.name = cursor.getString(1);
-			commDir.type = 2;
+			commDir.type = TxlConstants.COMMDIR_SHARE_TYPE;
 			log.info("dirid: " + commDir.dirId + ", name: " + commDir.name
 					+ ", type : " + commDir.type);
 			

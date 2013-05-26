@@ -4,7 +4,13 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 
 import txl.config.TxlConstants;
-
+/**
+ * content和desc字段：
+ * 当messageTypeName不为null，则表明为可分类的推送消息。此时，messageUrl为空，则发送纯文本。若messageUrl不为空，则为网页信息。
+ * 
+ * @author jinchao
+ *
+ */
 public class PushMsg implements Serializable{
 	private static final long serialVersionUID = 1L;
 	public int recUserId;
@@ -20,6 +26,12 @@ public class PushMsg implements Serializable{
 	public int type;
 	/*是否已读  0：未读  1：已读*/
 	public int isRead;
+	
+	
+	/** 以下为有分类的推送消息字段 **/
+	public String pushMsgTypeName;
+	public String pushMsgUrl;
+	
 	
 	public String  toJSONString(){
 		if(type==TxlConstants.PUSH_MESSAGE_TYPE_SEND){

@@ -214,6 +214,10 @@ public class TxlConstants
     /*内容请求包(发送包)*/
     public static final int BIZID_REQUEST_DATA = 5;
     
+    /*可分类推送消息的内容响应包*/
+    public static final int BIZID_RESPONSE_CLASSIFIED_PUSHDATA = 8;
     
+    public static final int COMMDIR_TYPE_COMMPANY = 1;
+    public static final int COMMDIR_TYPE_SHARE = 2;
     
 }
