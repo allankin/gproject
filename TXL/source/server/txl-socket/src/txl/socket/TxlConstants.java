@@ -25,4 +25,6 @@ public class TxlConstants
     public static final int SEND_STATUS_SUCCESS = 1;
     public static final int SEND_STATUS_USER_NOT_EXIST = 2;
     public static final int SEND_STATUS_FAIL = 3;
+    
+    public static final int MESSAGE_TYPE_PLAIN_TEXT  = -1;
 }

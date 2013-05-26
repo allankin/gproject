@@ -2,6 +2,8 @@ package txl.socket.po;
 
 import java.io.Serializable;
 
+import txl.socket.TxlConstants;
+
 /**
  * @ClassName:  PushMessage.java
  * @Description: 
@@ -20,9 +22,47 @@ public class PushMessage implements Serializable
     private String msgId;
     private long curTime;
     
+    /** below 推送消息时字段**/
+    private int pushMsgType;
+    private String pushMsgTypeName;
+    public int getPushMsgType() {
+		return pushMsgType;
+	}
+
+	public void setPushMsgType(int pushMsgType) {
+		this.pushMsgType = pushMsgType;
+	}
+
+	public String getPushMsgTypeName() {
+		return pushMsgTypeName;
+	}
+
+	public void setPushMsgTypeName(String pushMsgTypeName) {
+		this.pushMsgTypeName = pushMsgTypeName;
+	}
+
+	public String getPushMsgUrl() {
+		return pushMsgUrl;
+	}
+
+	public void setPushMsgUrl(String pushMsgUrl) {
+		this.pushMsgUrl = pushMsgUrl;
+	}
+
+	private String pushMsgUrl;
     
-    public String toJSONString(){
-        return "{\"b\":6,\"c\":\""+content+"\",\"m\":\""+msgId+"\",\"sn\":\""+sendName+"\",\"s\":"+sendUserId+"}";
+    
+    
+	public String toJSONString(){
+		if(pushMsgType == TxlConstants.MESSAGE_TYPE_PLAIN_TEXT){
+			return "{\"b\":6,\"c\":\""+content+"\",\"m\":\""+msgId+"\",\"sn\":\""+sendName+"\",\"s\":"+sendUserId+"}";
+		}else{
+			if(this.pushMsgUrl!=null){
+				return "{\"b\":8,\"ptn\":\""+pushMsgTypeName+"\",\"c\":\""+content+"\",\"url\":\""+pushMsgUrl+"\",\"m\":\""+msgId+"\",\"sn\":\""+sendName+"\",\"s\":"+sendUserId+"}";
+			}else{
+				return "{\"b\":8,\"ptn\":\""+pushMsgTypeName+"\",\"c\":\""+content+"\",\"url\":\"\",\"m\":\""+msgId+"\",\"sn\":\""+sendName+"\",\"s\":"+sendUserId+"}";
+			}
+		}
     }
     
     public int getRecUserId()
