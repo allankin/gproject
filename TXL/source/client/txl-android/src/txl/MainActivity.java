@@ -3,6 +3,8 @@ package txl;
 import txl.activity.R;
 import txl.call.CallRecordActivity;
 import txl.common.BadgeView;
+import txl.common.TxlAlertDialog;
+import txl.common.TxlAlertDialog.DialogInvoker;
 import txl.config.Config;
 import txl.config.ConfigParser;
 import txl.config.TxlConstants;
@@ -10,13 +12,13 @@ import txl.contact.ContactActivity;
 import txl.guide.GuideActivity;
 import txl.log.TxLogger;
 import txl.message.MessageActivity;
-import txl.message.MessageReceiver;
 import txl.message.pushmessage.core.MessageManager;
 import txl.message.pushmessage.dao.PushMsgDao;
 import txl.setting.SettingActivity;
 import txl.util.TxlSharedPreferences;
 import android.app.TabActivity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Rect;
@@ -25,6 +27,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -242,5 +245,24 @@ public class MainActivity extends TabActivity
     public Handler getHandler(){
     	return this.handler;
     }
-    
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event)
+    {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            boolean flag = this.isTaskRoot();
+            if(flag){
+                TxlAlertDialog.show(me, "确定退出吗?", "确定,取消", new DialogInvoker()
+                {
+                    @Override
+                    public void doInvoke(DialogInterface dialog, int btndex)
+                    {   
+                        if(btndex == TxlAlertDialog.FIRST_BTN_INDEX){
+                            me.moveTaskToBack(true);
+                        }
+                    }
+                });
+            }
+        } 
+        return false;
+    }
 }
