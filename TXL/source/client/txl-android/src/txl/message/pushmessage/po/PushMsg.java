@@ -31,6 +31,7 @@ public class PushMsg implements Serializable{
 	/** 以下为有分类的推送消息字段 **/
 	public String pushMsgTypeName;
 	public String pushMsgUrl;
+	public int pushMsgType;
 	
 	
 	public String  toJSONString(){

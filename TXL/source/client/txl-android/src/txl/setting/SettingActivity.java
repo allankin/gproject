@@ -15,6 +15,7 @@ import txl.common.login.ModifyPasswordDialog;
 import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
+import txl.test.TestManage;
 import txl.util.HttpClientUtil;
 import txl.util.Tool;
 import android.content.DialogInterface;
@@ -194,6 +195,8 @@ public class SettingActivity extends TxlActivity {
             }
             
         });*/
+		
+		TestManage.test();
         
 	}
 	@Override

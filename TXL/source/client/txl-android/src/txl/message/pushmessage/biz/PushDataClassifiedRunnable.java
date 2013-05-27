@@ -2,6 +2,7 @@ package txl.message.pushmessage.biz;
 
 import java.sql.Timestamp;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import txl.common.po.Account;
@@ -32,6 +33,7 @@ public class PushDataClassifiedRunnable implements BizRunnable
         PushMsg rpm = new PushMsg();
         rpm.content = jobject.optString("c");
         rpm.pushMsgUrl = jobject.optString("url");
+        rpm.pushMsgType = jobject.optInt("pt");
         rpm.pushMsgTypeName = jobject.optString("ptn");
         //rpm.recUserId = jobject.optInt("u");
         rpm.recUserId = Account.getSingle().userId;
@@ -45,5 +47,22 @@ public class PushDataClassifiedRunnable implements BizRunnable
         MessageManager.dealData(rpm);
     }
     
-   
+    public void test(){
+    	JSONObject jobj = new JSONObject();
+    	try {
+			jobj.put("c", "热水器真相");
+			jobj.put("url", "http://111.1.45.158/txlmain-manage/article/view.txl?article.articleId=2");
+			jobj.put("pt", 1);
+			jobj.put("ptn", "公司内刊");
+			jobj.put("sn", "小李");
+			jobj.put("s", 13);
+			jobj.put("m", "ce867e772b3c4ed684cf2aefa993941f");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+    	MessageManager.context = Config.mainContext;
+    	//MessageManager.startMessageService(Config.mainContext, userRet.userId, userRet.phone,userRet.name);
+    	this.receive(jobj);
+    }
+    
 }

@@ -57,6 +57,11 @@ public class RunnableManager
             	OfflineRunnable or = (OfflineRunnable)br;
             	or.dealReply(jobj);
             }
+            /*可分类的推送消息包*/
+            else if(bizId == TxlConstants.BIZID_RESPONSE_CLASSIFIED_PUSHDATA){
+            	PushDataClassifiedRunnable pcr = (PushDataClassifiedRunnable)br;
+            	pcr.receive(jobj);
+            }
         } catch (JSONException e)
         {
             e.printStackTrace();
