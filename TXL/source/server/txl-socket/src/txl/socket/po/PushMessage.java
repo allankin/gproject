@@ -58,9 +58,9 @@ public class PushMessage implements Serializable
 			return "{\"b\":6,\"c\":\""+content+"\",\"m\":\""+msgId+"\",\"sn\":\""+sendName+"\",\"s\":"+sendUserId+"}";
 		}else{
 			if(this.pushMsgUrl!=null){
-				return "{\"b\":8,\"ptn\":\""+pushMsgTypeName+"\",\"c\":\""+content+"\",\"url\":\""+pushMsgUrl+"\",\"m\":\""+msgId+"\",\"sn\":\""+sendName+"\",\"s\":"+sendUserId+"}";
+				return "{\"b\":8,\"pt\":"+pushMsgType+",\"ptn\":\""+pushMsgTypeName+"\",\"c\":\""+content+"\",\"url\":\""+pushMsgUrl+"\",\"m\":\""+msgId+"\",\"sn\":\""+sendName+"\",\"s\":"+sendUserId+"}";
 			}else{
-				return "{\"b\":8,\"ptn\":\""+pushMsgTypeName+"\",\"c\":\""+content+"\",\"url\":\"\",\"m\":\""+msgId+"\",\"sn\":\""+sendName+"\",\"s\":"+sendUserId+"}";
+				return "{\"b\":8,\"pt\":"+pushMsgType+",\"ptn\":\""+pushMsgTypeName+"\",\"c\":\""+content+"\",\"url\":\"\",\"m\":\""+msgId+"\",\"sn\":\""+sendName+"\",\"s\":"+sendUserId+"}";
 			}
 		}
     }
