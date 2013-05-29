@@ -37,7 +37,7 @@ public class DataRunnable implements BizRunnable
         rpm.sendUserId = jobject.optInt("s");
         rpm.msgId = jobject.optString("m");
         rpm.dtime = new Timestamp(System.currentTimeMillis());
-        rpm.pushMsgType = 0;
+        rpm.pushMsgType = TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED;
         rpm.pushMsgTypeName="";
         rpm.pushMsgUrl="";
         rpm.type = TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE;

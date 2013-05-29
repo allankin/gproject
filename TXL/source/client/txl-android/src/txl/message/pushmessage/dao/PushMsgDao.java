@@ -83,7 +83,7 @@ public class PushMsgDao extends BaseDao{
 		List<PushMsg> classfiedPushMsgList = this.getClassfiedPushMsg(null);
           for(int i=0,len=classfiedPushMsgList.size();i<len;i++){
             PushMsg pushMsg = classfiedPushMsgList.get(i);
-            int pushMsgType = Tool.convertPushMsgTypeToDB(pushMsg.pushMsgType);
+            int pushMsgType = pushMsg.pushMsgType;
             Integer index = pushMsgTypeSet.get(pushMsgType);
             if(index!=null){
                 PushMsgRecord record = pushMsgRecordMap.get(index);
@@ -139,7 +139,7 @@ public class PushMsgDao extends BaseDao{
 	 * @return
 	 */
 	public List<PushMsg> getContactPushMsg(Integer contactId){
-		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url,pushmsg_type from txl_push_msg where  pushmsg_type=0 ";
+		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url,pushmsg_type from txl_push_msg where  pushmsg_type="+TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED;
 		if(contactId!=null && contactId!=0){
 			sql +=" and (rec_user_id = "+contactId+" or send_user_id = "+contactId+")";
 		}
@@ -179,10 +179,10 @@ public class PushMsgDao extends BaseDao{
 	 */
 	public List<PushMsg> getClassfiedPushMsg(Integer pushMsgType){
 	    String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url,pushmsg_type from txl_push_msg where";
-        if(pushMsgType!=null && pushMsgType!=0){
+        if(pushMsgType!=null && pushMsgType!=TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
             sql +="  pushmsg_type = "+pushMsgType;
         }else{
-            sql +="  pushmsg_type!=0";
+            sql +="  pushmsg_type!="+TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED;
         }
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         Cursor cursor = db.rawQuery(sql, null);
@@ -265,6 +265,21 @@ public class PushMsgDao extends BaseDao{
         ContentValues cv = new ContentValues();
         cv.put("is_read", isRead);
         int row = db.update("txl_push_msg", cv, "send_user_id=?", new String[]{String.valueOf(userId)});
+        db.close();
+        return row>=1;
+	}
+	/**
+	 * 根据推送消息的分类id更新是否已读
+	 * @param pushMsgType
+	 * @param isRead
+	 * @return
+	 */
+	public boolean updatePushMsgReadStatusByPushMsgType(int pushMsgType,int isRead){
+		SQLiteDatabase db = dbHelper.getWritableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("is_read", isRead);
+        
+        int row = db.update("txl_push_msg", cv, "pushmsg_type=?", new String[]{String.valueOf(pushMsgType)});
         db.close();
         return row>=1;
 	}

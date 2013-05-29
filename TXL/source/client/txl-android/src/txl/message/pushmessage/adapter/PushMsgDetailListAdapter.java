@@ -66,9 +66,16 @@ public class PushMsgDetailListAdapter extends BaseAdapter
             
             String dateStr = sfd.format(new Date(msg.dtime.getTime()));
             if(msg.type == TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
-            	holder.recContentView.setText(msg.content+"  "+dateStr);
+            	String content = msg.content;
             	holder.sendContentView.setVisibility(View.INVISIBLE);
             	holder.recContentView.setVisibility(View.VISIBLE);
+            	if(msg.pushMsgType!=TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
+            		if(msg.pushMsgUrl.trim().length()>0){
+            			content +="  >>查看详情";
+            		}
+            	}
+            	content+="  "+dateStr;
+            	holder.recContentView.setText(content);
             }else if(msg.type == TxlConstants.PUSH_MESSAGE_TYPE_SEND){
             	holder.sendContentView.setText(msg.content+"  "+dateStr);
             	holder.recContentView.setVisibility(View.INVISIBLE);

@@ -71,6 +71,9 @@
         <activity android:name="txl.test.sidecom.Main"/>
         <activity android:name="txl.test.tree.TreeViewActivity" />
         
+        <activity android:name="txl.message.pushmessage.ClassfiedPushMsgDetailActivity"/>
+        
+        
         <service android:name="txl.message.pushmessage.core.MessageService">
 		   <intent-filter>
 		      <action android:name="txl.message.pushmessage.core.MessageService"/>

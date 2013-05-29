@@ -2,7 +2,9 @@ package txl.message.pushmessage.biz;
 
 import org.json.JSONObject;
 
+import txl.common.TxlToast;
 import txl.common.po.Account;
+import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import txl.message.pushmessage.core.SendMessageQueue;
@@ -27,6 +29,13 @@ public class RegistRunnable implements BizRunnable {
 	}
 
 	public void dealReply(final JSONObject jobj) {
+		Config.mainContext.runOnUiThread(new Runnable() {
+			
+			@Override
+			public void run() {
+				TxlToast.showShort(Config.mainContext, "消息连接成功");
+			}
+		});		
 		HeartBeatRunnable heartBeatRunnable = (HeartBeatRunnable) RunnableManager
 				.getRunnable(TxlConstants.BIZID_REQUEST_HEARTBEAT);
 		//HS_TODO: 要求保存账号信息(暂默认)

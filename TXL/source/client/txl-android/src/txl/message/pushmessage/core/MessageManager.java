@@ -5,16 +5,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import txl.activity.R;
+import txl.common.TxlNotification;
 import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import txl.message.pushmessage.dao.PushMsgDao;
 import txl.message.pushmessage.po.PushMsg;
-import txl.message.pushmessage.po.PushMsg;
 import txl.util.Tool;
 import android.content.Context;
 import android.content.Intent;
+import android.widget.RemoteViews;
 
 /**
  * @ClassName:  MessageManager.java
@@ -46,6 +48,8 @@ public class MessageManager
     	intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, rpm.sendUserId);
     	intent.putExtra(TxlConstants.INTENT_BUNDLE_MSG_ID, rpm.msgId);
     	Config.mainContext.sendBroadcast(intent);
+    	RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.notification_notice);
+    	TxlNotification.sendNotification2(context, rpm, remoteView);
     }
     /**
      * 发出通知

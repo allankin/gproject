@@ -28,11 +28,13 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
 
 /**
  * @author jinchao
@@ -41,7 +43,7 @@ import android.widget.TextView;
 public class PushMessageActivity extends TxlActivity {
 
 	private final TxLogger log = new TxLogger(PushMessageActivity.class,
-			TxlConstants.MODULE_ID_CONTACT);
+			TxlConstants.MODULE_ID_MESSAGE);
 
 	private PushMessageActivity me = this;
 	private List<PushMsg> pushMsgList;
@@ -55,29 +57,41 @@ public class PushMessageActivity extends TxlActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.pushmsg_detail_list);
 		pushMsgDetailListView = (ListView) findViewById(R.id.pushmsg_detail_list);
-		ajustListView(pushMsgDetailListView);
+		
 		TextView header = (TextView) findViewById(R.id.header);
 		header.setText("");
 		Intent intent = getIntent();
 		contactId = 0;
 		int messageCount = 0;
 		String contactName = "";
+		String pushMsgTypeName=null;
 		if (intent != null) {
 			Bundle bundle = intent.getExtras();
 			if (bundle != null) {
-				contactId = bundle
-						.getInt(TxlConstants.INTENT_BUNDLE_CONTACT_ID);
-				// messageCount =
-				// bundle.getInt(TxlConstants.INTENT_BUNDLE_COUNT);
-				contactName = bundle
-						.getString(TxlConstants.INTENT_BUNDLE_CONTACT_NAME);
-				log.info("contactId:" + contactId + ",contactName:"
-						+ contactName);
+				pushMsgTypeName =  bundle
+						.getString(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME);
+				/*联系人消息*/
+				if(pushMsgTypeName==null){
+					ajustListView(pushMsgDetailListView);
+					contactId = bundle
+							.getInt(TxlConstants.INTENT_BUNDLE_CONTACT_ID);
+					contactName = bundle
+							.getString(TxlConstants.INTENT_BUNDLE_CONTACT_NAME);
+					log.info("contactId:" + contactId + ",contactName:"
+							+ contactName);
+					pushMsgList = PushMsgDao.getSingle(me).getContactPushMsg(contactId);
+				}
+				/*可分类的消息推送消息*/
+				else{
+					contactId = bundle
+							.getInt(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE);
+					contactName = pushMsgTypeName;
+					pushMsgList = PushMsgDao.getSingle(me).getClassfiedPushMsg(contactId);
+				}
 
-				pushMsgList = PushMsgDao.getSingle(me).getContactPushMsg(contactId);
+
 				messageCount = pushMsgList.size();
 				header.setText(contactName + "(" + messageCount + ")");
-
 				detailListAdapter = new PushMsgDetailListAdapter(me,
 						pushMsgList);
 
@@ -91,8 +105,30 @@ public class PushMessageActivity extends TxlActivity {
 								return false;
 							}
 						});
-				boolean flag = PushMsgDao.getSingle(me)
-						.updatePushMsgReadStatusByUserId(contactId, 1);
+				boolean flag = false;
+				if(pushMsgTypeName==null){
+					flag = PushMsgDao.getSingle(me)
+							.updatePushMsgReadStatusByUserId(contactId, 1);
+				}else{
+					pushMsgDetailListView.setOnItemClickListener(new OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> parent, View view,
+								int position, long id) {
+							PushMsg pushMsg = pushMsgList.get(position);
+							String pushMsgUrl = pushMsg.pushMsgUrl;
+							if(pushMsgUrl!=null && pushMsgUrl.trim().length()>0){
+								Intent intent = new Intent(me,ClassfiedPushMsgDetailActivity.class);
+								intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TITLE, pushMsg.content);
+								intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_URL, pushMsgUrl);
+								startActivity(intent);
+							}
+						}
+						
+					});
+					flag = PushMsgDao.getSingle(me)
+							.updatePushMsgReadStatusByPushMsgType(contactId, 1);
+				}
 				if (flag) {
 					Config.mainContext
 							.getHandler()
@@ -104,51 +140,55 @@ public class PushMessageActivity extends TxlActivity {
 						.setSelection(detailListAdapter.getCount() - 1);
 			}
 		}
+		
+		if(pushMsgTypeName==null){
+			final int contactIdFinal = contactId;
+			final String contactNameFinal = contactName;
+			final EditText pushMsgInput = (EditText) findViewById(R.id.pushmsg_input);
+			// HS_TODO:暂屏蔽 键盘的回车键
+			pushMsgInput.setOnEditorActionListener(editListener);
+			pushMsgSendBtn = (Button) findViewById(R.id.pushmsg_send_btn);
+			pushMsgSendBtn.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					String content = pushMsgInput.getText().toString().trim();
+					if (content.length() > 0) {
+						DataRunnable dr = (DataRunnable) RunnableManager
+								.getRunnable(TxlConstants.BIZID_REQUEST_DATA);
+						PushMsg pushMsg = new PushMsg();
 
-		final int contactIdFinal = contactId;
-		final String contactNameFinal = contactName;
-		final EditText pushMsgInput = (EditText) findViewById(R.id.pushmsg_input);
-		// HS_TODO:暂屏蔽 键盘的回车键
-		pushMsgInput.setOnEditorActionListener(editListener);
-		pushMsgSendBtn = (Button) findViewById(R.id.pushmsg_send_btn);
-		pushMsgSendBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				String content = pushMsgInput.getText().toString().trim();
-				if (content.length() > 0) {
-					DataRunnable dr = (DataRunnable) RunnableManager
-							.getRunnable(TxlConstants.BIZID_REQUEST_DATA);
-					PushMsg pushMsg = new PushMsg();
+						pushMsg.content = Tool.string2Json(content);
+						pushMsg.recUserId = contactIdFinal;
+						pushMsg.sendUserId = Account.getSingle().userId;
+						pushMsg.msgId = Tool.genUUID();
+						pushMsg.type = TxlConstants.PUSH_MESSAGE_TYPE_SEND;
+						dr.send(pushMsg);
+						pushMsg.recName = contactNameFinal;
+						pushMsg.dtime = new Timestamp(System.currentTimeMillis());
+						pushMsg.pushMsgType = 0;
+						pushMsg.pushMsgTypeName="";
+						pushMsg.pushMsgUrl="";
+						PushMsgDao.getSingle(me).savePushMsg(pushMsg);
+						pushMsgList.add(pushMsg);
+						detailListAdapter.notifyDataSetChanged();
+						pushMsgDetailListView.setSelection(detailListAdapter
+								.getCount() - 1);
+						pushMsgInput.setText("");
+						// InputMethodManager imm
+						// =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+						// imm.hideSoftInputFromWindow(pushMsgInput.getWindowToken(),
+						// 0);
 
-					pushMsg.content = Tool.string2Json(content);
-					pushMsg.recUserId = contactIdFinal;
-					pushMsg.sendUserId = Account.getSingle().userId;
-					pushMsg.msgId = Tool.genUUID();
-					pushMsg.type = TxlConstants.PUSH_MESSAGE_TYPE_SEND;
-					dr.send(pushMsg);
-					pushMsg.recName = contactNameFinal;
-					pushMsg.dtime = new Timestamp(System.currentTimeMillis());
-					pushMsg.pushMsgType = 0;
-					pushMsg.pushMsgTypeName="";
-					pushMsg.pushMsgUrl="";
-					PushMsgDao.getSingle(me).savePushMsg(pushMsg);
-					pushMsgList.add(pushMsg);
-					detailListAdapter.notifyDataSetChanged();
-					pushMsgDetailListView.setSelection(detailListAdapter
-							.getCount() - 1);
-					pushMsgInput.setText("");
-					// InputMethodManager imm
-					// =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-					// imm.hideSoftInputFromWindow(pushMsgInput.getWindowToken(),
-					// 0);
-
+					}
 				}
-			}
-		});
+			});
 
-		pushMsgInput.setFocusable(true);
-		pushMsgInput.requestFocus();
-		onFocusChange(pushMsgInput,true);
+			pushMsgInput.setFocusable(true);
+			pushMsgInput.requestFocus();
+			onFocusChange(pushMsgInput,true);
+		}
+		
+		
 		mr = new MessageDetailReceiver();
 		IntentFilter filter = new IntentFilter(
 				TxlConstants.ACTION_MESSAGE_RECEIVED);
@@ -279,9 +319,10 @@ public class PushMessageActivity extends TxlActivity {
 	protected void onRestart() {
 		super.onRestart();
 		log.info("onRestart");
-		me.unregisterReceiver(mr);
+		//me.unregisterReceiver(mr);
 	}
 
+	
 	@Override
 	protected void onResume() {
 		super.onResume();

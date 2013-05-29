@@ -34,6 +34,7 @@ public class PushDataClassifiedRunnable implements BizRunnable
         rpm.content = jobject.optString("c");
         rpm.pushMsgUrl = jobject.optString("url");
         rpm.pushMsgType = jobject.optInt("pt");
+        rpm.pushMsgType = Tool.convertPushMsgTypeToDB(rpm.pushMsgType);
         rpm.pushMsgTypeName = jobject.optString("ptn");
         //rpm.recUserId = jobject.optInt("u");
         rpm.recUserId = Account.getSingle().userId;
@@ -51,7 +52,7 @@ public class PushDataClassifiedRunnable implements BizRunnable
     	JSONObject jobj = new JSONObject();
     	try {
 			jobj.put("c", "热水器真相");
-			jobj.put("url", "http://111.1.45.158/txlmain-manage/article/view.txl?article.articleId=2");
+			jobj.put("url", "http://111.1.45.158/txlmain-manage/article/view.naf?article.articleId=2");
 			jobj.put("pt", 1);
 			jobj.put("ptn", "公司内刊");
 			jobj.put("sn", "小李");

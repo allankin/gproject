@@ -155,12 +155,20 @@ public class TxlConstants
     public static final String INTENT_BUNDLE_MSG_ID = "msgId";
     public static final String INTENT_BUNDLE_COMPANY_USER = "companyUser";
     
+    public static final String INTENT_BUNDLE_PUSHMSG_TYPE = "pushMsgType";
+    public static final String INTENT_BUNDLE_PUSHMSG_TYPE_NAME = "pushMsgTypeName";
+    
+    
+    public static final String INTENT_BUNDLE_PUSHMSG_TITLE = "pushMsgTitle";
+    public static final String INTENT_BUNDLE_PUSHMSG_URL = "pushMsgUrl";
     
     public static final int REQUEST_CODE_SELECT_DEPARTMENT = 0x0001;
     
     public static final String ERROR_NETWORK_TIMEOUT = "网络超时";
     public static final String TIP_QUERING = "正在查询";
     public static final String TIP_SYNC = "正在同步";
+    
+    public static final String TIP_LOADING = "正在加载...";
     
     public static final String SHARE_PREFERENCE_FILENAME = "app";
     
@@ -221,4 +229,13 @@ public class TxlConstants
     public static final int COMMDIR_TYPE_SHARE = 2;
     
     public static final int PUSH_MSG_TYPE_OFFSET = 20000;
+    
+    /*不可分类的推送消息类型。   即：服务器端  的：   MESSAGE_TYPE_PLAIN_TEXT：-1 */
+    public static final int PUSHMSG_TYPE_NOT_CLASSFIED = -1;
+    
+    
+    public static final int initNoticeLen = 100;
+    
+    
+    
 }

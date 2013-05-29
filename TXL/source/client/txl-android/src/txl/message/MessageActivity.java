@@ -201,22 +201,28 @@ public class MessageActivity extends TxlActivity {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				int contactUserId = 0;
 				PushMsgRecord record =  pushMsgMap.get(position);
 				int count = record.pushMsgRecordList.size();
-				String contactName;
-				if(record.pushMsg.type!= TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
-					contactUserId = record.pushMsg.recUserId;
-					contactName = record.pushMsg.recName;
-				}else{
-					contactUserId = record.pushMsg.sendUserId;
-					contactName = record.pushMsg.sendName;
-				}
-				log.info("loadPushMessageModule .... contactUserId :"+contactUserId+",count:"+count);
 				Intent intent = new Intent(me,PushMessageActivity.class);
-				intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, contactUserId);
+				if(record.pushMsg.pushMsgType==0){
+					int contactUserId = 0;
+					String contactName;
+					if(record.pushMsg.type!= TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
+						contactUserId = record.pushMsg.recUserId;
+						contactName = record.pushMsg.recName;
+					}else{
+						contactUserId = record.pushMsg.sendUserId;
+						contactName = record.pushMsg.sendName;
+					}
+					log.info("loadPushMessageModule .... contactUserId :"+contactUserId+",count:"+count);
+					intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, contactUserId);
+					intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME, contactName);
+				}else{
+					int pushMsgType = record.pushMsg.pushMsgType;
+					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
+					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME, record.pushMsg.pushMsgTypeName);
+				}
 				intent.putExtra(TxlConstants.INTENT_BUNDLE_COUNT, count);
-				intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME, contactName);
 				startActivity(intent);
 			}
 		});

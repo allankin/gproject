@@ -45,7 +45,7 @@ public class PushMsgListAdapter extends BaseAdapter {
 		return position;
 	}
 
-	class ViewHolder {
+	static class ViewHolder {
 		TextView pushMsgNameView;
 		TextView pushMsgDateView;
 		TextView pushMsgContent;
