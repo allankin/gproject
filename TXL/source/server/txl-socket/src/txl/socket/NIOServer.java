@@ -221,7 +221,7 @@ public class NIOServer {
                        wrapChannel.name = name;
                        addChannel(wrapChannel);
 	                   
-	                   int j=1;
+	                  /* int j=1;
 	                   while(j<8){
 	                       Random r = new Random();
 	                       int i = r.nextInt(50);
@@ -236,7 +236,7 @@ public class NIOServer {
 	                       sendCount = channel.write(writeBuffer);
 	                       log.info("发送内容："+dataJsonStr+" count："+sendCount);
 	                       j++;
-	                   }
+	                   }*/
 	                   
 	                }
 	                /*心跳处理*/
