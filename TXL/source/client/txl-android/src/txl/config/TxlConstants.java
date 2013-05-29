@@ -220,4 +220,5 @@ public class TxlConstants
     public static final int COMMDIR_TYPE_COMMPANY = 1;
     public static final int COMMDIR_TYPE_SHARE = 2;
     
+    public static final int PUSH_MSG_TYPE_OFFSET = 20000;
 }

@@ -74,7 +74,7 @@ public class PushMessageActivity extends TxlActivity {
 				log.info("contactId:" + contactId + ",contactName:"
 						+ contactName);
 
-				pushMsgList = PushMsgDao.getSingle(me).getPushMsg(contactId);
+				pushMsgList = PushMsgDao.getSingle(me).getContactPushMsg(contactId);
 				messageCount = pushMsgList.size();
 				header.setText(contactName + "(" + messageCount + ")");
 
@@ -128,6 +128,9 @@ public class PushMessageActivity extends TxlActivity {
 					dr.send(pushMsg);
 					pushMsg.recName = contactNameFinal;
 					pushMsg.dtime = new Timestamp(System.currentTimeMillis());
+					pushMsg.pushMsgType = 0;
+					pushMsg.pushMsgTypeName="";
+					pushMsg.pushMsgUrl="";
 					PushMsgDao.getSingle(me).savePushMsg(pushMsg);
 					pushMsgList.add(pushMsg);
 					detailListAdapter.notifyDataSetChanged();

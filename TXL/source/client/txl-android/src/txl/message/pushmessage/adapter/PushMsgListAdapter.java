@@ -54,6 +54,7 @@ public class PushMsgListAdapter extends BaseAdapter {
 
 	public View getView(int position, View convertView, ViewGroup parent) {
 		PushMsgRecord pm = this.pushMsgMap.get(position);
+		
 		ViewHolder holder;
 		if (convertView == null) {
 			convertView = LayoutInflater.from(mContext).inflate(
@@ -70,8 +71,11 @@ public class PushMsgListAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
- 
-		holder.pushMsgNameView.setText(pm.pushMsg.sendName);
+		if(pm.pushMsg.pushMsgType==0){
+		    holder.pushMsgNameView.setText(pm.pushMsg.sendName);
+		}else{
+		    holder.pushMsgNameView.setText(pm.pushMsg.pushMsgTypeName);
+		}
 		String dateStr = sfd.format(new Date(pm.pushMsg.dtime.getTime()));
 		holder.pushMsgDateView.setText(dateStr);
 		holder.pushMsgContent.setText(pm.pushMsg.content);

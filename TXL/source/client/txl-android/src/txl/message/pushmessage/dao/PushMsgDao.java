@@ -13,6 +13,7 @@ import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import txl.message.pushmessage.po.PushMsg;
 import txl.message.pushmessage.po.PushMsgRecord;
+import txl.util.Tool;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -41,7 +42,7 @@ public class PushMsgDao extends BaseDao{
 	public void loadPushMsgList(Context context,
 			Map<Integer,PushMsgRecord> pushMsgRecordMap){
 		
-		List<PushMsg> pushMsgList = getPushMsg(null);
+		List<PushMsg> pushMsgList = getContactPushMsg(null);
 		int count=0;
 		Map<Integer,Integer> pushMsgContactIdSet = new HashMap<Integer,Integer>();
 		for(int i=0,len=pushMsgList.size();i<len;i++){
@@ -77,6 +78,25 @@ public class PushMsgDao extends BaseDao{
 				}
 			}
 		}
+		
+		Map<Integer,Integer> pushMsgTypeSet = new HashMap<Integer,Integer>();
+		List<PushMsg> classfiedPushMsgList = this.getClassfiedPushMsg(null);
+          for(int i=0,len=classfiedPushMsgList.size();i<len;i++){
+            PushMsg pushMsg = classfiedPushMsgList.get(i);
+            int pushMsgType = Tool.convertPushMsgTypeToDB(pushMsg.pushMsgType);
+            Integer index = pushMsgTypeSet.get(pushMsgType);
+            if(index!=null){
+                PushMsgRecord record = pushMsgRecordMap.get(index);
+                record.pushMsgRecordList.add(pushMsg);
+            }else{
+                PushMsgRecord record = new PushMsgRecord();
+                record.pushMsg = pushMsg;
+                record.pushMsgRecordList.add(pushMsg);
+                pushMsgRecordMap.put(count, record);
+                pushMsgTypeSet.put(pushMsgType, count);
+                count++;
+            }
+          }
 		log.info("loadPushMsgList .... pushMsgRecordMap size :"+pushMsgRecordMap.size());
 		 
 	}
@@ -99,6 +119,7 @@ public class PushMsgDao extends BaseDao{
 		cv.put("send_name", pushMsg.sendName);
 		cv.put("content", pushMsg.content);
 		cv.put("type", pushMsg.type);
+		cv.put("pushmsg_type", pushMsg.pushMsgType);
 		cv.put("pushmsg_type_name", pushMsg.pushMsgTypeName);
 		cv.put("pushmsg_url", pushMsg.pushMsgUrl);
 		cv.put("dtime",pushMsg.dtime.toString());
@@ -117,10 +138,10 @@ public class PushMsgDao extends BaseDao{
 	 * @param contactId 表示查找该联系人的消息记录
 	 * @return
 	 */
-	public List<PushMsg> getPushMsg(Integer contactId){
-		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url from txl_push_msg ";
+	public List<PushMsg> getContactPushMsg(Integer contactId){
+		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url,pushmsg_type from txl_push_msg where  pushmsg_type=0 ";
 		if(contactId!=null && contactId!=0){
-			sql +=" where rec_user_id = "+contactId+" or send_user_id = "+contactId;
+			sql +=" and (rec_user_id = "+contactId+" or send_user_id = "+contactId+")";
 		}
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
@@ -137,6 +158,7 @@ public class PushMsgDao extends BaseDao{
 			pushMsg.isRead = cursor.getInt(7);
 			pushMsg.pushMsgTypeName = cursor.getString(8);
 			pushMsg.pushMsgUrl = cursor.getString(9);
+			pushMsg.pushMsgType = 0;
 			pushMsgList.add(pushMsg);
 			log.info("getPushMsg ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
 					pushMsg.sendUserId+",sendName:"+pushMsg.sendName+",content:"
@@ -144,12 +166,52 @@ public class PushMsgDao extends BaseDao{
 					",pushMsgUrl:"+pushMsg.pushMsgUrl);
 		}
 		
-		log.info("getPushMsg  size: "+pushMsgList.size());
+		log.info("getContactPushMsg  size: "+pushMsgList.size());
 		cursor.close();
 		db.close();
 		return pushMsgList;
 	}
-	
+	/**
+	 * 根据推送消息类型id，查找推送消息。
+	 * 若id为null，则查找所有的可分类的推送消息。
+	 * @param pushMsgType
+	 * @return
+	 */
+	public List<PushMsg> getClassfiedPushMsg(Integer pushMsgType){
+	    String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url,pushmsg_type from txl_push_msg where";
+        if(pushMsgType!=null && pushMsgType!=0){
+            sql +="  pushmsg_type = "+pushMsgType;
+        }else{
+            sql +="  pushmsg_type!=0";
+        }
+        SQLiteDatabase db = dbHelper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(sql, null);
+        List<PushMsg> pushMsgList = new ArrayList<PushMsg>();
+        while (cursor.moveToNext()) {
+            PushMsg pushMsg = new PushMsg();
+            pushMsg.msgId = cursor.getString(0);
+            pushMsg.recUserId = cursor.getInt(1);
+            pushMsg.sendUserId = cursor.getInt(2);
+            pushMsg.sendName = cursor.getString(3);
+            pushMsg.content = cursor.getString(4);
+            pushMsg.type = cursor.getInt(5);
+            pushMsg.dtime =  Timestamp.valueOf(cursor.getString(6));
+            pushMsg.isRead = cursor.getInt(7);
+            pushMsg.pushMsgTypeName = cursor.getString(8);
+            pushMsg.pushMsgUrl = cursor.getString(9);
+            pushMsg.pushMsgType = cursor.getInt(10);
+            pushMsgList.add(pushMsg);
+            log.info("getPushMsg ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
+                    pushMsg.sendUserId+",sendName:"+pushMsg.sendName+",content:"
+                    +pushMsg.content+",isRead:"+pushMsg.isRead+",type:"+pushMsg.type+",pushMsgTypeName:"+pushMsg.pushMsgTypeName+
+                    ",pushMsgUrl:"+pushMsg.pushMsgUrl);
+        }
+        
+        log.info("getContactPushMsg  size: "+pushMsgList.size());
+        cursor.close();
+        db.close();
+        return pushMsgList;
+	}
 	
 	public PushMsg getPushMsgByMsgId(String msgId){
 		PushMsg pushMsg =null;

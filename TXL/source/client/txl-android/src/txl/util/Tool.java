@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.UUID;
 
 import txl.config.Config;
+import txl.config.TxlConstants;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -223,5 +224,9 @@ public class Tool {
                return sw.toString();
         }
         return "No Exception";
+    }
+    
+    public static int convertPushMsgTypeToDB(int pushMsgType){
+        return pushMsgType+TxlConstants.PUSH_MSG_TYPE_OFFSET;
     }
 }
