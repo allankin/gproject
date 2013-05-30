@@ -261,10 +261,20 @@ public class NIOServer {
 	                    		String uuid = Tool.genUUID();
 	                    		if(wrapChannel!=null){
 	                    			String dataJsonStr = "{\"b\":6,\"c\":\""+content+"\",\"m\":\""+uuid+"\",\"sn\":\""+name+"\",\"s\":"+userId+"}";
+	                    			byte[] bytes = dataJsonStr.getBytes("UTF-8");
 	                    			// HS_TODO: 可以优化,公用ByteBuffer
-	                    			ByteBuffer writeBuffer = ByteBuffer.wrap(dataJsonStr.getBytes("UTF-8"));
+	                    			ByteBuffer writeBuffer = ByteBuffer.wrap(bytes);
 	                    			sendCount = wrapChannel.channel.write(writeBuffer);
+	                    			int length = bytes.length;
 	                    			log.info("发送内容："+dataJsonStr+" count："+sendCount);
+	                    			/*发送失败*/
+	                    			if(length != sendCount){
+	                    				
+	                    			}
+	                    		}
+	                    		/*接收者离线*/
+	                    		else{
+	                    			
 	                    		}
 	                    	}
 	                    }
