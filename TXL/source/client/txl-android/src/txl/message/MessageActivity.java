@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import txl.Handlable;
 import txl.TxlActivity;
 import txl.activity.R;
 import txl.config.Config;
@@ -23,6 +24,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,7 +38,7 @@ import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.Spinner;
 
-public class MessageActivity extends TxlActivity {
+public class MessageActivity extends TxlActivity implements Handlable {
 	
 	private final TxLogger  log = new TxLogger(MessageActivity.class, TxlConstants.MODULE_ID_MESSAGE);
 	
@@ -328,7 +330,14 @@ public class MessageActivity extends TxlActivity {
     }
     
     private Handler handler = new Handler(){
-        
+        public void handleMessage(Message msg)
+        {
+            if(msg.what == TxlConstants.MSG_HANDLER_SELECT_MESSAGE_TYPE){
+                Integer messageType = (Integer)msg.obj;
+                RadioGroup messageTypeRG = (RadioGroup)findViewById(R.id.message_type);
+                messageTypeRG.check(messageType);
+            }
+        }
     };
     @Override
     public Handler getHandler()

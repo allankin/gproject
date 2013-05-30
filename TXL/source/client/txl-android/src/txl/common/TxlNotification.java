@@ -1,8 +1,8 @@
 package txl.common;
 
+import txl.MainActivity;
 import txl.activity.R;
 import txl.config.TxlConstants;
-import txl.message.MessageActivity;
 import txl.message.pushmessage.po.PushMsg;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -71,7 +71,7 @@ public class TxlNotification
         long when = System.currentTimeMillis();  
         
          
-        Notification noti = new Notification(icon, "MAW新消息", when + 10000);  
+        Notification noti = new Notification(icon, "单位通信录有新消息", when + 10000);  
         noti.defaults = Notification.DEFAULT_SOUND;
         noti.flags |= Notification.FLAG_ONLY_ALERT_ONCE | Notification.FLAG_AUTO_CANCEL;  
         
@@ -79,7 +79,7 @@ public class TxlNotification
         String c = info.content.substring(0,len);
         
         
-        Intent mIntent = new Intent(context,MessageActivity.class);
+        Intent mIntent = new Intent(context,MainActivity.class);
         mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
         mIntent.putExtra("action", "message");
         

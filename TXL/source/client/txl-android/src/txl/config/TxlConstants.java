@@ -71,7 +71,7 @@ public class TxlConstants
     public static final File SDCARD_DIRECTORY =  Environment.getExternalStorageDirectory();
     
     
-    
+    public static final int MSG_HANDLER_SELECT_MESSAGE_TYPE = 0x0001;
     
     public static final int CONTACT_HANDLER_HIDE_OVERLAY = 0x0001;
     public static final int CONTACT_HANDLER_OVERLAY_VISIBLE = 0x0002;
@@ -161,6 +161,8 @@ public class TxlConstants
     
     public static final String INTENT_BUNDLE_PUSHMSG_TITLE = "pushMsgTitle";
     public static final String INTENT_BUNDLE_PUSHMSG_URL = "pushMsgUrl";
+    
+    public static final String INTENT_BUNDLE_ACTION = "action";
     
     public static final int REQUEST_CODE_SELECT_DEPARTMENT = 0x0001;
     

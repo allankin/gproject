@@ -1,0 +1,70 @@
+
+@media screen and (-webkit-device-pixel-ratio: 1.5),
+only screen and (min-width: 480px){
+	
+a.icon::before{
+	background-image: url(../images/hdpi/ftbtn_icons.png) ;
+	}
+	
+a.icon:hover::before , a.icon:active::before {
+	 background-image: url(../images/hdpi/ftbtn_icons_hover.png) ;
+	}
+
+input.hs-ui-forms[type=checkbox] + label::before { 
+	background-image:url(../images/hdpi/form_checkbox.png) ;
+}
+
+.span_single a.receivebox::before {
+	background: url(../images/hdpi/symbol_receivebox.png) center center no-repeat ;	
+	}	
+	
+.span_single a.sentbox::before {
+	background: url(../images/hdpi/symbol_sendbox.png) center center no-repeat ;
+	}
+
+.span_single a.deletebox::before {
+	background: url(../images/hdpi/symbol_deletebox.png) center center no-repeat ;
+	}
+	
+.span_single a.had_message::after {
+	background: url(../images/hdpi/sign_next.png) no-repeat ;
+	}
+
+.span_single2 a:hover .sub_tt::after {
+	 background: url(../images/hdpi/sign_next_hover.png) no-repeat ; 
+	 }
+	 
+.span_single2 .sub_tt::after {
+	background: url(../images/hdpi/sign_next.png) no-repeat ;
+	}	
+	
+.parameter1.attachment::after{
+	background: url(../images/hdpi/sign_attachment.png) no-repeat ;
+	}
+
+.span_double a.unread::before{
+	background-image: url(../images/hdpi/mark_unread.png) ;
+	}
+	
+.span_double a::after {
+	background: url(../images/hdpi/sign_next.png) no-repeat ;
+	}
+	
+.span_double a:hover::after {
+
+	background: url(../images/hdpi/sign_next_hover.png) no-repeat ;
+	}
+		
+	
+.span_double_forms div.span_content.unread::before{
+	background-image: url(../images/hdpi/mark_unread.png) ;
+	}
+	
+a.type::before {
+	background: url(../images/hdpi/type_image.png) no-repeat ;
+	} 
+	
+.add_contacter {
+	background: url(../images/hdpi/btn_add_contacter.png) no-repeat ;
+	}
+	

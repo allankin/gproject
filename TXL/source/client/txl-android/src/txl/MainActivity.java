@@ -32,6 +32,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.TabWidget;
@@ -52,7 +54,8 @@ public class MainActivity extends TabActivity
         super.onCreate(savedInstanceState);
         ConfigParser.init(me);
         log = new TxLogger(MainActivity.class, TxlConstants.MODULE_ID_SPLASHSCREEN);
-        preprocess();
+        log.info("onCreate");
+        preprocess(0);
         
         
         txlReceiver = new TxlReceiver(me);
@@ -60,7 +63,7 @@ public class MainActivity extends TabActivity
 		me.registerReceiver(txlReceiver, filter);
     }
     
-    private void preprocess(){
+    private void preprocess(int tabIndex){
     	boolean loaded = TxlSharedPreferences.getBoolean(me, "loaded", false);
         if(loaded){
             final View view = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
@@ -81,7 +84,7 @@ public class MainActivity extends TabActivity
             intent = new Intent().setClass(this, SettingActivity.class);
             setupTab(TxlConstants.TAB_ITEM_SETTING, intent);
             
-            tabHost.setCurrentTab(1); 
+            tabHost.setCurrentTab(tabIndex); 
             setTabBackground();
             
             ajustTabContent();
@@ -168,12 +171,23 @@ public class MainActivity extends TabActivity
         tv.setText(text);
         return view;
     }
-    
 
     @Override
     protected void onNewIntent (Intent intent){
        log.info("onNewIntent");
-       preprocess();
+       String action = intent.getStringExtra(TxlConstants.INTENT_BUNDLE_ACTION);
+       if("message".equals(action)){
+           preprocess(1);
+           /*FrameLayout tabContent = (FrameLayout)findViewById(android.R.id.tabcontent);
+           RadioGroup messageType = (RadioGroup)tabContent.findViewById(R.id.message_type);
+           messageType.check(R.id.pushmsg);*/
+           Intent i = new Intent(me,MessageActivity.class);
+           
+           
+           me.startActivity(i);
+       }else{
+           preprocess(0);
+       }
     } 
     
     @Override
