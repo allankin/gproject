@@ -81,7 +81,16 @@ public class TxlNotification
         
         Intent mIntent = new Intent(context,MainActivity.class);
         mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
-        mIntent.putExtra("action", "message");
+        mIntent.putExtra(TxlConstants.INTENT_BUNDLE_ACTION, "message");
+        if(info.pushMsgType==TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
+        	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, info.sendUserId);
+        	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME, info.sendName);
+        }else{
+        	int pushMsgType = info.pushMsgType;
+        	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
+        	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME, info.pushMsgTypeName);
+        	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_CLASSIFIED, true);
+        }
         
         //mIntent.putExtra("content", c);
         PendingIntent mContentIntent =PendingIntent.getActivity(context,NOTIFICATION_ID, mIntent, 0);

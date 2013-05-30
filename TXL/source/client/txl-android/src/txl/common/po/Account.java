@@ -144,6 +144,20 @@ public class Account {
         return true;
     }
 	
+	/**
+	 * 清除用户信息
+	 * @return
+	 */
+	public boolean clearUserInfo(){
+		String filePath = directoryPath + fileName;
+		File file = new File(filePath);
+		boolean flag = false;
+		if(file.exists()){
+			flag = file.delete();
+		}
+		log.info("clearUserInfo..."+flag);
+		return flag;
+	}
 	
 	public void load(Context ctx){
 		/*加载设置信息*/

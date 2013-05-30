@@ -191,6 +191,7 @@ public class NIOSocket {
             }
 
         }
+        log.info("Socket listen is ... "+pollFlag);
     }
     /**
      * 处理读取服务端发来的信息 的事件
@@ -290,6 +291,7 @@ public class NIOSocket {
     
     public void stop(){
         this.pollFlag = false;
+        log.info("NIOSocket ...  stop");
     }
     /**
      * 客户端测试

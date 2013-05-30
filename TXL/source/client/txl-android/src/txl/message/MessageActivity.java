@@ -206,7 +206,7 @@ public class MessageActivity extends TxlActivity implements Handlable {
 				PushMsgRecord record =  pushMsgMap.get(position);
 				int count = record.pushMsgRecordList.size();
 				Intent intent = new Intent(me,PushMessageActivity.class);
-				if(record.pushMsg.pushMsgType==0){
+				if(record.pushMsg.pushMsgType== TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
 					int contactUserId = 0;
 					String contactName;
 					if(record.pushMsg.type!= TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
@@ -223,8 +223,9 @@ public class MessageActivity extends TxlActivity implements Handlable {
 					int pushMsgType = record.pushMsg.pushMsgType;
 					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
 					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME, record.pushMsg.pushMsgTypeName);
+					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_CLASSIFIED, true);
 				}
-				intent.putExtra(TxlConstants.INTENT_BUNDLE_COUNT, count);
+				//intent.putExtra(TxlConstants.INTENT_BUNDLE_COUNT, count);
 				startActivity(intent);
 			}
 		});

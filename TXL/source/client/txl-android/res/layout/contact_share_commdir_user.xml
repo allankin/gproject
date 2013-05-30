@@ -13,21 +13,24 @@
         layout="@layout/header" />
 
     <LinearLayout
-        android:layout_width="wrap_content"
+        android:layout_width="fill_parent"
         android:layout_height="40dp" 
+        android:orientation="horizontal"
         >
 
         <EditText
         android:id="@+id/share_commdir_user_search"
-        android:layout_width="250dp"
+        android:layout_weight="3"
+	    android:layout_width="0dip"
         android:layout_height="40dp"
+        android:hint="请输入姓名"
         android:textSize="15sp" />
 
 	    <Button
 	        android:id="@+id/share_commdir_user_search_btn"
-	        android:layout_width="60dp"
-	        android:layout_height="fill_parent"
-	        android:text="搜索" />
+	        android:layout_width="45dip"
+            android:layout_height="fill_parent"
+            android:background="@drawable/menu_icon_search" />
         
     </LinearLayout>
 

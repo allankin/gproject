@@ -12,6 +12,7 @@ import txl.contact.ContactActivity;
 import txl.guide.GuideActivity;
 import txl.log.TxLogger;
 import txl.message.MessageActivity;
+import txl.message.pushmessage.PushMessageActivity;
 import txl.message.pushmessage.core.MessageManager;
 import txl.message.pushmessage.dao.PushMsgDao;
 import txl.setting.SettingActivity;
@@ -55,7 +56,32 @@ public class MainActivity extends TabActivity
         ConfigParser.init(me);
         log = new TxLogger(MainActivity.class, TxlConstants.MODULE_ID_SPLASHSCREEN);
         log.info("onCreate");
-        preprocess(0);
+
+        Intent intent = this.getIntent();
+        if(intent!=null){
+        	String action = intent.getStringExtra(TxlConstants.INTENT_BUNDLE_ACTION);
+        	if("message".equals(action)){
+        		preprocess(1);
+        		/*FrameLayout tabContent = (FrameLayout)findViewById(android.R.id.tabcontent);
+            RadioGroup messageType = (RadioGroup)tabContent.findViewById(R.id.message_type);
+            messageType.check(R.id.pushmsg);*/
+        		Intent i = new Intent(me,PushMessageActivity.class);
+        		
+        		if(intent.getBooleanExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_CLASSIFIED,	false)){
+        			i.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, intent.getIntExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE,-1));
+        			i.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME, intent.getStringExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME));
+        		}else{
+        			i.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, intent.getIntExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID,0));
+        			i.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME,  intent.getStringExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME));
+        		}
+        		me.startActivity(i);
+        	}else{
+        		preprocess(0);
+        	}
+        }else{
+        	preprocess(0);
+        }
+        
         
         
         txlReceiver = new TxlReceiver(me);
@@ -175,19 +201,6 @@ public class MainActivity extends TabActivity
     @Override
     protected void onNewIntent (Intent intent){
        log.info("onNewIntent");
-       String action = intent.getStringExtra(TxlConstants.INTENT_BUNDLE_ACTION);
-       if("message".equals(action)){
-           preprocess(1);
-           /*FrameLayout tabContent = (FrameLayout)findViewById(android.R.id.tabcontent);
-           RadioGroup messageType = (RadioGroup)tabContent.findViewById(R.id.message_type);
-           messageType.check(R.id.pushmsg);*/
-           Intent i = new Intent(me,MessageActivity.class);
-           
-           
-           me.startActivity(i);
-       }else{
-           preprocess(0);
-       }
     } 
     
     @Override

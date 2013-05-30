@@ -5,8 +5,10 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.UUID;
 
+import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
+import txl.message.pushmessage.core.MessageManager;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
@@ -228,5 +230,14 @@ public class Tool {
     
     public static int convertPushMsgTypeToDB(int pushMsgType){
         return pushMsgType+TxlConstants.PUSH_MSG_TYPE_OFFSET;
+    }
+    
+    /**
+     * 退出清理信息。
+     * 如：存储的个人信息，socket连接等
+     */
+    public static void quitClear(Activity ctx){
+    	Account.getSingle().clearUserInfo();
+    	MessageManager.stopMessageService(ctx);
     }
 }

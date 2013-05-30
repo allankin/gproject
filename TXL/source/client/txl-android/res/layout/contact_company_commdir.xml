@@ -7,15 +7,18 @@
         >
         <EditText
 	        android:id="@+id/company_user_search"
-	        android:layout_width="150dp"
+	        android:layout_weight="3"
+	        android:layout_width="0dip"
 	        android:layout_height="fill_parent"
 	        android:text="" 
 	        android:textSize="15sp"
+	        android:hint="请输入姓名"
 	        />
         
         <TextView
 	        android:id="@+id/company_depName"
-	        android:layout_width="wrap_content"
+	        android:layout_weight="1.5"
+	        android:layout_width="0dip"
 	        android:layout_height="fill_parent"
 	        android:text="部门选择" 
 	        android:textSize="15sp"
@@ -24,9 +27,9 @@
         
         <Button
 	            android:id="@+id/company_search_btn"
-	            android:layout_width="60dp"
+	            android:layout_width="45dip"
 	            android:layout_height="fill_parent"
-	            android:text="搜索"
+	            android:background="@drawable/menu_icon_search"
 	            />
     </LinearLayout>
     

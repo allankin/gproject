@@ -217,6 +217,7 @@ public class SettingActivity extends TxlActivity {
             	ImageView stateImage = (ImageView)findViewById(R.id.setting_state_image);
             	stateImage.setImageResource(R.drawable.state_offline);
             	loginStatusView.setText("登陆");
+            	Tool.quitClear(me);
             }
             
         }

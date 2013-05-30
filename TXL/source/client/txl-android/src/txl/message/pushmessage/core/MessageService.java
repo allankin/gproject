@@ -27,6 +27,8 @@ public class MessageService extends Service
 {
     public static Context context;
     
+    public static boolean needReConnect = true;
+    
     public NIOSocket client = null;
     
     private TxLogger log = new TxLogger(MessageService.class, TxlConstants.MODULE_ID_MESSAGE);    
@@ -42,6 +44,35 @@ public class MessageService extends Service
         if(client!=null){
             client.stop();
         }
+        log.info("MessageService...onDestroy ");
+        if(client.channel!=null){
+            if(!client.channel.socket().isClosed()){
+                try
+                {
+                    client.channel.socket().close();
+                } catch (IOException e1)
+                {
+                    e1.printStackTrace();
+                }
+            }
+            try
+            {
+                client.channel.close();
+            } catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+        }
+        if(client.selector.isOpen()){
+            try
+            {
+                client.selector.close();
+            } catch (IOException e1)
+            {
+                e1.printStackTrace();
+            }
+        }
+        needReConnect = false;
         super.onDestroy();
     }
 
@@ -57,6 +88,7 @@ public class MessageService extends Service
         MessageManager.context = context;
         String pushIp = Config.getInstance().getPushMessageServerIP();
         Integer port = Config.getInstance().getPushMessageServerPort();
+        needReConnect = true;
         connectServer(pushIp,port,userId,phone,name);
         return START_NOT_STICKY;
     }
@@ -140,7 +172,7 @@ public class MessageService extends Service
                     {
                         e1.printStackTrace();
                     }
-                    if(!Config.isKickOut){
+                    if(!Config.isKickOut && needReConnect){
                         log.info("re connectServer...");
                         connectServer(ip, port,userId,phone,name);
                     }

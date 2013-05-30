@@ -163,6 +163,7 @@ public class TxlConstants
     public static final String INTENT_BUNDLE_PUSHMSG_URL = "pushMsgUrl";
     
     public static final String INTENT_BUNDLE_ACTION = "action";
+    public static final String INTENT_BUNDLE_PUSHMSG_CLASSIFIED = "classified";
     
     public static final int REQUEST_CODE_SELECT_DEPARTMENT = 0x0001;
     
