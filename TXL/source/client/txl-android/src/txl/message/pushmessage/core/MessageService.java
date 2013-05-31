@@ -1,16 +1,14 @@
 package txl.message.pushmessage.core;
 
 import java.io.IOException;
+import java.net.SocketException;
+import java.nio.channels.ClosedSelectorException;
 import java.nio.channels.SocketChannel;
 
+import txl.common.TxlToast;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
-import txl.message.pushmessage.biz.DataRunnable;
-import txl.message.pushmessage.biz.HeartBeatRunnable;
-import txl.message.pushmessage.biz.OfflineRunnable;
-import txl.message.pushmessage.biz.RegistRunnable;
-import txl.message.pushmessage.biz.RunnableManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -125,7 +123,12 @@ public class MessageService extends Service
                 {
                 	channel = client.initClient(ip,port,userId,phone,name);
                     client.listen();
-                }catch (Exception e)
+                }
+                /*catch (ClosedSelectorException e){
+                	e.printStackTrace();
+                	
+                }*/
+                catch (Exception e)
                 {
                     e.printStackTrace();
                     
@@ -172,6 +175,16 @@ public class MessageService extends Service
                     {
                         e1.printStackTrace();
                     }
+                    
+                    /*if(e instanceof ClosedSelectorException || e instanceof SocketException){
+                    	Config.mainContext.runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+								TxlToast.showShort(Config.mainContext, "服务器意外停止...");
+							}
+						});
+                    }*/
                     if(!Config.isKickOut && needReConnect){
                         log.info("re connectServer...");
                         connectServer(ip, port,userId,phone,name);

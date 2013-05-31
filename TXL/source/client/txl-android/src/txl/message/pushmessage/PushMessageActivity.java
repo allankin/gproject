@@ -64,14 +64,15 @@ public class PushMessageActivity extends TxlActivity {
 		contactId = 0;
 		int messageCount = 0;
 		String contactName = "";
-		String pushMsgTypeName=null;
+		int pushMsgType = 0;
 		if (intent != null) {
 			Bundle bundle = intent.getExtras();
 			if (bundle != null) {
-				pushMsgTypeName =  bundle
-						.getString(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME);
+				
+				pushMsgType = bundle
+						.getInt(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE);
 				/*联系人消息*/
-				if(pushMsgTypeName==null){
+				if(pushMsgType== TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
 					ajustListView(pushMsgDetailListView);
 					contactId = bundle
 							.getInt(TxlConstants.INTENT_BUNDLE_CONTACT_ID);
@@ -85,7 +86,9 @@ public class PushMessageActivity extends TxlActivity {
 				else{
 					contactId = bundle
 							.getInt(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE);
-					contactName = pushMsgTypeName;
+					
+					contactName = bundle
+							.getString(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME);
 					pushMsgList = PushMsgDao.getSingle(me).getClassfiedPushMsg(contactId);
 				}
 
@@ -106,7 +109,7 @@ public class PushMessageActivity extends TxlActivity {
 							}
 						});
 				boolean flag = false;
-				if(pushMsgTypeName==null){
+				if(pushMsgType== TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
 					flag = PushMsgDao.getSingle(me)
 							.updatePushMsgReadStatusByUserId(contactId, 1);
 				}else{
@@ -141,7 +144,7 @@ public class PushMessageActivity extends TxlActivity {
 			}
 		}
 		
-		if(pushMsgTypeName==null){
+		if(pushMsgType== TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
 			final int contactIdFinal = contactId;
 			final String contactNameFinal = contactName;
 			final EditText pushMsgInput = (EditText) findViewById(R.id.pushmsg_input);

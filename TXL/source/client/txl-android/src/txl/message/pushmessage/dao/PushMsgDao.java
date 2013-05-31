@@ -158,7 +158,7 @@ public class PushMsgDao extends BaseDao{
 			pushMsg.isRead = cursor.getInt(7);
 			pushMsg.pushMsgTypeName = cursor.getString(8);
 			pushMsg.pushMsgUrl = cursor.getString(9);
-			pushMsg.pushMsgType = 0;
+			pushMsg.pushMsgType = TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED;
 			pushMsgList.add(pushMsg);
 			log.info("getPushMsg ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
 					pushMsg.sendUserId+",sendName:"+pushMsg.sendName+",content:"
@@ -178,7 +178,7 @@ public class PushMsgDao extends BaseDao{
 	 * @return
 	 */
 	public List<PushMsg> getClassfiedPushMsg(Integer pushMsgType){
-	    String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url,pushmsg_type from txl_push_msg where";
+	    String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url,pushmsg_type from txl_push_msg where ";
         if(pushMsgType!=null && pushMsgType!=TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
             sql +="  pushmsg_type = "+pushMsgType;
         }else{

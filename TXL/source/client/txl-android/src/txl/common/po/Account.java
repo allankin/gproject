@@ -104,7 +104,9 @@ public class Account {
             user.name = userInfoProp.getProperty("name");
             user.phone = userInfoProp.getProperty("phone");
             user.compCode = userInfoProp.getProperty("compCode");
-            log.info("readUserFromFS : password:"+user.password+",userName: "+user.userName+",userId:"+user.userId+",name:"+user.name+",phone:"+user.phone+",compCode:"+user.compCode);	
+            user.isSave = Boolean.parseBoolean(userInfoProp.getProperty("isSave"));
+            log.info("readUserFromFS : password:"+user.password+",userName: "+user.userName+",userId:"+user.userId+"" +
+            		",name:"+user.name+",phone:"+user.phone+",compCode:"+user.compCode+",isSave:"+user.isSave);	
         } catch (IOException e)
         {
             e.printStackTrace();
@@ -124,6 +126,7 @@ public class Account {
         userProp.put("phone", this.phone);
         userProp.put("compCode", this.compCode);
         userProp.put("name", this.name);
+        userProp.put("isSave", String.valueOf(this.isSave));
         
         String filePath = directoryPath + fileName;
         try
@@ -140,7 +143,8 @@ public class Account {
             return false;
         }
         ed.encryString(rawKeyData, filePath, filePath);
-        log.info("readUserFromFS : password:"+this.password+",userName: "+this.userName+",userId:"+this.userId+",name:"+this.name+",phone:"+this.phone+",compCode:"+this.compCode);	
+        log.info("encryUserInfo : password:"+this.password+",userName: "+this.userName+",userId:"+this.userId+"" +
+        		",name:"+this.name+",phone:"+this.phone+",compCode:"+this.compCode+",isSave:"+this.isSave);	
         return true;
     }
 	

@@ -22,7 +22,7 @@ public class ContactMessageDao extends BaseDao {
 	public boolean save(final PushMessage pushMsg, final int compId,
 			final String recPhone, final String recName, final int status) {
 
-		String sql = "insert into messag_contact_log("
+		String sql = "insert into message_contact_log("
 				+ "user_id,comp_id,content,rec_user_id,"
 				+ "rec_phone,rec_name,create_time,status,send_name," +
 				"msg_uuid) "
@@ -54,7 +54,7 @@ public class ContactMessageDao extends BaseDao {
 	}
 	
 	public boolean delete(int msgId){
-		String sql = "delete from messag_contact_log where msg_id = ?";
+		String sql = "delete from message_contact_log where msg_id = ?";
 		int count = this.jdbcTemplate.update(sql,msgId);
 		return count==1;
 	}

@@ -52,7 +52,7 @@ public class ContactMessageServiceImpl implements ContactMessageService
     @Override
     public void delete(List<Integer> msgIdList)
     {
-        this.delete(msgIdList);
+        this.contactMessageDao.delete(msgIdList);
     }
     
     

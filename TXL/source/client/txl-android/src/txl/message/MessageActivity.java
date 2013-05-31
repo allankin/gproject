@@ -206,7 +206,8 @@ public class MessageActivity extends TxlActivity implements Handlable {
 				PushMsgRecord record =  pushMsgMap.get(position);
 				int count = record.pushMsgRecordList.size();
 				Intent intent = new Intent(me,PushMessageActivity.class);
-				if(record.pushMsg.pushMsgType== TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
+				int pushMsgType = record.pushMsg.pushMsgType;
+				if(pushMsgType== TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
 					int contactUserId = 0;
 					String contactName;
 					if(record.pushMsg.type!= TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
@@ -217,10 +218,10 @@ public class MessageActivity extends TxlActivity implements Handlable {
 						contactName = record.pushMsg.sendName;
 					}
 					log.info("loadPushMessageModule .... contactUserId :"+contactUserId+",count:"+count);
+					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
 					intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, contactUserId);
 					intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME, contactName);
 				}else{
-					int pushMsgType = record.pushMsg.pushMsgType;
 					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
 					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME, record.pushMsg.pushMsgTypeName);
 					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_CLASSIFIED, true);

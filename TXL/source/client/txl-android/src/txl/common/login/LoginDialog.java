@@ -24,6 +24,7 @@ import android.content.DialogInterface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -56,6 +57,19 @@ public class LoginDialog {
 	public void show(final TxlActivity ctx){
 		final LayoutInflater factory = LayoutInflater.from(ctx);
         final View loginView = factory.inflate(R.layout.login, null);
+        Account account = Account.getSingle();
+        
+        if(account!=null && account.isSave){
+        	if(account!=null){
+        		TextView userName = (TextView)loginView.findViewById(R.id.userName);
+        		userName.setText(account.userName);
+        		TextView password = (TextView)loginView.findViewById(R.id.password);
+        		password.setText(account.password);
+        	}
+        	CheckBox remeberPwd = (CheckBox)loginView.findViewById(R.id.remeberPwd);
+        	remeberPwd.setChecked(true);
+        }
+        
         final android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(ctx);
         builder.setTitle("用户登陆");
         builder.setView(loginView); 
@@ -79,6 +93,7 @@ public class LoginDialog {
             @Override
             public void onClick(View v)
             {
+            	CheckBox remeberPwd = (CheckBox)loginView.findViewById(R.id.remeberPwd);
                 TextView untv = (TextView)loginView.findViewById(R.id.userName); 
                 if(untv.getText().length()==0){
                    Toast.makeText(ctx, "请输入用户名", TxlConstants.Toast.SHORT).show(); 
@@ -89,14 +104,14 @@ public class LoginDialog {
                     Toast.makeText(ctx, "请输入密码", TxlConstants.Toast.SHORT).show();  
                     return;
                 }
-               
+                
                 loginAlert.dismiss();
                 
                 Account user = Account.getSingle();
                 user.userName = untv.getText().toString();
                 user.phone = user.userName;
                 user.password = password.getText().toString();
-                
+                user.isSave = remeberPwd.isChecked();
                 new LoginTask(ctx).execute(user);
                 
                 

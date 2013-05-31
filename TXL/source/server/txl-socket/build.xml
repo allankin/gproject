@@ -12,7 +12,12 @@
     <target name="jar" depends="clean"> 
         <jar destfile="${basedir}/${JAR_NAME}" 
              basedir="${classesdir}"
-             manifest="MANIFEST.MF" />
+             manifest="MANIFEST.MF">
+             
+       		<fileset dir="${classesdir}">
+	 			<exclude name="config/spring/spring-db.xml"/> 
+	 		</fileset>
+        </jar>
          
 		<jar destfile="${basedir}/${RMI_JAR_NAME}" >
 			<fileset dir="${classesdir}">

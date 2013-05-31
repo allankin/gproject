@@ -24,8 +24,8 @@
         android:autoText="false"
         android:capitalize="none"
         android:gravity="fill_horizontal"
+        android:inputType="textUri|textMultiLine"
         android:textAppearance="?android:attr/textAppearanceMedium" 
-        android:text="lisi"
         />
 
     <TextView
@@ -50,14 +50,31 @@
         android:gravity="fill_horizontal"
         android:password="true"
         android:textAppearance="?android:attr/textAppearanceMedium" 
-        android:text="lisi"
         />
-     <Button
+     <LinearLayout 
+        android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="horizontal" 
+    	android:layout_gravity="center"
+    	android:gravity="center"
+    	>
+
+         <CheckBox
+             android:id="@+id/remeberPwd"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="记住密码" />
+         
+          <Button
 	            android:id="@+id/find_password_back_btn"
 	            android:layout_width="wrap_content"
 	            android:layout_height="40dp"
 	            android:text="找回密码"
+	            android:layout_marginLeft="50dp"
 	            android:layout_gravity="center"
 	            />
+         
+     </LinearLayout>
+    
       
 </LinearLayout>
