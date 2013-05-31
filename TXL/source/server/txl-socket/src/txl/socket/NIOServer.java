@@ -15,17 +15,17 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Stack;
-import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import txl.socket.po.PushMessage;
 import txl.socket.rmi.PushMessageService;
 import txl.socket.rmi.impl.PushMessageServiceImpl;
+import txl.socket.service.ContactMessageService;
 import txl.socket.util.Tool;
 
 /**
@@ -221,6 +221,22 @@ public class NIOServer {
                        wrapChannel.name = name;
                        addChannel(wrapChannel);
 	                   
+                       ContactMessageService contactMessageService = (ContactMessageService)SpringManager.getBean("contactMessageService");
+                       List<PushMessage> pushMessageList = contactMessageService.queryPushMessagesByRecUserId(userId);
+                       if(pushMessageList.size()>0){
+                           List<Integer> msgIdList = new ArrayList<Integer>();
+                           for(PushMessage message:pushMessageList){
+                               byte[] bytes = message.toJSONString().getBytes("UTF-8");
+                               sendCount = channel.write(ByteBuffer.wrap(bytes));
+                               if(bytes.length == sendCount){
+                                   msgIdList.add(message.getMsgIntId());
+                               }
+                           }
+                           contactMessageService.delete(msgIdList);
+                           log.info("发送未发送成功消息...数量："+msgIdList.size());
+                       }
+                       
+                       
 	                  /* int j=1;
 	                   while(j<8){
 	                       Random r = new Random();
@@ -400,6 +416,9 @@ public class NIOServer {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args){
+	    
+	    SpringManager.init();
+	    
 		final NIOServer server = NIOServer.getSingle();
         
         Runnable runnable = new Runnable(){

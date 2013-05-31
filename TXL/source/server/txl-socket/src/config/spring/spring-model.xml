@@ -15,22 +15,9 @@
 	<context:component-scan base-package="txl" />
 	
 	<!-- service start  未从action访问的实例无法访问sping中注解的对象。 以springManager类提供访问-->
-	<bean name="userService" class="txl.service.impl.UserServiceImpl"> 
+	<bean name="contactMessageService" class="txl.socket.service.impl.ContactMessageServiceImpl"> 
 	</bean>
-	<bean name="companyService" class="txl.service.impl.CompanyServiceImpl"> 
-	</bean>
-	<bean name="departService" class="txl.service.impl.DepartServiceImpl"> 
-	</bean>
-	<bean name="resService" class="txl.service.impl.ResServiceImpl"> 
-	</bean>
-	<bean name="messageService" class="txl.service.impl.MessageServiceImpl"> 
-	</bean>
-	
-	<bean name="addressService" class="txl.service.impl.AddressServiceImpl"> 
-	</bean>
-	
-	<bean name="articleColumnService" class="txl.service.impl.ArticleColumnServiceImpl"> 
-	</bean>
+	 
 	<!-- service end -->
 	
 	<!-- dao start -->

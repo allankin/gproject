@@ -25,6 +25,22 @@ public class PushMessage implements Serializable
     /** below 推送消息时字段**/
     private int pushMsgType;
     private String pushMsgTypeName;
+    
+    /**数据库中消息自增自动**/
+    private int msgIntId;
+    
+    
+    public int getMsgIntId()
+    {
+        return msgIntId;
+    }
+
+    
+    public void setMsgIntId(int msgIntId)
+    {
+        this.msgIntId = msgIntId;
+    }
+
     public int getPushMsgType() {
 		return pushMsgType;
 	}
