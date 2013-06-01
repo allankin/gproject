@@ -31,6 +31,7 @@ public class UserDao extends BaseDao
                 user.setCompId(rs.getInt("comp_id"));
                 user.setUserId(id);
                 user.setUserName(rs.getString("user_name"));
+                user.setName(rs.getString("name"));
                 user.setUserPhone(rs.getString("user_phone"));
             }
         },id);

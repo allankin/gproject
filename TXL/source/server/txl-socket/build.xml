@@ -11,7 +11,6 @@
 	
     <target name="jar" depends="clean"> 
         <jar destfile="${basedir}/${JAR_NAME}" 
-             basedir="${classesdir}"
              manifest="MANIFEST.MF">
              
        		<fileset dir="${classesdir}">

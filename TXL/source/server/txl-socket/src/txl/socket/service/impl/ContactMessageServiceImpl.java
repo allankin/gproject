@@ -35,7 +35,7 @@ public class ContactMessageServiceImpl implements ContactMessageService
     {
         User recUser = this.userDao.queryById(pushMsg.getRecUserId());
         if(recUser!=null){
-            boolean flag = this.contactMessageDao.save(pushMsg, recUser.getCompId(), recUser.getUserPhone(), recUser.getUserName(), status);
+            boolean flag = this.contactMessageDao.save(pushMsg, recUser.getCompId(), recUser.getUserPhone(), recUser.getName(), status);
             return flag;
         }else{
             log.info("recUser , userid :"+pushMsg.getRecUserId()+", is nulll, not save... ");

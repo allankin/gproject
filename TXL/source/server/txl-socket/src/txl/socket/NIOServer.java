@@ -51,6 +51,8 @@ public class NIOServer {
     
     private Map<Integer,WrapChannel> channelMap = new HashMap<Integer,WrapChannel>();
     
+    ContactMessageService contactMessageService = (ContactMessageService)SpringManager.getBean("contactMessageService");
+    
     
     public Stack<Byte> jsonStack = new Stack<Byte>();
     ByteBuffer readBuffer = ByteBuffer.allocate(1);
@@ -221,7 +223,6 @@ public class NIOServer {
                        wrapChannel.name = name;
                        addChannel(wrapChannel);
 	                   
-                       ContactMessageService contactMessageService = (ContactMessageService)SpringManager.getBean("contactMessageService");
                        List<PushMessage> pushMessageList = contactMessageService.queryPushMessagesByRecUserId(userId);
                        if(pushMessageList.size()>0){
                            List<Integer> msgIdList = new ArrayList<Integer>();
@@ -285,12 +286,25 @@ public class NIOServer {
 	                    			log.info("发送内容："+dataJsonStr+" count："+sendCount);
 	                    			/*发送失败*/
 	                    			if(length != sendCount){
-	                    				
+	                    				PushMessage pushMsg = new PushMessage();
+		                    			pushMsg.setContent(content);
+		                    			pushMsg.setMsgId(uuid);
+		                    			pushMsg.setRecUserId(recId);
+		                    			pushMsg.setSendUserId(userId);
+		                    			pushMsg.setSendName(name);
+		                    			contactMessageService.save(pushMsg, TxlConstants.SEND_STATUS_FAIL);
 	                    			}
 	                    		}
 	                    		/*接收者离线*/
 	                    		else{
-	                    			
+	                    			log.info("没有查找接收者socketchannel...userId:"+recId);
+	                    			PushMessage pushMsg = new PushMessage();
+	                    			pushMsg.setContent(content);
+	                    			pushMsg.setMsgId(uuid);
+	                    			pushMsg.setRecUserId(recId);
+	                    			pushMsg.setSendUserId(userId);
+	                    			pushMsg.setSendName(name);
+	                    			contactMessageService.save(pushMsg, TxlConstants.SEND_STATUS_USER_NOT_EXIST);
 	                    		}
 	                    	}
 	                    }
