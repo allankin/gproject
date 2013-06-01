@@ -16,7 +16,6 @@
     	android:id="@+id/contact_commdir_container" 
     	android:layout_marginTop="54dp"
     	android:orientation="vertical"
-    	style="@style/txl_list_padding"
         >
        
         

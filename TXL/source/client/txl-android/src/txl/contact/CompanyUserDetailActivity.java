@@ -59,6 +59,7 @@ private final TxLogger  log = new TxLogger(CompanyUserDetailActivity.class, TxlC
 					@Override
 					public void onClick(View v) {
 						Intent intent = new Intent(me,PushMessageActivity.class);
+						intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED);
 						intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, user.userId);
 						intent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME, user.name);
 						startActivity(intent);

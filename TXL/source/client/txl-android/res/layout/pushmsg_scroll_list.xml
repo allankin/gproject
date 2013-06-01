@@ -9,8 +9,7 @@
            android:id="@+id/pushmsg_list"
            android:layout_width="match_parent"
            android:layout_height="wrap_content" 
-           android:cacheColorHint="@android:color/transparent"
-           style="@style/txl_list_padding"
+           style="@style/txl_list"
            android:descendantFocusability="blocksDescendants"
            >
  

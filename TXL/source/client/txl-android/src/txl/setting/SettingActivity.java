@@ -18,6 +18,7 @@ import txl.log.TxLogger;
 import txl.test.TestManage;
 import txl.util.HttpClientUtil;
 import txl.util.Tool;
+import txl.web.WebViewActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -27,13 +28,9 @@ import android.os.Handler;
 import android.os.Message;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
@@ -171,6 +168,36 @@ public class SettingActivity extends TxlActivity {
 			}
 		});
 		
+		
+		TableRow useHelpTr = (TableRow)findViewById(R.id.setting_use_help);
+		useHelpTr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(me,WebViewActivity.class);
+				intent.putExtra(TxlConstants.INTENT_BUNDLE_HEADER_TITLE, me.getString(R.string.setting_use_help));
+				intent.putExtra(TxlConstants.INTENT_BUNDLE_WEB_URL, me.getString(R.string.setting_use_help_url));
+				startActivity(intent);
+			}
+		}); 
+		
+		TableRow adviseTr = (TableRow)findViewById(R.id.setting_advise);
+		adviseTr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				AdviseDialog.getInstance().show(me);
+			}
+		}); 
+		
+		TableRow aboutUsTr = (TableRow)findViewById(R.id.setting_about_us);
+		aboutUsTr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(me,WebViewActivity.class);
+				intent.putExtra(TxlConstants.INTENT_BUNDLE_HEADER_TITLE, me.getString(R.string.setting_about_us));
+				intent.putExtra(TxlConstants.INTENT_BUNDLE_WEB_URL, me.getString(R.string.setting_about_us_url));
+				startActivity(intent);
+			}
+		}); 
 		
 		/*Spinner dialModeSpinner = (Spinner)findViewById(R.id.setting_dial_mode_btn);
 		ArrayAdapter<String> dialModeAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,me.getResources().getStringArray(R.array.setting_dial_mode_array));

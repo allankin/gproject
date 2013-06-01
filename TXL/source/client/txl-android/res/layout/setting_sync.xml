@@ -22,6 +22,8 @@
             android:id="@+id/setting_sync_table"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             >
             
             <TableRow
@@ -29,70 +31,89 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_top_bot" 
+                android:layout_marginTop="@dimen/setting_block_margin_top"
                 >
-                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_icon_sms_restore" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                <ImageView style="@style/setting_column1" android:visibility="gone"   android:src="@drawable/setting_icon_sms_restore" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 
                 <TextView
                     style="@style/setting_column2"
                     android:id="@+id/setting_login_label"
                     android:text="@string/setting_sync_company" />
-                <LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+                <LinearLayout style="@style/setting_column3" android:layout_marginRight="10dp">
 					<ToggleButton
 					   android:id="@+id/setting_sync_company_comdir_toggle"
 					   android:layout_width="wrap_content"
 					   android:layout_height="wrap_content"
 					   android:background="@drawable/switch_bg"
 					   android:textOn=""
-                		android:textOff="" />
+					   android:clickable="false"
+                	   android:textOff="" />
 				</LinearLayout>
                  
                 
             </TableRow>
             
             
+            
+            <!-- 
             <TableRow
+                android:id="@+id/setting_sync_share_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+            </TableRow>
+             -->
+     	 </TableLayout>
+     	 
+         <TableLayout
+            android:id="@+id/setting_sync_table2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:layout_marginTop="@dimen/setting_block_margin_top"
+            >
+         	<TableRow
                 android:id="@+id/setting_sync_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_top_bot"
                 >
-                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_icon_sms_restore" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                <ImageView style="@style/setting_column1"  android:visibility="gone"    android:src="@drawable/setting_icon_sms_restore" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 
                 <TextView
                     style="@style/setting_column2"
                     android:id="@+id/setting_login_label"
                     android:text="@string/setting_sync_share" />
                 
-				<LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+				<LinearLayout style="@style/setting_column3" android:layout_marginRight="10dp">
 					<ToggleButton
 					   android:id="@+id/setting_sync_share_commdir_toggle"
 					   android:layout_width="wrap_content"
 					   android:layout_height="wrap_content"
 					   android:background="@drawable/switch_bg"
 					   android:textOn=""
+					   android:clickable="false"
                 		android:textOff="" />
 				</LinearLayout>
                 
             </TableRow>
-            
-            <TableRow
-                android:id="@+id/setting_sync_share_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-                
-            
-            </TableRow>
-            
-     	 </TableLayout>
+         
+         </TableLayout>
+         
+         <TableLayout
+	            android:id="@+id/setting_sync_share_item_table"
+	            android:layout_width="match_parent"
+	            android:layout_height="wrap_content"
+	            android:paddingLeft="20dp"
+	            android:paddingRight="20dp"
+	            >
+	            
+	     </TableLayout>
      	 
-        		<TableLayout
-		            android:id="@+id/setting_sync_share_item_table"
-		            android:layout_width="match_parent"
-		            android:layout_height="wrap_content"
-		            >
-                    
-		        </TableLayout>
+			 
      	 </LinearLayout>
 	</ScrollView>
 </LinearLayout>

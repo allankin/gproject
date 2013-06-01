@@ -5,6 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/list_item_bg"
     android:descendantFocusability="blocksDescendants"
+    android:paddingBottom="5dp"
+    android:paddingTop="5dp"
     >  
     <!-- <ImageView android:id="@+id/contact_photo"  
         android:layout_width="40dip" android:layout_height="40dip" />  --> 

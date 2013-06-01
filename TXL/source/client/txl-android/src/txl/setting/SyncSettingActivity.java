@@ -29,6 +29,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -50,7 +51,8 @@ private final TxLogger  log = new TxLogger(SyncSettingActivity.class, TxlConstan
 		header.setText("同步号码");
 		final TableLayout syncTable = (TableLayout)findViewById(R.id.setting_sync_share_item_table);
 		
-		ToggleButton syncCompanyToggle = (ToggleButton)findViewById(R.id.setting_sync_company_comdir_toggle);
+		
+		final ToggleButton syncCompanyToggle = (ToggleButton)findViewById(R.id.setting_sync_company_comdir_toggle);
 		syncCompanyToggle.setChecked(setting.syncCompany==1?true:false);
 		syncCompanyToggle.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -85,38 +87,64 @@ private final TxLogger  log = new TxLogger(SyncSettingActivity.class, TxlConstan
 				}
 			}
 		});
+		LinearLayout syncCompanyLayout = (LinearLayout)findViewById(R.id.setting_sync_company);
+		syncCompanyLayout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				syncCompanyToggle.setChecked(syncCompanyToggle.isChecked()?false:true);
+			}
+		});
 		
-		
-		ToggleButton syncShareToggle = (ToggleButton)findViewById(R.id.setting_sync_share_commdir_toggle);
-		syncShareToggle.setChecked(setting.syncShare==1?true:false);
+		final ToggleButton syncShareToggle = (ToggleButton)findViewById(R.id.setting_sync_share_commdir_toggle);
 		syncShareToggle.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 				SettingDao settingDao = SettingDao.getSingle(me);
 				settingDao.updateSyncShare(isChecked?"1":"0");
+				syncTable.removeAllViews();
 				if(isChecked){
-					syncTable.removeAllViews();
 	            	List<CommDir> commDirList = CommDirDao.getSingle(me).getShareCommDirList(null);
 	            	if(commDirList.isEmpty()){
 	            		TxlToast.showLong(me, "您还未添加共享通讯录，请到联系人中添加");
 	            	}else{
-	            		for(CommDir commDir:commDirList){
-	            			showShareCommDirItem(syncTable,commDir);
+	            		for(int i=0,len=commDirList.size();i<len;i++){
+	            			CommDir commDir = commDirList.get(i);
+	            			showShareCommDirItem(syncTable,commDir,i+1,len);
 	            		}
 	            	}
 	            	
-				}else{
-					syncTable.removeAllViews();
 				}
 			}
 		});
 		
+		final LinearLayout syncShareLayout = (LinearLayout)findViewById(R.id.setting_sync_share);
+		syncShareLayout.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				syncShareToggle.setChecked(syncShareToggle.isChecked()?false:true);
+				if(syncShareToggle.isChecked()){
+					syncShareLayout.setBackgroundResource(R.drawable.bg_base_list_top);
+				}else{
+					syncShareLayout.setBackgroundResource(R.drawable.bg_base_list_top_bot);
+				}
+					
+			}
+		});
+		syncShareToggle.setChecked(setting.syncShare==1?true:false);
+		if(syncShareToggle.isChecked()){
+			syncShareLayout.setBackgroundResource(R.drawable.bg_base_list_top);
+		}
 	
 	}
 	
 	
-	private void showShareCommDirItem(TableLayout syncTable,final CommDir commDir){
+	private void showShareCommDirItem(TableLayout syncTable,final CommDir commDir,int cur,int count){
 		View row = createTableRow();
+		if(cur==count){
+			row.setBackgroundResource(R.drawable.base_list_bot);
+		}else{
+			row.setBackgroundResource(R.drawable.base_list_mid);
+		}
         syncTable.addView(row);
         TextView shareCommDirLabel = (TextView)row.findViewById(R.id.setting_share_commdir_label);
         shareCommDirLabel.setText(commDir.name);
@@ -131,6 +159,7 @@ private final TxLogger  log = new TxLogger(SyncSettingActivity.class, TxlConstan
             	new ShareCommDirUserQueryTask(me,TxlConstants.ACTION_SYNC_CODE).execute(cdq);
             }
         });
+		
 	}
 	
 	

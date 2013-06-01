@@ -5,6 +5,7 @@ import java.util.List;
 
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.common.TxlToast;
 import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
@@ -12,6 +13,7 @@ import txl.log.TxLogger;
 import txl.message.pushmessage.adapter.PushMsgDetailListAdapter;
 import txl.message.pushmessage.biz.DataRunnable;
 import txl.message.pushmessage.biz.RunnableManager;
+import txl.message.pushmessage.core.MessageManager;
 import txl.message.pushmessage.dao.PushMsgDao;
 import txl.message.pushmessage.po.PushMsg;
 import txl.util.Tool;
@@ -154,34 +156,39 @@ public class PushMessageActivity extends TxlActivity {
 			pushMsgSendBtn.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					String content = pushMsgInput.getText().toString().trim();
-					if (content.length() > 0) {
-						DataRunnable dr = (DataRunnable) RunnableManager
-								.getRunnable(TxlConstants.BIZID_REQUEST_DATA);
-						PushMsg pushMsg = new PushMsg();
-
-						pushMsg.content = Tool.string2Json(content);
-						pushMsg.recUserId = contactIdFinal;
-						pushMsg.sendUserId = Account.getSingle().userId;
-						pushMsg.msgId = Tool.genUUID();
-						pushMsg.type = TxlConstants.PUSH_MESSAGE_TYPE_SEND;
-						dr.send(pushMsg);
-						pushMsg.recName = contactNameFinal;
-						pushMsg.dtime = new Timestamp(System.currentTimeMillis());
-						pushMsg.pushMsgType = 0;
-						pushMsg.pushMsgTypeName="";
-						pushMsg.pushMsgUrl="";
-						PushMsgDao.getSingle(me).savePushMsg(pushMsg);
-						pushMsgList.add(pushMsg);
-						detailListAdapter.notifyDataSetChanged();
-						pushMsgDetailListView.setSelection(detailListAdapter
-								.getCount() - 1);
-						pushMsgInput.setText("");
-						// InputMethodManager imm
-						// =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-						// imm.hideSoftInputFromWindow(pushMsgInput.getWindowToken(),
-						// 0);
-
+					if(MessageManager.isConnnected()){
+						String content = pushMsgInput.getText().toString().trim();
+						if (content.length() > 0) {
+							DataRunnable dr = (DataRunnable) RunnableManager
+									.getRunnable(TxlConstants.BIZID_REQUEST_DATA);
+							PushMsg pushMsg = new PushMsg();
+	
+							pushMsg.content = Tool.string2Json(content);
+							pushMsg.recUserId = contactIdFinal;
+							pushMsg.sendUserId = Account.getSingle().userId;
+							pushMsg.msgId = Tool.genUUID();
+							pushMsg.type = TxlConstants.PUSH_MESSAGE_TYPE_SEND;
+							dr.send(pushMsg);
+							
+							pushMsg.recName = contactNameFinal;
+							pushMsg.dtime = new Timestamp(System.currentTimeMillis());
+							pushMsg.pushMsgType = TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED;
+							pushMsg.pushMsgTypeName="";
+							pushMsg.pushMsgUrl="";
+							PushMsgDao.getSingle(me).savePushMsg(pushMsg);
+							pushMsgList.add(pushMsg);
+							detailListAdapter.notifyDataSetChanged();
+							pushMsgDetailListView.setSelection(detailListAdapter
+									.getCount() - 1);
+							pushMsgInput.setText("");
+							// InputMethodManager imm
+							// =(InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+							// imm.hideSoftInputFromWindow(pushMsgInput.getWindowToken(),
+							// 0);
+	
+						}
+					}else{
+						TxlToast.showShort(me, "未连接消息服务器，请稍后重试!");
 					}
 				}
 			});

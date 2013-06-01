@@ -71,8 +71,12 @@ public class PushMsgListAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		if(pm.pushMsg.pushMsgType==0){
-		    holder.pushMsgNameView.setText(pm.pushMsg.sendName);
+		if(pm.pushMsg.pushMsgType==TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
+			if(pm.pushMsg.type == TxlConstants.PUSH_MESSAGE_TYPE_RECEIVE){
+				holder.pushMsgNameView.setText(pm.pushMsg.sendName);
+			}else{
+				holder.pushMsgNameView.setText(pm.pushMsg.recName);
+			}
 		}else{
 		    holder.pushMsgNameView.setText(pm.pushMsg.pushMsgTypeName);
 		}

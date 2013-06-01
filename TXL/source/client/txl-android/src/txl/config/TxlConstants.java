@@ -121,6 +121,8 @@ public class TxlConstants
     public static String FIND_BACK_PASSWORD_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileFindBackPassword.naf";
     public static String MODIFY_PASSWORD_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileModifyPassword.naf";
     
+    public static String COMMIT_ADVISE_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/saveAdvise.naf";
+    
     public static String SEARCH_DEPARTMENT_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/department/mobileSearch.txl";
     public static String SEARCH_COMPANY_USER_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/s/mobileSearch.txl";
 
@@ -164,6 +166,8 @@ public class TxlConstants
     
     public static final String INTENT_BUNDLE_ACTION = "action";
     public static final String INTENT_BUNDLE_PUSHMSG_CLASSIFIED = "classified";
+    
+    public static final String INTENT_BUNDLE_WEB_URL = "webUrl";
     
     public static final int REQUEST_CODE_SELECT_DEPARTMENT = 0x0001;
     

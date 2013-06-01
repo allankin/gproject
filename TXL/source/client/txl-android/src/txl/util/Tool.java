@@ -4,6 +4,8 @@ import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.List;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import txl.common.po.Account;
 import txl.config.Config;
@@ -239,5 +241,17 @@ public class Tool {
     public static void quitClear(Activity ctx){
     	Account.getSingle().clearUserInfo();
     	MessageManager.stopMessageService(ctx);
+    }
+    
+    /**
+     * 判断email是否有效
+     * @param email
+     * @return
+     */
+    public static boolean checkEmail(String email){
+    	Pattern p = Pattern.compile("\\w+@(\\w+.)+[a-z]{2,3}");  
+        Matcher m = p.matcher(email);  
+        boolean b = m.matches();  
+        return b;
     }
 }

@@ -168,7 +168,7 @@ public class NIOSocket {
                     //registRun.sendRequest(userId);
                     
                     /*发送注册消息*/
-                    String str =  "{\"u\":" + userId + ",\"b\":1,\"p\":\""+phone+"\",\"n\":\""+name+"\"}";
+                    String str =  "{\"u\":" + userId + ",\"b\":"+TxlConstants.BIZID_REQUEST_REGIST+",\"p\":\""+phone+"\",\"n\":\""+name+"\"}";
                     ByteBuffer writeBuffer = ByteBuffer.wrap(str.getBytes("UTF-8"));
                     channel.write(writeBuffer);
                     

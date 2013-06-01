@@ -11,9 +11,8 @@
            android:id="@+id/pushmsg_detail_list"
            android:layout_width="match_parent"
            android:layout_height="fill_parent" 
-           android:cacheColorHint="@android:color/transparent"
            android:divider="@null"
-           style="@style/txl_list_padding"
+           style="@style/txl_list"
            >
  
    	</ListView>

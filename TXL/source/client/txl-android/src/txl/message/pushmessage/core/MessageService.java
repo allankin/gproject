@@ -131,7 +131,7 @@ public class MessageService extends Service
                 catch (Exception e)
                 {
                     e.printStackTrace();
-                    
+                    MessageManager.setConnected(false);
                     SendMessageDealer.getSingle(channel).stop();
                     ReceiveMessageDealer.getSingle().stop();
                     synchronized (SendMessageQueue.queue) {

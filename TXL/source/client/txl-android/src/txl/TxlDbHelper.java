@@ -111,6 +111,7 @@ public class TxlDbHelper extends SQLiteOpenHelper
         
         db.execSQL("CREATE TABLE txl_push_msg(msg_id varchar(64)," +
         		"rec_user_id integer," +
+        		"rec_name varchar(20),"+
         		"send_user_id integer," +
         		"content text," +
         		"send_name varchar(20)," +

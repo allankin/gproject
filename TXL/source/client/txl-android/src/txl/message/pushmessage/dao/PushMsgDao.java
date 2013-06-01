@@ -42,7 +42,7 @@ public class PushMsgDao extends BaseDao{
 	public void loadPushMsgList(Context context,
 			Map<Integer,PushMsgRecord> pushMsgRecordMap){
 		
-		List<PushMsg> pushMsgList = getContactPushMsg(null);
+		List<PushMsg> pushMsgList = _getContactPushMsg(null,null);
 		int count=0;
 		Map<Integer,Integer> pushMsgContactIdSet = new HashMap<Integer,Integer>();
 		for(int i=0,len=pushMsgList.size();i<len;i++){
@@ -118,6 +118,7 @@ public class PushMsgDao extends BaseDao{
 		cv.put("send_user_id", pushMsg.sendUserId);
 		cv.put("send_name", pushMsg.sendName);
 		cv.put("content", pushMsg.content);
+		cv.put("rec_name", pushMsg.recName);
 		cv.put("type", pushMsg.type);
 		cv.put("pushmsg_type", pushMsg.pushMsgType);
 		cv.put("pushmsg_type_name", pushMsg.pushMsgTypeName);
@@ -125,23 +126,25 @@ public class PushMsgDao extends BaseDao{
 		cv.put("dtime",pushMsg.dtime.toString());
 		cv.put("is_read", 0);
 		db.insert("txl_push_msg", null, cv);
-		log.info("msg_id:"+pushMsg.msgId+",rec_user_id:"+pushMsg.recUserId+",content:"+pushMsg.content);
+		log.info("savePushMsg .....  msg_id:"+pushMsg.msgId+",rec_user_id:"+pushMsg.recUserId+",content:"+pushMsg.content+",recName:"+pushMsg.recName);
 		db.setTransactionSuccessful();
 		db.endTransaction();
 		db.close();
 		log.info("saveReceivePushMsg... ");
 	} 
 	
-	
-	/**
-	 * 
-	 * @param contactId 表示查找该联系人的消息记录
-	 * @return
-	 */
-	public List<PushMsg> getContactPushMsg(Integer contactId){
-		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url,pushmsg_type from txl_push_msg where  pushmsg_type="+TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED;
+	private List<PushMsg> _getContactPushMsg(Integer contactId,String orderStr){
+		String sql = "select msg_id,rec_user_id,send_user_id,send_name,content," +
+				"type,dtime,is_read,pushmsg_type_name,pushmsg_url," +
+				"pushmsg_type,rec_name " +
+				"from txl_push_msg where  pushmsg_type="+TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED;
 		if(contactId!=null && contactId!=0){
 			sql +=" and (rec_user_id = "+contactId+" or send_user_id = "+contactId+")";
+		}
+		if(orderStr==null){
+			sql +=" order by dtime desc ";
+		}else{
+			sql +=orderStr;
 		}
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
@@ -159,17 +162,27 @@ public class PushMsgDao extends BaseDao{
 			pushMsg.pushMsgTypeName = cursor.getString(8);
 			pushMsg.pushMsgUrl = cursor.getString(9);
 			pushMsg.pushMsgType = TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED;
+			pushMsg.recName = cursor.getString(11);
 			pushMsgList.add(pushMsg);
-			log.info("getPushMsg ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
+			log.info("getContactPushMsg ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
 					pushMsg.sendUserId+",sendName:"+pushMsg.sendName+",content:"
 					+pushMsg.content+",isRead:"+pushMsg.isRead+",type:"+pushMsg.type+",pushMsgTypeName:"+pushMsg.pushMsgTypeName+
-					",pushMsgUrl:"+pushMsg.pushMsgUrl);
+					",pushMsgUrl:"+pushMsg.pushMsgUrl+",recName: "+pushMsg.recName);
 		}
 		
 		log.info("getContactPushMsg  size: "+pushMsgList.size());
 		cursor.close();
 		db.close();
 		return pushMsgList;
+	}
+	
+	/**
+	 * 
+	 * @param contactId 表示查找该联系人的消息记录
+	 * @return
+	 */
+	public List<PushMsg> getContactPushMsg(Integer contactId){
+		return this._getContactPushMsg(contactId," order by dtime asc ");
 	}
 	/**
 	 * 根据推送消息类型id，查找推送消息。
@@ -178,7 +191,10 @@ public class PushMsgDao extends BaseDao{
 	 * @return
 	 */
 	public List<PushMsg> getClassfiedPushMsg(Integer pushMsgType){
-	    String sql = "select msg_id,rec_user_id,send_user_id,send_name,content,type,dtime,is_read,pushmsg_type_name,pushmsg_url,pushmsg_type from txl_push_msg where ";
+	    String sql = "select msg_id,rec_user_id,send_user_id,send_name,content," +
+	    		"type,dtime,is_read,pushmsg_type_name,pushmsg_url," +
+	    		"pushmsg_type,rec_name " +
+	    		"from txl_push_msg where ";
         if(pushMsgType!=null && pushMsgType!=TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
             sql +="  pushmsg_type = "+pushMsgType;
         }else{
@@ -200,11 +216,12 @@ public class PushMsgDao extends BaseDao{
             pushMsg.pushMsgTypeName = cursor.getString(8);
             pushMsg.pushMsgUrl = cursor.getString(9);
             pushMsg.pushMsgType = cursor.getInt(10);
+            pushMsg.recName = cursor.getString(11);
             pushMsgList.add(pushMsg);
             log.info("getPushMsg ... msgId: "+pushMsg.msgId+",recuserid: "+pushMsg.recUserId+",sendUserId:"+
                     pushMsg.sendUserId+",sendName:"+pushMsg.sendName+",content:"
                     +pushMsg.content+",isRead:"+pushMsg.isRead+",type:"+pushMsg.type+",pushMsgTypeName:"+pushMsg.pushMsgTypeName+
-                    ",pushMsgUrl:"+pushMsg.pushMsgUrl);
+                    ",pushMsgUrl:"+pushMsg.pushMsgUrl+",recName: "+pushMsg.recName);
         }
         
         log.info("getContactPushMsg  size: "+pushMsgList.size());

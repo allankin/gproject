@@ -38,6 +38,15 @@ public class MessageManager {
 	private static TxLogger log = new TxLogger(MessageManager.class,
 			TxlConstants.MODULE_ID_MESSAGE);
 
+	/**标识socket channel 是否连接**/
+	private static boolean isConnected = false;
+	
+	public static boolean isConnnected(){
+		return isConnected;
+	}
+	public static void setConnected(boolean connected){
+		isConnected = connected;
+	}
 	/**
 	 * 处理消息
 	 * 
@@ -101,20 +110,19 @@ public class MessageManager {
 						name = account.name;
 					}
 				}
-				if (userId == null || userId == 0) {
-					log.warn("startMessageService, userId ：" + userId
+				if (userId == null || userId == 0
+					|| phone == null || phone.trim().length()==0
+					|| name == null || name.trim().length()==0
+						) {
+					log.warn("startMessageService, userId ：" + userId+",phone:"+phone+",name:"+name
 							+ ", 未启动消息服务....");
 					return;
 				}
 				Intent i = new Intent();
 				i.setClass(context, MessageService.class);
 				i.putExtra("userId", userId);
-				if (phone != null) {
-					i.putExtra("phone", phone);
-				}
-				if (name != null) {
-					i.putExtra("name", name);
-				}
+				i.putExtra("phone", phone);
+				i.putExtra("name", name);
 				if (!Tool.isServiceRunning(MessageService.class, context)) {
 					context.startService(i);
 				} else {

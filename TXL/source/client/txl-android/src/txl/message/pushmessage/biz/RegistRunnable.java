@@ -7,6 +7,7 @@ import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
+import txl.message.pushmessage.core.MessageManager;
 import txl.message.pushmessage.core.SendMessageQueue;
 
 /**
@@ -19,7 +20,12 @@ public class RegistRunnable implements BizRunnable {
 	private TxLogger log = new TxLogger(RegistRunnable.class,
 			TxlConstants.MODULE_ID_MESSAGE);
 	
-	public void sendRequest(int userId) {
+	/**
+	 * @deprecated
+	 * @param userId
+	 * @param name
+	 */
+	public void sendRequest(int userId,String name) {
 		String str = "{\"u\":" + userId + ",\"b\":"+TxlConstants.BIZID_REQUEST_REGIST+"}";
 		synchronized (SendMessageQueue.queue) {
 			SendMessageQueue.queue.add(str);
@@ -29,8 +35,8 @@ public class RegistRunnable implements BizRunnable {
 	}
 
 	public void dealReply(final JSONObject jobj) {
+		MessageManager.setConnected(true);
 		Config.mainContext.runOnUiThread(new Runnable() {
-			
 			@Override
 			public void run() {
 				TxlToast.showShort(Config.mainContext, "消息连接成功");

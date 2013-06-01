@@ -1,5 +1,6 @@
 package txl.util;
  
+import android.app.Activity;
 import android.content.Context;
  
 import android.os.Build;
@@ -30,7 +31,7 @@ public class DeviceUtil
     
     
     
-    public DeviceUtil(Context context){
+    public DeviceUtil(Activity context){
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
         DisplayMetrics metrics = new DisplayMetrics();

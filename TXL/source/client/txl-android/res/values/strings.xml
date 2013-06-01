@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <integer name="apkVersionCode">4</integer>
+    <string name="apkVersionName">2.0.3</string>
     <string name="app_name">单位通信录</string>
     <string name="hello_world">Hello world!</string>
     
@@ -11,6 +13,14 @@
 	<string name="setting_modify_password_label">修改密码</string>
 	<string name="setting_dial_mode">拨打方式</string>
 	<string name="setting_sync_commdir">同步号码</string> 
+	<string name="setting_about_us">关于我们</string> 
+	<string name="setting_check_upgrade">检查更新</string> 
+	<string name="setting_advise">意见反馈</string>
+	<string name="setting_share">告诉朋友</string> 
+	<string name="setting_use_help">如何使用</string> 
+	
+	
+	
 	<string name="setting_offline_storage">离线存储</string> 
 	<string name="setting_sync_company">同步公司通讯录</string>   
 	<string name="setting_sync_share">同步共享通讯录</string>
@@ -38,8 +48,8 @@
 	<string name="menu_sms_draft">草稿</string>
 	
 	<string name="contact_search_hint_text">共有 %d 个联系人</string>
-	
-	
+	<string name="setting_about_us_url">www/aboutus.html</string>
+	<string name="setting_use_help_url">www/help.html</string>
 	
 	<string-array name="setting_message_send_mode_array">
 	   <item>短信发送</item> 

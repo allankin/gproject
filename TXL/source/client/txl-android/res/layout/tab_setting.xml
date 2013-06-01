@@ -18,6 +18,8 @@
             android:id="@+id/tableLayout1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
             >
             <!-- 登陆   -->
             <TableRow
@@ -25,8 +27,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_top"
+                android:layout_marginTop="@dimen/setting_block_margin_top"
                 >
-                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_login" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                <ImageView style="@style/setting_column1"  android:visibility="gone"  android:src="@drawable/setting_login" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 <LinearLayout 
                     style="@style/setting_column2"
                     >
@@ -50,9 +54,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" 
                 android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_bot"
                 >
                 
-                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_modify" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                <ImageView style="@style/setting_column1"  android:visibility="gone"  android:src="@drawable/setting_modify" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 
                 <TextView
                     style="@style/setting_column2"
@@ -66,14 +71,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" 
                 android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_top"
+                android:layout_marginTop="@dimen/setting_block_margin_top"
+                android:clickable="true"
                 >
-                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_tip" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                <ImageView style="@style/setting_column1"  android:visibility="gone"  android:src="@drawable/setting_tip" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 
                 <TextView
                     style="@style/setting_column2"
                     android:text="@string/setting_wifi_tip" />
 
-				<LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+				<LinearLayout style="@style/setting_column3" android:layout_marginRight="10dp">
 					<ToggleButton
 					   android:id="@+id/setting_wifi_tip_btn"
 					   android:layout_width="wrap_content"
@@ -92,14 +100,17 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" 
                 android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_mid" 
+                android:visibility="gone"
+                android:clickable="true"
                 >
-                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_tip" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                <ImageView style="@style/setting_column1"  android:visibility="gone"  android:src="@drawable/setting_tip" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 
                 <TextView
                     style="@style/setting_column2"
                     android:text="@string/setting_ad_receive" />
                 
-                <LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+                <LinearLayout style="@style/setting_column3" android:layout_marginRight="10dp">
 					<ToggleButton
 					   android:id="@+id/setting_ad_receive_btn"
 					   android:layout_width="wrap_content"
@@ -116,13 +127,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" 
                 android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_mid" 
+                android:clickable="true"
                 >
-                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_message" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                <ImageView style="@style/setting_column1"  android:visibility="gone"  android:src="@drawable/setting_message" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 
                 <TextView
                     style="@style/setting_column2"
                     android:text="@string/setting_online_push" />
-                <LinearLayout style="@style/setting_column3" android:layout_marginRight="15dp">
+                <LinearLayout style="@style/setting_column3" android:layout_marginRight="10dp">
 					<ToggleButton
 					   android:id="@+id/setting_online_push_btn"
 					   android:layout_width="wrap_content"
@@ -166,8 +179,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" 
                 android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_bot"
                 >
-                <ImageView style="@style/setting_column1"   android:src="@drawable/setting_sync_commdir" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                <ImageView style="@style/setting_column1"   android:visibility="gone"  android:src="@drawable/setting_sync_commdir" android:layout_height="wrap_content" android:layout_width="wrap_content" />
                 
                 <TextView
                     style="@style/setting_column2"
@@ -219,9 +233,81 @@
             -->
             
             
-            </TableLayout>
+            <!-- 如何使用-->
+            <TableRow
+                android:id="@+id/setting_use_help"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_top"
+                android:layout_marginTop="@dimen/setting_block_margin_top"
+                
+                >
+                <ImageView style="@style/setting_column1"   android:visibility="gone" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_use_help" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
             
-        
+            <!-- 反馈意见 -->
+            <TableRow
+                android:id="@+id/setting_advise"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_mid"
+                >
+                <ImageView style="@style/setting_column1"   android:visibility="gone" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_advise" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
+            
+            
+            <!-- 检查升级 -->
+            <TableRow
+                android:id="@+id/setting_check_upgrade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:background="@drawable/bg_base_list_mid"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                >
+                <ImageView style="@style/setting_column1"   android:visibility="gone" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_check_upgrade" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
+            
+            <!-- 关于我们  -->
+            <TableRow
+                android:id="@+id/setting_about_us"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_bot"
+                android:layout_marginBottom="50dp"
+                >
+                <ImageView style="@style/setting_column1"  android:visibility="gone"  android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_about_us" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+            </TableRow>
+            
+   		</TableLayout>
+            
+         
         
     </ScrollView>
 
