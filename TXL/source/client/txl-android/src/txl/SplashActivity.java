@@ -1,11 +1,13 @@
 package txl;
 
 import txl.activity.R;
+import txl.common.TxlToast;
 import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.ConfigParser;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
+import txl.upgrade.ResourceManager;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +24,7 @@ import android.widget.Toast;
  * @Author JinChao
  * @Date 2012-11-8 上午9:28:25
  */
-public class SplashActivity extends Activity
+public class SplashActivity extends TxlActivity
 {
     public static final int SHOW_CONNECT_TOAST = 0x0001;
     private TxLogger log =null;    
@@ -31,7 +33,9 @@ public class SplashActivity extends Activity
     public static boolean finished = false;
     private int interval = 1;
     private int delayedTime = 100;
+    public SplashActivity me = this;
     
+    private TextView progressTv;
     private void setProgressMessage(final String msgStr) {
         handler.post(new Runnable() {
             @Override
@@ -42,7 +46,7 @@ public class SplashActivity extends Activity
     }
     
     @Override
-    protected void onCreate(Bundle savedInstanceState)
+    public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         
@@ -52,7 +56,8 @@ public class SplashActivity extends Activity
         Config.launcher = this;
         /*解析配置文件*/
         ConfigParser.init(this);
-        String url = Config.getInstance().getUpgradeFileServer();
+        //String url = Config.getInstance().getUpgradeFileServer();
+        String url = TxlConstants.UPGRADE_CHECK_URL;
         if(url==null || url.trim().length()==0){
             delayedTime = 3000;
             findViewById(R.id.progress).setVisibility(View.GONE);
@@ -64,6 +69,7 @@ public class SplashActivity extends Activity
         new TxlDbHelper(this).getWritableDatabase().close();
         Account.getSingle().load(this);
         
+        progressTv = (TextView)findViewById(R.id.progressTv);
         checkUpgrade();
         
         /*Handler h = new Handler();
@@ -84,15 +90,27 @@ public class SplashActivity extends Activity
         {
             if(msg.what == Config.CHECKING_UPGRADE){
                 setProgressMessage("正在检查更新...");
-            }else if(msg.what == Config.DOWNLOADING_RES){
-                progressBar.setProgress(1);
-                setProgressMessage("正在下载资源");
-            }/*else if(msg.what == Config.LOADING_RES){
+            }
+            else if(msg.what == Config.BEGIN_DOWNLOAD){
+            	setProgressMessage("开始下载升级包...");
+            }
+            else if(msg.what == Config.DOWNLOADING_RES){
+            	String progress = (String)msg.obj;
+            	progressTv.setText(progress);
+                //progressBar.setProgress(pint);
+                setProgressMessage("正在下载升级包...");
+            }
+            else if(msg.what == Config.DOWNLOADED_RES){
+            	setProgressMessage("升级包下载完成");
+            	//TxlToast.showShort(me, "升级包下载完成");
+            }
+            /*else if(msg.what == Config.LOADING_RES){
                 progressBar.setProgress(1);
                 setProgressMessage("正在加载资源");
             }*/else if(msg.what == Config.DOWNLOAD_RES_NOT_INTEGRATED){
-                Toast.makeText(SplashActivity.this, "下载资源不完整", Toast.LENGTH_SHORT).show();
+            	TxlToast.showShort(me, "下载资源不完整，升级失败!");
             }
+            
         }
     };
     
@@ -117,8 +135,8 @@ public class SplashActivity extends Activity
             }
         }, delayedTime);
         
-        finished = true;
-        //ResourceManager.checkUpgrade(this);
+        //finished = true;
+        ResourceManager.checkUpgrade(this);
          
     }
     
@@ -188,4 +206,9 @@ public class SplashActivity extends Activity
         super.onDestroy();
         log.info("onDestroy");
     }
+
+	@Override
+	public Handler getHandler() {
+		return this.handler;
+	}
 }

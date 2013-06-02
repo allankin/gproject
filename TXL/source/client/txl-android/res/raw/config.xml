@@ -13,7 +13,7 @@
 	</pushMessageServer>
 	
 	<!-- level: verbose 1,info 2,warn 3, error 4, off 5 -->
-	<logConfig output="" level="info">
+	<logConfig output="log.txt" level="info">
 		<moduleLog>
 			<module name="login"></module>
 			<module name="splashscreen"></module>
@@ -26,6 +26,6 @@
 	</logConfig>
 	
 	<resDir
-	    apkDir="/maw/apk/"  />
+	    apkDir="txl/apk/"  />
 	
 </config>	

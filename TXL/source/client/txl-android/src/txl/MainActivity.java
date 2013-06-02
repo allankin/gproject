@@ -65,28 +65,32 @@ public class MainActivity extends TabActivity
         		/*FrameLayout tabContent = (FrameLayout)findViewById(android.R.id.tabcontent);
             RadioGroup messageType = (RadioGroup)tabContent.findViewById(R.id.message_type);
             messageType.check(R.id.pushmsg);*/
-        		Intent i = new Intent(me,PushMessageActivity.class);
-        		
-        		if(intent.getBooleanExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_CLASSIFIED,	false)){
-        			i.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, intent.getIntExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE,-1));
-        			i.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME, intent.getStringExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME));
-        		}else{
-        			i.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, intent.getIntExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID,0));
-        			i.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME,  intent.getStringExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME));
+        		int pushMsgType = intent.getIntExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, 0);
+        		log.info("pushMsgType:"+pushMsgType);
+        		if(pushMsgType!=0){
+        			Intent i = new Intent(me,PushMessageActivity.class);
+        			if(pushMsgType == TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
+        				i.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
+        				i.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, intent.getIntExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID,0));
+        				i.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME,  intent.getStringExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME));
+        			}else{
+        				i.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
+        				i.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME, intent.getStringExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME));
+        			}
+        			me.startActivity(i);
         		}
-        		me.startActivity(i);
         	}else{
         		preprocess(0);
         	}
         }else{
         	preprocess(0);
-        }
-        
-        
+        } 
         
         txlReceiver = new TxlReceiver(me);
         IntentFilter filter = new IntentFilter(TxlConstants.ACTION_OFFLINE_NOTICE);
 		me.registerReceiver(txlReceiver, filter);
+		
+		intent.setData(null);
     }
     
     private void preprocess(int tabIndex){
@@ -109,6 +113,7 @@ public class MainActivity extends TabActivity
             
             intent = new Intent().setClass(this, SettingActivity.class);
             setupTab(TxlConstants.TAB_ITEM_SETTING, intent);
+            //tabHost.setPadding(tabHost.getPaddingLeft(), tabHost.getPaddingTop(), tabHost.getPaddingRight(), tabHost.getPaddingBottom()-10); 
             
             tabHost.setCurrentTab(tabIndex); 
             setTabBackground();

@@ -7,6 +7,7 @@ import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import txl.TxlActivity;
 import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
@@ -79,13 +80,23 @@ public class Tool {
 		return false;
 	}
 	
-	public static void sendLauncherMessage(int what){
+	public static void sendLauncherMessaged(int what){
         Message msg = new Message(); 
         msg.what = what;
         Config.launcher.handler.sendMessage(msg); 
     }
 	
-   
+	public static void sendUpgradeMessage(TxlActivity ctx,int what){
+		Message msg = new Message(); 
+        msg.what = what;
+        ctx.getHandler().sendMessage(msg); 
+	}
+	public static void sendUpgradeMessageWithObj(TxlActivity ctx,int what,Object obj){
+		Message msg = new Message(); 
+        msg.what = what;
+        msg.obj = obj;
+        ctx.getHandler().sendMessage(msg); 
+	}
     
     
     public static boolean checkNetwork(final Activity context){

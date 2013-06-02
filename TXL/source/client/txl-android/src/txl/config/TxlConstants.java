@@ -122,6 +122,9 @@ public class TxlConstants
     public static String MODIFY_PASSWORD_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/mobileModifyPassword.naf";
     
     public static String COMMIT_ADVISE_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/saveAdvise.naf";
+    public static String UPGRADE_CHECK_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/upgrade/checkUpgrade.naf";
+    public static String DOWNLOAD_APK_URL_PREFIX = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage";
+    
     
     public static String SEARCH_DEPARTMENT_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/department/mobileSearch.txl";
     public static String SEARCH_COMPANY_USER_URL = "http://"+TXLMAIN_HOST+":"+WEB_PORT+"/txlmain-manage/mobile/user/s/mobileSearch.txl";
@@ -165,7 +168,6 @@ public class TxlConstants
     public static final String INTENT_BUNDLE_PUSHMSG_URL = "pushMsgUrl";
     
     public static final String INTENT_BUNDLE_ACTION = "action";
-    public static final String INTENT_BUNDLE_PUSHMSG_CLASSIFIED = "classified";
     
     public static final String INTENT_BUNDLE_WEB_URL = "webUrl";
     

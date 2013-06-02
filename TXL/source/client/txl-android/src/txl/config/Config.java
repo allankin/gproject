@@ -60,6 +60,9 @@ public class Config
     public static final int DOWNLOADING_RES = 0x006;
     public static final int LOADING_RES = 0x007;
     public static final int DOWNLOAD_RES_NOT_INTEGRATED = 0x009;
+    public static final int DOWNLOADED_RES = 0x010;
+    public static final int BEGIN_DOWNLOAD = 0x011;
+    
     
     public String getApkDir(){
         return this.resDir.apkDir;

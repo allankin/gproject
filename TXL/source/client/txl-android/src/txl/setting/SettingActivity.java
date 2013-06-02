@@ -13,9 +13,11 @@ import txl.common.WebLoadingTipDialog;
 import txl.common.login.LoginDialog;
 import txl.common.login.ModifyPasswordDialog;
 import txl.common.po.Account;
+import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import txl.test.TestManage;
+import txl.upgrade.ResourceManager;
 import txl.util.HttpClientUtil;
 import txl.util.Tool;
 import txl.web.WebViewActivity;
@@ -199,6 +201,16 @@ public class SettingActivity extends TxlActivity {
 			}
 		}); 
 		
+		TableRow checkUpgradeTr = (TableRow)findViewById(R.id.setting_check_upgrade);
+		checkUpgradeTr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ResourceManager.checkUpgrade(me);
+			}
+		}); 
+		
+		
+		
 		/*Spinner dialModeSpinner = (Spinner)findViewById(R.id.setting_dial_mode_btn);
 		ArrayAdapter<String> dialModeAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,me.getResources().getStringArray(R.array.setting_dial_mode_array));
 		dialModeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -245,6 +257,26 @@ public class SettingActivity extends TxlActivity {
             	stateImage.setImageResource(R.drawable.state_offline);
             	loginStatusView.setText("登陆");
             	Tool.quitClear(me);
+            }
+            
+            if(msg.what == Config.CHECKING_UPGRADE){
+                TxlToast.showShort(me,"正在检查更新...");
+            }
+            else if(msg.what == Config.BEGIN_DOWNLOAD){
+            	TxlToast.showShort(me,"开始下载升级包...");
+            }
+            else if(msg.what == Config.DOWNLOADING_RES){
+                TxlToast.showShort(me,"正在下载升级包...");
+            }
+            else if(msg.what == Config.DOWNLOADED_RES){
+            	TxlToast.showShort(me,"升级包下载完成");
+            	//TxlToast.showShort(me, "升级包下载完成");
+            }
+            /*else if(msg.what == Config.LOADING_RES){
+                progressBar.setProgress(1);
+                setProgressMessage("正在加载资源");
+            }*/else if(msg.what == Config.DOWNLOAD_RES_NOT_INTEGRATED){
+            	TxlToast.showShort(me, "下载资源不完整");
             }
             
         }

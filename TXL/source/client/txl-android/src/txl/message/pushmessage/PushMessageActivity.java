@@ -73,6 +73,7 @@ public class PushMessageActivity extends TxlActivity {
 				
 				pushMsgType = bundle
 						.getInt(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE);
+				log.info("pushMsgType:" +pushMsgType);
 				/*联系人消息*/
 				if(pushMsgType== TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
 					ajustListView(pushMsgDetailListView);

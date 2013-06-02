@@ -1,5 +1,8 @@
 package txl.common;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import txl.MainActivity;
 import txl.activity.R;
 import txl.config.TxlConstants;
@@ -9,6 +12,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 
@@ -18,9 +22,9 @@ public class TxlNotification
     private static NotificationManager mNotificationManager;
     private static boolean inited = false;
     private static int NOTIFICATION_ID = 0x0001;
-    
-  
-    
+    private static String TAG = TxlNotification.class.getSimpleName();
+    private static int requestCode=0;
+    private static SimpleDateFormat sfd = new SimpleDateFormat("HH:mm");
     public static void cancel(){
         if(mNotificationManager!=null){
            mNotificationManager.cancelAll();
@@ -80,27 +84,27 @@ public class TxlNotification
         
         
         Intent mIntent = new Intent(context,MainActivity.class);
-        mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK); 
+        mIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP); 
         mIntent.putExtra(TxlConstants.INTENT_BUNDLE_ACTION, "message");
-        if(info.pushMsgType==TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
+        int pushMsgType = info.pushMsgType;
+        mIntent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
+        Log.i(TAG,"pushMsgType:"+pushMsgType+",sendUserId:"+info.sendUserId+",sendName:"+info.sendName);
+        if(pushMsgType==TxlConstants.PUSHMSG_TYPE_NOT_CLASSFIED){
         	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_ID, info.sendUserId);
         	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_CONTACT_NAME, info.sendName);
         }else{
-        	int pushMsgType = info.pushMsgType;
-        	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
         	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME, info.pushMsgTypeName);
-        	mIntent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_CLASSIFIED, true);
         }
         
         //mIntent.putExtra("content", c);
-        PendingIntent mContentIntent =PendingIntent.getActivity(context,NOTIFICATION_ID, mIntent, 0);
+        PendingIntent mContentIntent =PendingIntent.getActivity(context,requestCode, mIntent, 0);
         
         //remoteView.setOnClickPendingIntent(R.id.enter, mContentIntent);
         
         remoteView.setImageViewResource(R.id.noticeImage, R.drawable.ic_launcher);  
         remoteView.setTextViewText(R.id.notification_text , c);  
+        remoteView.setTextViewText(R.id.notification_datetime, sfd.format(new Date(System.currentTimeMillis())));
         noti.contentView = remoteView;  
-        
         
         
         
@@ -140,11 +144,10 @@ public class TxlNotification
 
         Notification noti = builder.build();*/
  
-        
+        requestCode++;
         noti.contentIntent = mContentIntent;
         
         mNotificationManager.notify(NOTIFICATION_ID, noti);
-        NOTIFICATION_ID++; 
     }
     
     

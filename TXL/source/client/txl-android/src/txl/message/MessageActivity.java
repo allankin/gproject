@@ -224,7 +224,6 @@ public class MessageActivity extends TxlActivity implements Handlable {
 				}else{
 					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE, pushMsgType);
 					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TYPE_NAME, record.pushMsg.pushMsgTypeName);
-					intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_CLASSIFIED, true);
 				}
 				//intent.putExtra(TxlConstants.INTENT_BUNDLE_COUNT, count);
 				startActivity(intent);

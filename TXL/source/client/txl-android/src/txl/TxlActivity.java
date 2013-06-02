@@ -23,7 +23,7 @@ import android.view.WindowManager;
 public abstract class TxlActivity extends Activity {
 	public abstract Handler getHandler();
 	
-	private final TxLogger log = new TxLogger(TxlActivity.class, TxlConstants.MODULE_ID_BASE);
+	//private final TxLogger log = new TxLogger(TxlActivity.class, TxlConstants.MODULE_ID_BASE);
 	public boolean isRunning;
 	@Override
     public void onCreate(Bundle savedInstanceState)
