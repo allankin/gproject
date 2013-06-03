@@ -11,9 +11,9 @@ import txl.common.TxlAlertDialog;
 import txl.common.TxlToast;
 import txl.common.WebLoadingTipDialog;
 import txl.common.login.LoginDialog;
+import txl.common.login.LoginDialog.LoginTask;
 import txl.common.login.ModifyPasswordDialog;
 import txl.common.po.Account;
-import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
 import txl.test.TestManage;
@@ -21,6 +21,7 @@ import txl.upgrade.ResourceManager;
 import txl.util.HttpClientUtil;
 import txl.util.Tool;
 import txl.web.WebViewActivity;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -205,7 +206,7 @@ public class SettingActivity extends TxlActivity {
 		checkUpgradeTr.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ResourceManager.checkUpgrade(me);
+				ResourceManager.checkUpgrade(me,false);
 			}
 		}); 
 		
@@ -259,24 +260,51 @@ public class SettingActivity extends TxlActivity {
             	Tool.quitClear(me);
             }
             
-            if(msg.what == Config.CHECKING_UPGRADE){
-                TxlToast.showShort(me,"正在检查更新...");
+            if(msg.what == TxlConstants.MSG_CHECKING_UPGRADE){
+            	WebLoadingTipDialog.getInstance(me).show("正在检查更新...");
+                //TxlToast.showShort(me,"正在检查更新...");
             }
-            else if(msg.what == Config.BEGIN_DOWNLOAD){
-            	TxlToast.showShort(me,"开始下载升级包...");
+            else if(msg.what == TxlConstants.MSG_CHECKING_UPGRADE_NEEDNOT){
+            	WebLoadingTipDialog.getInstance(me).dismiss();
+            	TxlToast.showShort(me,"当前为最新版本，无需更新...");
             }
-            else if(msg.what == Config.DOWNLOADING_RES){
-                TxlToast.showShort(me,"正在下载升级包...");
+            else if(msg.what == TxlConstants.MSG_BEGIN_DOWNLOAD){
+            	//TxlToast.showShort(me,"开始下载升级包...");
+            	WebLoadingTipDialog.getInstance(me).setMessage("开始下载升级包...");
             }
-            else if(msg.what == Config.DOWNLOADED_RES){
-            	TxlToast.showShort(me,"升级包下载完成");
-            	//TxlToast.showShort(me, "升级包下载完成");
+            else if(msg.what == TxlConstants.MSG_DOWNLOADING_RES_SHOW_PROCESSBAR){
+            	WebLoadingTipDialog.getInstance(me).dismiss();
+            	WebLoadingTipDialog.getInstance(me).show("正在下载升级包...", ProgressDialog.STYLE_HORIZONTAL);
+            }
+            else if(msg.what == TxlConstants.MSG_DOWNLOADING_RES){
+            	String progress = (String)msg.obj;
+            	log.info("progress: "+progress);
+            	int processInt = Integer.parseInt(progress.substring(0,progress.length()-1));
+            	WebLoadingTipDialog.getInstance(me).setProcess(processInt);
+            	//TxlToast.showShort(me,"正在下载升级包...");
+            }
+            else if(msg.what == TxlConstants.MSG_DOWNLOADED_RES){
+            	//TxlToast.showShort(me,"升级包下载完成");
+            	WebLoadingTipDialog.getInstance(me).setMessage("升级包下载完成");
+            	WebLoadingTipDialog.getInstance(me).dismiss();
             }
             /*else if(msg.what == Config.LOADING_RES){
                 progressBar.setProgress(1);
                 setProgressMessage("正在加载资源");
-            }*/else if(msg.what == Config.DOWNLOAD_RES_NOT_INTEGRATED){
-            	TxlToast.showShort(me, "下载资源不完整");
+            }*/
+            else if(msg.what == TxlConstants.MSG_NOT_INSTALL_NOW){
+            }
+            else if(msg.what == TxlConstants.MSG_DOWNLOAD_RES_NOT_INTEGRATED){
+            	Boolean isEnforce = (Boolean)msg.obj;
+            	if(isEnforce){
+            		TxlToast.showShort(me, "下载资源不完整,强制退出!");
+            	}else{
+            		TxlToast.showShort(me, "下载资源不完整");
+            	}
+            }
+            else if(msg.what == TxlConstants.MSG_CHECK_UPGRADE_ERROR){
+            	WebLoadingTipDialog.getInstance(me).dismiss();
+            	TxlToast.showShort(me, "网络访问异常,更新取消");
             }
             
         }
@@ -315,6 +343,11 @@ public class SettingActivity extends TxlActivity {
     protected void onResume(){
         super.onResume();
         log.info("onResume");
+        
+        Account user = Account.getSingle();
+        if(user!=null && user.isSave){
+        	new LoginTask(me,true).execute(user);
+        }
         
     }
     @Override

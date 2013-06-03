@@ -17,6 +17,7 @@ import txl.common.WebLoadingTipDialog;
 import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.message.pushmessage.core.MessageManager;
+import txl.setting.SettingActivity;
 import txl.util.HttpClientUtil;
 import txl.util.Tool;
 import txl.util.ValidateUtil;
@@ -209,13 +210,20 @@ public class LoginDialog {
 	 * @author jinchao
 	 *
 	 */
-	class LoginTask extends NetworkAsyncTask<Account, Void, Account>{
-        public LoginTask(TxlActivity ctx){
+	public static class LoginTask extends NetworkAsyncTask<Account, Void, Account>{
+		boolean isAuto = false;
+        public LoginTask(TxlActivity ctx,boolean isAuto){
             this.ctx = ctx;
+            this.isAuto = isAuto;
+        }
+        public LoginTask(TxlActivity ctx){
+        	this(ctx, false);
         }
         @Override
         protected void onPreExecute(){
-        	WebLoadingTipDialog.getInstance(ctx).show("正在登陆..."); 
+        	if(!this.isAuto){
+        		WebLoadingTipDialog.getInstance(ctx).show("正在登陆..."); 
+        	}
         }
 		@Override
 		protected Account doInBackground(Account... user) {
@@ -239,12 +247,11 @@ public class LoginDialog {
 					userRet.name= account.optString("name");
 					userRet.phone= account.optString("phone");
 					userRet.compId = account.optInt("compId");
-					userRet.isSave = true;
 					
 					/*保存用户信息*/
-					if(userRet.isSave){
-						userRet.saveUserToFS();
-					}
+					userRet.saveUserToFS();
+					/*if(userRet.isSave){
+					}*/
 					
 					MessageManager.startMessageService(ctx, userRet.userId, userRet.phone,userRet.name);
 				}
@@ -257,10 +264,16 @@ public class LoginDialog {
 		@Override
         protected void onPostExecute(Account userRet)
         {
-            WebLoadingTipDialog.getInstance(ctx).dismiss();
+			if(!this.isAuto){
+				WebLoadingTipDialog.getInstance(ctx).dismiss();
+			}
             switch (userRet.loginStatus) {
+            	case 100: 
+            		
                 case 1:
-                    TxlToast.showLong(ctx, "登陆成功!");
+                	if(!this.isAuto){
+                		TxlToast.showLong(ctx, "登陆成功!");
+                	}
                     ctx.getHandler().sendMessage(Tool.genMessage(TxlConstants.SETTING_HANDLER_ONLINE_STATUS));
                     ctx.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_LOAD_COMPANY_COMMDIR));
                     break;
@@ -303,7 +316,9 @@ public class LoginDialog {
         }
 		
 		private void loginFail(){
-			LoginDialog.getInstance().show(ctx);
+			if(!this.isAuto){
+				LoginDialog.getInstance().show(ctx);
+			}
 			ctx.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_LOGIN_OFFLINE_STATUS));
 		}
 	}

@@ -114,7 +114,7 @@ public class MessageManager {
 					|| phone == null || phone.trim().length()==0
 					|| name == null || name.trim().length()==0
 						) {
-					log.warn("startMessageService, userId ：" + userId+",phone:"+phone+",name:"+name
+					log.info("startMessageService, userId ：" + userId+",phone:"+phone+",name:"+name
 							+ ", 未启动消息服务....");
 					return;
 				}
@@ -126,7 +126,7 @@ public class MessageManager {
 				if (!Tool.isServiceRunning(MessageService.class, context)) {
 					context.startService(i);
 				} else {
-					log.warn("MessageService已经启动, 不能重复启动...");
+					log.info("MessageService已经启动, 不能重复启动...");
 				}
 			}
 		}).start();

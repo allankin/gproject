@@ -44,7 +44,36 @@ public class WebLoadingTipDialog {
 		    loadingTipDialog.show();
 		//}
 	}
+	public void show(String msg,int style){
+		if(ProgressDialog.STYLE_HORIZONTAL == style){
+			loadingTipDialog  = new ProgressDialog(ctx);
+			// 设置进度条风格，风格为长形
+			loadingTipDialog.setProgressStyle(style);
+			// 设置ProgressDialog 标题
+			//loadingTipDialog.setTitle("提示");
+			// 设置ProgressDialog 提示信息
+			loadingTipDialog.setMessage(msg);
+			// 设置ProgressDialog 标题图标
+			//loadingTipDialog.setIcon(R.drawable.img2);
+			// 设置ProgressDialog 进度条进度
+			loadingTipDialog.setProgress(0);
+			// 设置ProgressDialog 的进度条是否不明确
+			loadingTipDialog.setIndeterminate(false);
+		}else{
+			loadingTipDialog  = new ProgressDialog(ctx);
+		}
+		// 设置ProgressDialog 是否可以按退回按键取消
+		loadingTipDialog.setCancelable(true);
+		// 让ProgressDialog显示
+		loadingTipDialog.show();
+	}
 	
+	public void setMessage(String message){
+		loadingTipDialog.setMessage(message);
+	}
+	public void setProcess(int value){
+		loadingTipDialog.setProgress(value);
+	}
 	public void overLoadingDismiss(){
 		if(loadingTipDialog!=null && loadingTipDialog.isShowing()){
 			TxlToast.showLong(ctx, TxlConstants.ERROR_NETWORK_TIMEOUT);

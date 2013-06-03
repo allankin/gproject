@@ -63,7 +63,7 @@
              android:id="@+id/remeberPwd"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
-             android:text="记住密码" />
+             android:text="保存并自动登陆" />
          
           <Button
 	            android:id="@+id/find_password_back_btn"

@@ -71,6 +71,7 @@ public class MessageService extends Service
             }
         }
         needReConnect = false;
+        log.info("  MessageService  onDestroy ...");		
         super.onDestroy();
     }
 

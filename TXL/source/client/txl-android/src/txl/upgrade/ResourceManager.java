@@ -114,7 +114,7 @@ public class ResourceManager
      * 
      * @param activity
      */
-    public static void checkUpgrade(final TxlActivity activity)
+    public static void checkUpgrade(final TxlActivity activity,final boolean isAuto)
     {
     	ctx = activity;
         new Thread(new Runnable()
@@ -124,12 +124,13 @@ public class ResourceManager
             public void run()
             {
 
-                Tool.sendUpgradeMessage(ctx,Config.CHECKING_UPGRADE);
+                Tool.sendUpgradeMessage(ctx,TxlConstants.MSG_CHECKING_UPGRADE);
                 final ResControl resControl = fetchUpgradeRes();
                 int resCount = resControl.resList.size();
                 // 不需要升级
                 if (resCount == 0)
                 {
+                	Tool.sendUpgradeMessage(ctx,TxlConstants.MSG_CHECKING_UPGRADE_NEEDNOT);
                     SplashActivity.finished = true;
                 } else
                 {
@@ -145,21 +146,26 @@ public class ResourceManager
                             @Override
                             public void run()
                             {
-                                TxlAlertDialog.show(activity, "有新版本需要更新", "确定,取消", new DialogInvoker()
-                                {
-
-                                    @Override
-                                    public void doInvoke(DialogInterface dialog, int btndex)
-                                    {
-                                        if (btndex == TxlAlertDialog.FIRST_BTN_INDEX)
-                                        {
-                                        	TxlAlertDialog.alert.dismiss();
-                                            doUpgrade(resControl.resList, false);
-                                        }else{
-                                            SplashActivity.finished = true;
-                                        }
-                                    }
-                                });
+                            	/*欢迎页面，自动触发检查升级包 */
+                            	if(isAuto){
+                            		TxlAlertDialog.show(activity, "有新版本需要更新", "确定,取消", new DialogInvoker()
+                            		{
+                            			
+                            			@Override
+                            			public void doInvoke(DialogInterface dialog, int btndex)
+                            			{
+                            				if (btndex == TxlAlertDialog.FIRST_BTN_INDEX)
+                            				{
+                            					TxlAlertDialog.alert.dismiss();
+                            					doUpgrade(resControl.resList, false);
+                            				}else{
+                            					SplashActivity.finished = true;
+                            				}
+                            			}
+                            		});
+                            	}else{
+                            		doUpgrade(resControl.resList, false);
+                            	}
                             }
                         });
                     }
@@ -178,13 +184,11 @@ public class ResourceManager
             Res res = resList.get(0);
             if(!Environment.getExternalStorageState().equals(  
                                                             Environment.MEDIA_MOUNTED)){
-                
-                Config.launcher.handler.post(new Runnable()
-                {
-                    @Override
-                    public void run()
-                    {
-                        android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(Config.launcher);
+            	ctx.runOnUiThread(new Runnable() {
+					
+					@Override
+					public void run() {
+					 	android.app.AlertDialog.Builder builder = new android.app.AlertDialog.Builder(Config.launcher);
                         builder.setTitle(Config.getInstance().getTiptitle());
                         builder.setMessage("未检测到存储卡,下载取消！").setCancelable(false);
                         builder.setPositiveButton("确定", new DialogInterface.OnClickListener()
@@ -197,8 +201,17 @@ public class ResourceManager
                         });  
                         alert = builder.create();
                         alert.show();
+					}
+				});
+            	/*
+                Config.launcher.handler.post(new Runnable()
+                {
+                    @Override
+                    public void run()
+                    {
+                       
                     }
-                });
+                });*/
                
                 
             }else{
@@ -213,7 +226,7 @@ public class ResourceManager
     {
         if (!verifyRes(res.verifyCode, apkPath))
         {
-            Tool.sendUpgradeMessage(ctx,Config.DOWNLOAD_RES_NOT_INTEGRATED);
+            Tool.sendUpgradeMessageWithObj(ctx,TxlConstants.MSG_DOWNLOAD_RES_NOT_INTEGRATED,isEnforce);
             // 强制升级，不完整退出
             if (isEnforce)
             {
@@ -224,7 +237,7 @@ public class ResourceManager
                 {
                     e.printStackTrace();
                 }
-                Config.launcher.finish();
+                ctx.finish();
                 android.os.Process.killProcess(android.os.Process.myPid());
             } else
             {
@@ -244,13 +257,13 @@ public class ResourceManager
                 install(apkPath);
             } else
             {
-                Config.launcher.runOnUiThread(new Runnable()
+                ctx.runOnUiThread(new Runnable()
                 {
 
                     @Override
                     public void run()
                     {
-                    	TxlAlertDialog.show(Config.launcher, "升级包下载完毕,需要升级吗？", "确定,取消",
+                    	TxlAlertDialog.show(ctx, "升级包下载完毕,需要升级吗？", "确定,取消",
                                             new TxlAlertDialog.DialogInvoker()
                                             {
 
@@ -262,6 +275,7 @@ public class ResourceManager
                                                         install(apkPath);
                                                     } else if (btndex == TxlAlertDialog.SENCOND_BTN_INDEX)
                                                     {
+                                                    	Tool.sendUpgradeMessage(ctx,TxlConstants.MSG_NOT_INSTALL_NOW);
                                                         SplashActivity.finished = true;
                                                     }
                                                 }
@@ -281,7 +295,7 @@ public class ResourceManager
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.setAction(android.content.Intent.ACTION_VIEW);
         intent.setDataAndType(Uri.fromFile(new File(apkPath)), "application/vnd.android.package-archive");
-        Config.launcher.startActivity(intent);
+        ctx.startActivity(intent);
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
@@ -320,7 +334,7 @@ public class ResourceManager
 
     private static void doDownload(final Res res, final boolean isEnforce)
     {
-    	Tool.sendUpgradeMessage(ctx,Config.BEGIN_DOWNLOAD);
+    	Tool.sendUpgradeMessage(ctx,TxlConstants.MSG_BEGIN_DOWNLOAD);
         // DESUtil encry = new DESUtil();
         // final String urlMD5 = MD5Util.md5(res.url);
 
@@ -340,7 +354,7 @@ public class ResourceManager
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.connect();
                     log.info("upgrade url connected .... ResponseCode: "+conn.getResponseCode());
-                    Tool.sendUpgradeMessageWithObj(ctx,Config.DOWNLOADING_RES,"0%");
+                    Tool.sendUpgradeMessage(ctx,TxlConstants.MSG_DOWNLOADING_RES_SHOW_PROCESSBAR);
                     if (conn.getResponseCode() == 200)
                     {
 
@@ -376,7 +390,7 @@ public class ResourceManager
                                     threadfile.write(buffer, 0, offset);
                                     Thread.currentThread().sleep(50);
                                     int progress = Math.round(hasDownloadSize/Float.valueOf(fileSize)*100);
-                                    Tool.sendUpgradeMessageWithObj(ctx,Config.DOWNLOADING_RES,progress+"%");
+                                    Tool.sendUpgradeMessageWithObj(ctx,TxlConstants.MSG_DOWNLOADING_RES,progress+"%");
                                     log.info("hasDownloadSize:"+hasDownloadSize);
                                     /*int _downFlag = progress/10;
                                     if(_downFlag>downFlag){
@@ -398,15 +412,16 @@ public class ResourceManager
 
                     }
                     if(filePath.length()>0){
-                    	Tool.sendUpgradeMessageWithObj(ctx,Config.DOWNLOADING_RES,"100%");
+                    	Tool.sendUpgradeMessageWithObj(ctx,TxlConstants.MSG_DOWNLOADING_RES,"100%");
                     	if("apk".equals(res.type)){
-                    		Tool.sendUpgradeMessage(ctx,Config.DOWNLOADED_RES);
+                    		Tool.sendUpgradeMessage(ctx,TxlConstants.MSG_DOWNLOADED_RES);
                     		afterApkDownload(res, filePath, isEnforce);
                     	}
                     }
                     
                 } catch (Exception e)
                 {
+                	Tool.sendUpgradeMessage(ctx,TxlConstants.MSG_CHECK_UPGRADE_ERROR);
                     e.printStackTrace();
                 }
 

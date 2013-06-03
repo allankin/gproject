@@ -88,26 +88,26 @@ public class SplashActivity extends TxlActivity
     {
         public void handleMessage(Message msg)
         {
-            if(msg.what == Config.CHECKING_UPGRADE){
+            if(msg.what == TxlConstants.MSG_CHECKING_UPGRADE){
                 setProgressMessage("正在检查更新...");
             }
-            else if(msg.what == Config.BEGIN_DOWNLOAD){
+            else if(msg.what == TxlConstants.MSG_BEGIN_DOWNLOAD){
             	setProgressMessage("开始下载升级包...");
             }
-            else if(msg.what == Config.DOWNLOADING_RES){
+            else if(msg.what == TxlConstants.MSG_DOWNLOADING_RES){
             	String progress = (String)msg.obj;
             	progressTv.setText(progress);
                 //progressBar.setProgress(pint);
                 setProgressMessage("正在下载升级包...");
             }
-            else if(msg.what == Config.DOWNLOADED_RES){
+            else if(msg.what == TxlConstants.MSG_DOWNLOADED_RES){
             	setProgressMessage("升级包下载完成");
             	//TxlToast.showShort(me, "升级包下载完成");
             }
             /*else if(msg.what == Config.LOADING_RES){
                 progressBar.setProgress(1);
                 setProgressMessage("正在加载资源");
-            }*/else if(msg.what == Config.DOWNLOAD_RES_NOT_INTEGRATED){
+            }*/else if(msg.what == TxlConstants.MSG_DOWNLOAD_RES_NOT_INTEGRATED){
             	TxlToast.showShort(me, "下载资源不完整，升级失败!");
             }
             
@@ -136,7 +136,7 @@ public class SplashActivity extends TxlActivity
         }, delayedTime);
         
         //finished = true;
-        ResourceManager.checkUpgrade(this);
+        ResourceManager.checkUpgrade(this,true);
          
     }
     

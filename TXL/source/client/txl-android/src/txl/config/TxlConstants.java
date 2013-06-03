@@ -99,6 +99,18 @@ public class TxlConstants
     public static final int MSG_SEARCH_CALL_RECORD = 0x00017;
     
     
+    /**升级 MSG **/
+    public static final int MSG_CHECKING_UPGRADE = 0x050;
+    public static final int MSG_DOWNLOADING_RES = 0x051;
+    public static final int MSG_LOADING_RES = 0x052;
+    public static final int MSG_DOWNLOAD_RES_NOT_INTEGRATED = 0x053;
+    public static final int MSG_DOWNLOADED_RES = 0x054;
+    public static final int MSG_BEGIN_DOWNLOAD = 0x055;
+    public static final int MSG_CHECKING_UPGRADE_NEEDNOT = 0x056;
+    public static final int MSG_NOT_INSTALL_NOW = 0x057;
+    public static final int MSG_CHECK_UPGRADE_ERROR = 0x058;
+    public static final int MSG_DOWNLOADING_RES_SHOW_PROCESSBAR = 0x59;
+    
     public static class Toast{
         public static int LONG = 5000;
         public static int SHORT = 2000;
