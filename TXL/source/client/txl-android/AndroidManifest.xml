@@ -37,9 +37,12 @@
         android:screenOrientation="portrait"
         >
         
-        <!-- android:theme="@android:style/Theme.NoTitleBar.Fullscreen"  -->
+        <!-- android:theme="@android:style/Theme.NoTitleBar.Fullscreen"  
+        txl.SplashActivity
+        txl.test.animationSplash.StartAnimation
+        -->
         <activity
-            android:name="txl.SplashActivity"
+            android:name="txl.test.backup.TestBackupActivity"
             android:label="@string/app_name" 
             android:theme="@style/Theme.Start"
             android:screenOrientation="portrait"
@@ -75,6 +78,7 @@
         <activity android:name="txl.message.pushmessage.ClassfiedPushMsgDetailActivity"/>
         
         <activity android:name="txl.web.WebViewActivity"/>
+        
         
         <service android:name="txl.message.pushmessage.core.MessageService">
 		   <intent-filter>
