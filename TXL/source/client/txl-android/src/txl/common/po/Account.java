@@ -32,6 +32,8 @@ public class Account {
 	/*用户id*/
 	public int userId;
 	
+	public String imei;
+	
 	public Setting setting;
 	/*共享通讯录ID List*/
 	public List<Integer> shareCommDirIdList;

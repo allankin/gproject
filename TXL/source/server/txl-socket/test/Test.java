@@ -1,6 +1,7 @@
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.UUID;
 
 import org.apache.log4j.Logger;
 import org.apache.log4j.MDC;
@@ -30,6 +31,8 @@ public class Test
         String md5 = MD5Util.md5(String.valueOf(1207114));
 
         System.out.println(Integer.parseInt("43%".substring(0,"43%".length()-1)));
+        
+        System.out.println("uuid:"+UUID.randomUUID().toString().replaceAll("-", "").length());
     }
     
     public static String getExceptionTrace(Throwable e) {

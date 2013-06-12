@@ -42,7 +42,7 @@
         txl.test.animationSplash.StartAnimation
         -->
         <activity
-            android:name="txl.test.backup.TestBackupActivity"
+            android:name="txl.test.animationSplash.StartAnimation"
             android:label="@string/app_name" 
             android:theme="@style/Theme.Start"
             android:screenOrientation="portrait"

@@ -40,6 +40,9 @@ public class DeviceUtil
         this.heightPixels = metrics.heightPixels;
         TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         this.imei = tm.getDeviceId(); 
+        if(this.imei==null){
+        	this.imei = Tool.genUUID();
+        }
         this.imsi =tm.getSubscriberId();
         /*不一定正确*/
         this.phoneNumber = tm.getLine1Number();

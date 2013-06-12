@@ -18,6 +18,7 @@ import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.message.pushmessage.core.MessageManager;
 import txl.setting.SettingActivity;
+import txl.util.DeviceUtil;
 import txl.util.HttpClientUtil;
 import txl.util.Tool;
 import txl.util.ValidateUtil;
@@ -113,6 +114,8 @@ public class LoginDialog {
                 user.phone = user.userName;
                 user.password = password.getText().toString();
                 user.isSave = remeberPwd.isChecked();
+                DeviceUtil dv = new DeviceUtil(ctx);
+                user.imei = dv.imei;
                 new LoginTask(ctx).execute(user);
                 
                 
@@ -231,6 +234,7 @@ public class LoginDialog {
 			Map<String,String> params = new HashMap<String,String>();
 			params.put("user.account", user[0].userName);
 			params.put("user.password", user[0].password);
+			params.put("user.imei", user[0].imei);
 			Account userRet = user[0];
 			
 			try {

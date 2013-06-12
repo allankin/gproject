@@ -45,6 +45,7 @@ public class TestBackupActivity extends Activity
                 // setTitle(str);
 
                 getContact();
+                Log.i(TAG, str);
 
                 File saveFile = new File("/sdcard/test.txt");
                 FileOutputStream outStream;
