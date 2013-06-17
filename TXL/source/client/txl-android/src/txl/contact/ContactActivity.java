@@ -31,6 +31,7 @@ import txl.contact.task.CampanyUserQueryTask;
 import txl.contact.task.ShareCommDirQueryTask;
 import txl.log.TxLogger;
 import txl.util.ContactVoComparator;
+import txl.util.Tool;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -88,7 +89,7 @@ public class ContactActivity extends TxlActivity implements Handlable
     private ContactListAdapter            personalContactListAdapter                 = null;
     
     private TextView overlay;
-    private boolean visible;
+    private boolean overLayVisibleFlag;
     private boolean personalCommDirLoaded = false;
     private View personalLayout;
     EditText contactSearch;
@@ -196,6 +197,7 @@ public class ContactActivity extends TxlActivity implements Handlable
         btnClearSearch.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 log.info("btnClearSearch click ....");
+                Tool.hideSoftInputFromWindow(me);
                 contactSearch.setText("");
                 btnClearSearch.setVisibility(View.GONE);
                 personalContactListAdapter.contactList = contactList;
@@ -206,6 +208,14 @@ public class ContactActivity extends TxlActivity implements Handlable
             }
         });
 		
+        contactSearch.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                overlay.setVisibility(View.GONE);
+            }
+        });
         
         contactSearch.addTextChangedListener(new TextWatcher() {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -216,12 +226,14 @@ public class ContactActivity extends TxlActivity implements Handlable
                     overlay.setVisibility(View.GONE);
                     ContactDao.getSearchUser(me,searchList,s.toString());
                     personalContactListAdapter.contactList = searchList;
+                    overLayVisibleFlag = false;
                     //personalContactListAdapter.isShowNum = true;
                 } else {
                     btnClearSearch.setVisibility(View.GONE);
                     personalContactListAdapter.contactList = contactList;
                     sideBar.setVisibility(View.VISIBLE);
-                    overlay.setVisibility(View.VISIBLE);
+                    overlay.setVisibility(View.GONE);
+                    overLayVisibleFlag = true;
                     //personalContactListAdapter.isShowNum = false;
                 }
                 updateSearchHint();
@@ -267,7 +279,7 @@ public class ContactActivity extends TxlActivity implements Handlable
 			
 			@Override
 			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				visible = true;
+				overLayVisibleFlag = true;
 				if (scrollState == ListView.OnScrollListener.SCROLL_STATE_IDLE) {
 				    if(overlay!=null){
 				        overlay.setVisibility(View.INVISIBLE);
@@ -278,7 +290,7 @@ public class ContactActivity extends TxlActivity implements Handlable
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
-				if (visible) {
+				if (overLayVisibleFlag) {
 					char firstLetter = contactList.get(firstVisibleItem).firstLetter;
 					if(firstLetter!='0'){
 					    if(overlay!=null){
@@ -465,7 +477,7 @@ public class ContactActivity extends TxlActivity implements Handlable
             if(msg.what == TxlConstants.CONTACT_HANDLER_HIDE_OVERLAY){
             	me.overlay.setVisibility(View.INVISIBLE);
             }else if(msg.what == TxlConstants.CONTACT_HANDLER_OVERLAY_VISIBLE){
-            	visible = true;
+            	overLayVisibleFlag = true;
             }else if(msg.what == TxlConstants.MSG_RENDER_COMPANY_USER){
             	companyUserList.clear();
             	List<CompanyUser> users = (List<CompanyUser>)msg.obj;

@@ -23,6 +23,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Message;
+import android.view.inputmethod.InputMethodManager;
 
 
 /**
@@ -264,5 +265,9 @@ public class Tool {
         Matcher m = p.matcher(email);  
         boolean b = m.matches();  
         return b;
+    }
+    
+    public static void hideSoftInputFromWindow(Activity act){
+        ((InputMethodManager)act.getSystemService(android.content.Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 }
