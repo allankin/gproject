@@ -99,6 +99,10 @@ public class TxlConstants
     public static final int MSG_SEARCH_CALL_RECORD = 0x00017;
     
     
+    public static final int MSG_SYNC_PERSONAL_BACKUP_SET_ACTION_NAME = 0x0018;
+    public static final int MSG_SYNC_PERSONAL_BACKUP_SET_INDEX = 0x0019;
+    public static final int MSG_SYNC_PERSONAL_BACKUP_SET_SUCEESS_COUNT = 0x0020;
+    
     /**升级 MSG **/
     public static final int MSG_CHECKING_UPGRADE = 0x050;
     public static final int MSG_DOWNLOADING_RES = 0x051;
@@ -121,8 +125,8 @@ public class TxlConstants
     public static final int HTTP_CONNECTION_TIMEOUT = 5000;
     public static final int HTTP_SO_TIMEOUT = 10000;
     
-    public static String TXLMAIN_HOST = "111.1.45.158";   //192.168.2.100 111.1.45.158
-    public static int WEB_PORT = 80;//8080  80
+    public static String TXLMAIN_HOST = "192.168.2.100";   //192.168.2.100 111.1.45.158
+    public static int WEB_PORT = 8080;//8080  80
     
     public static String WEB_APP_CONTEXT_TXLMAIN = "txlmain-manage";
     public static String WEB_APP_CONTEXT_TXLSHARE = "txlshare-manage";
@@ -150,9 +154,14 @@ public class TxlConstants
     public static String SYNC_SHARE_COMMDIR_URL =  "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBook/mobileSync.txl";
     public static String SEARCH_SHARE_COMMDIR_USER_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/mobile/shareBookUser/mobileSearch.txl";
     
+    public static String SYNC_ACTION_PERSONAL_BACKUP_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/syncPhoneCommDir/backup.txl";
+    public static String SYNC_ACTION_PERSONAL_PREBACKUP_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/syncPhoneCommDir/preBackup.txl";
+    public static String SYNC_ACTION_PERSONAL_POSTBACKUP_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/syncPhoneCommDir/postBackup.txl";
     
-    
-    
+    public static String SYNC_ACTION_PERSONAL_RESTORE_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/syncPhoneCommDir/restore.txl";
+    public static String SYNC_ACTION_PERSONAL_PRERESTORE_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/syncPhoneCommDir/preRestore.txl";
+    public static String SYNC_ACTION_PERSONAL_POSTRESTORE_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/syncPhoneCommDir/postRestore.txl";
+    public static String SYNC_ACTION_PERSONAL_FETCH_CONTACTID_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/syncPhoneCommDir/fetchContactIds.txl";
     
     public static final String DB_NAME = "txl";
     public static final int DB_VERSION = 12;
@@ -188,6 +197,9 @@ public class TxlConstants
     public static final String ERROR_NETWORK_TIMEOUT = "网络超时";
     public static final String TIP_QUERING = "正在查询";
     public static final String TIP_SYNC = "正在同步";
+    
+    public static final String TIP_BACKUP = "正在备份";
+    public static final String TIP_DOWNLOAD = "正在下载";
     
     public static final String TIP_LOADING = "正在加载...";
     
@@ -257,6 +269,31 @@ public class TxlConstants
     
     public static final int initNoticeLen = 100;
     
+    public static final int SHARE_COMPANY_NOT_EXIST = 0x0002;
+    public static final int SHARE_USER_NOT_EXIT = 0x0003;
     
+    public static final int SYNC_ACTION_BACKUP_PERSONAL_COMMDIR_SUCCESS = 0x0001;
+    public static final int SYNC_ACTION_BACKUP_PERSONAL_COMMDIR_FAIL = -1;
+    
+    public static final int SYNC_ACTION_BACKUP_PERSONAL_NO_SYNCID_FAIL = 0x0021;
+	public static final int SYNC_ACTION_PREBACK_UP_FAIL = 0x0022;
+	public static final int SYNC_ACTION_POSTBACK_UP_FAIL = 0x0023;
+	
+    
+    public static final int SYNC_ACTION_BACKUP = 0x0001;
+	public static final int SYNC_ACTION_RESTORE = 0x0002;
+	
+	public static final int CONTACT_DATA_TOATAL_TYPE_TEL = 0x0001;
+	public static final int CONTACT_DATA_TOATAL_TYPE_EMAIL = 0x0002;
+	public static final int CONTACT_DATA_TOATAL_TYPE_ORG = 0x0003;
+	public static final int CONTACT_DATA_TOATAL_TYPE_ADDRESS= 0x0004;
+	public static final int CONTACT_DATA_TOATAL_TYPE_IM= 0x0005;
+	
+	public static final int CONTACT_DATA_TYPE_CUSTOM = 0x0000;
+	
+	public static final String SYNC_ACTION_BACKUP_SUCCESS_LABEL = "备份成功";
+	public static final String SYNC_ACTION_RESTORE_SUCCESS_LABEL = "恢复成功";
+	public static final String SYNC_ACTION_BACKUP_FAIL_LABEL = "备份失败";
+	public static final String SYNC_ACTION_RESTORE_FAIL_LABEL = "恢复失败";
     
 }

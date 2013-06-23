@@ -380,6 +380,10 @@ public class ResourceManager
 
                             if(Environment.getExternalStorageState().equals(  
                                                                             Environment.MEDIA_MOUNTED)){
+                            	File file = new File(saveFile);
+                            	if(file.exists()){
+                            		file.delete();
+                            	}
                                 RandomAccessFile threadfile = new RandomAccessFile(saveFile, "rwd");
                                 threadfile.seek(startPos);
                                 InputStream inStream = new BufferedInputStream(url.openStream());

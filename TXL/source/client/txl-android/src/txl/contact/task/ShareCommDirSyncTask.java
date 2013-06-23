@@ -77,10 +77,10 @@ public class ShareCommDirSyncTask extends NetworkAsyncTask<CommDirQuery,Void,Lis
 					}
 				}
 			}
-			else if(status==2){
+			else if(status==TxlConstants.SHARE_COMPANY_NOT_EXIST){
 				ctx.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_SHARE_COMPANY_NOT_EXIST));
 			}
-			else if(status==3){
+			else if(status==TxlConstants.SHARE_USER_NOT_EXIT){
 				ctx.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_SHARE_USER_NOT_EXIT));
 			}
 			

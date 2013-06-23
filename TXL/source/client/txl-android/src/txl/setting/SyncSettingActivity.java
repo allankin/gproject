@@ -6,17 +6,16 @@ import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.TxlAlertDialog;
 import txl.common.TxlToast;
-import txl.common.login.LoginDialog;
 import txl.common.po.Account;
 import txl.config.TxlConstants;
-import txl.contact.DepartmentTreeActivity;
 import txl.contact.dao.CommDirDao;
 import txl.contact.po.CommDir;
 import txl.contact.po.CommDirUserQuery;
-import txl.contact.po.ShareUser;
 import txl.contact.po.UserQuery;
 import txl.contact.task.CampanyUserQueryTask;
 import txl.contact.task.DepartmentQueryTask;
+import txl.contact.task.PersonalCommDirSyncBackupTask;
+import txl.contact.task.PersonalCommDirSyncRestoreTask;
 import txl.contact.task.ShareCommDirUserQueryTask;
 import txl.log.TxLogger;
 import txl.util.Tool;
@@ -29,12 +28,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.ToggleButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 public class SyncSettingActivity extends TxlActivity {
 	
@@ -50,6 +49,23 @@ private final TxLogger  log = new TxLogger(SyncSettingActivity.class, TxlConstan
 		TextView header = (TextView)findViewById(R.id.header);
 		header.setText("同步号码");
 		final TableLayout syncTable = (TableLayout)findViewById(R.id.setting_sync_share_item_table);
+		
+		
+		LinearLayout syncPersonalBackup = (LinearLayout)findViewById(R.id.setting_sync_personal_backup);
+		syncPersonalBackup.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View view) {
+				new PersonalCommDirSyncBackupTask(me).execute();
+			}
+		});
+		
+		LinearLayout syncPersonalRestore = (LinearLayout)findViewById(R.id.setting_sync_personal_restore);
+		syncPersonalRestore.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View arg0) {
+				new PersonalCommDirSyncRestoreTask(me).execute();
+			}
+		});
 		
 		
 		final ToggleButton syncCompanyToggle = (ToggleButton)findViewById(R.id.setting_sync_company_comdir_toggle);

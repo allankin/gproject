@@ -26,6 +26,45 @@
             android:paddingRight="20dp"
             >
             
+            
+            <!-- 个人通讯录同步  -->
+            <TableRow
+                android:id="@+id/setting_sync_personal_backup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_top"
+                android:layout_marginTop="@dimen/setting_block_margin_top"
+                android:clickable="true"
+                >
+                <ImageView style="@style/setting_column1"  android:visibility="gone"  android:src="@drawable/setting_tip" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_sync_personal_backup" />
+                
+            </TableRow>
+            
+            
+            <TableRow
+                android:id="@+id/setting_sync_personal_restore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_bot"
+                >
+                <ImageView style="@style/setting_column1"   android:visibility="gone"  android:src="@drawable/setting_sync_commdir" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_sync_personal_restore" />
+                
+            </TableRow>
+            
+            
+            
+            
+            
             <TableRow
                 android:id="@+id/setting_sync_company"
                 android:layout_width="wrap_content"

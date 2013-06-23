@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
+    android:paddingLeft="30dp"
+    android:paddingRight="30dp"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView 
+        android:id="@+id/progress_action"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:textSize="25sp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+            
+     
+    <!-- 百分比进度 -->
+    <TextView 
+        android:id="@+id/progress_percent"
+        android:visibility="gone"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="20dip"
+        android:layout_marginRight="20dip"
+        android:textSize="20sp"
+        android:text="0%"/>
+    
+    <!-- 个人通讯录备份和恢复进度 -->
+    <LinearLayout
+        android:visibility="gone"
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_horizontal"
+	    android:gravity="center"
+	    android:orientation="vertical"
+	    android:id="@+id/sync_personal_commdir_progress"
+	    >
+	    
+	    <LinearLayout
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_horizontal"
+	    android:gravity="center"
+	    android:orientation="horizontal"
+	    >
+		    <TextView 
+		        android:id="@+id/progress_current_index"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:layout_marginLeft="20dip"
+		        android:textSize="20sp"
+		        android:text="0"/>
+	        <TextView 
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:textSize="20sp"
+		        android:text="/"/>
+	        <TextView 
+		        android:id="@+id/progress_current_total"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:layout_marginRight="20dip"
+		        android:textSize="20sp"
+		        android:text="0"/>
+	    </LinearLayout>
+	    <LinearLayout
+        android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_horizontal"
+	    android:gravity="center"
+	    android:orientation="horizontal"
+	    >
+	    	<TextView 
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:layout_marginLeft="20dip"
+		        android:textSize="15sp"
+		        android:text="成功数目："/>
+	        <TextView 
+	            android:id="@+id/progress_success_index"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:textSize="15sp"
+		        android:text="0"/>
+        
+        </LinearLayout>
+        
+	    <Button 
+	        android:layout_width="wrap_content" 
+	        android:layout_height="wrap_content"
+	        android:text="确  定"
+	        android:id="@+id/progress_confirm_exit"
+	        />
+    </LinearLayout>
+      
+</LinearLayout>

@@ -25,6 +25,8 @@
 	<string name="setting_sync_company">同步公司通讯录</string>   
 	<string name="setting_sync_share">同步共享通讯录</string>
 	<string name="setting_sync_personal">同步个人通讯录</string>
+	<string name="setting_sync_personal_backup">备份个人通讯录</string>
+	<string name="setting_sync_personal_restore">恢复个人通讯录</string>
 	<string name="setting_sync_complete">完全同步</string>
 	
 	<string name="setting_incoming">来电设置</string>
