@@ -125,8 +125,8 @@ public class TxlConstants
     public static final int HTTP_CONNECTION_TIMEOUT = 5000;
     public static final int HTTP_SO_TIMEOUT = 10000;
     
-    public static String TXLMAIN_HOST = "192.168.2.100";   //192.168.2.100 111.1.45.158
-    public static int WEB_PORT = 8080;//8080  80
+    public static String TXLMAIN_HOST = "111.1.45.158";   //192.168.2.100 111.1.45.158
+    public static int WEB_PORT = 80;//8080  80
     
     public static String WEB_APP_CONTEXT_TXLMAIN = "txlmain-manage";
     public static String WEB_APP_CONTEXT_TXLSHARE = "txlshare-manage";

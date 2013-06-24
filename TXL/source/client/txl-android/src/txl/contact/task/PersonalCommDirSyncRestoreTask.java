@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 import txl.TxlActivity;
 import txl.activity.R;
 import txl.common.ExceptionCallBack;
@@ -12,12 +15,14 @@ import txl.common.NetworkAsyncTask;
 import txl.common.TxlAlertDialog;
 import txl.common.TxlAlertDialog.DialogInvoker;
 import txl.common.TxlProgressDialog;
-import txl.common.TxlSyncPersonalCommdirProgressDialog;
 import txl.common.TxlToast;
 import txl.common.po.Account;
 import txl.config.TxlConstants;
+import txl.contact.po.PhoneContact;
+import txl.contact.po.SyncContactResult;
 import txl.contact.po.SyncLog;
 import txl.contact.po.SyncLogResult;
+import txl.log.TxLogger;
 import txl.util.HttpClientUtil;
 import txl.util.Tool;
 import android.app.Activity;
@@ -28,6 +33,8 @@ import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -39,6 +46,7 @@ import com.google.gson.Gson;
  *
  */
 public class PersonalCommDirSyncRestoreTask extends NetworkAsyncTask<Void,Void,Integer> implements Callback {
+	final private TxLogger log = new TxLogger(CampanyUserQueryTask.class, TxlConstants.MODULE_ID_CONTACT);
 	public PersonalCommDirSyncRestoreTask me = this;
 	private TxlProgressDialog progressDialog;
 	
@@ -64,7 +72,7 @@ public class PersonalCommDirSyncRestoreTask extends NetworkAsyncTask<Void,Void,I
 		String body;
 		try {
 			body = HttpClientUtil.httpPostUTF8(TxlConstants.SYNC_ACTION_PERSONAL_PRERESTORE_URL, postParams);
-			SyncLogResult slr = new Gson().fromJson("",SyncLogResult.class);
+			final SyncLogResult slr = new Gson().fromJson(body,SyncLogResult.class);
 			if(slr!=null){
 				/*  preRestore success   */
 				status = slr.getStatus();
@@ -72,16 +80,104 @@ public class PersonalCommDirSyncRestoreTask extends NetworkAsyncTask<Void,Void,I
 					this.progressDialog.dismiss();
 					int size = slr.getLogs().size();
 					if(size>0){
-						View syncListLayout = LayoutInflater.from(me.ctx).inflate(R.layout.contact_personal_sync_log, null);
+						final View syncListLayout = LayoutInflater.from(me.ctx).inflate(R.layout.contact_personal_sync_log, null);
 						ListView listView = (ListView)syncListLayout.findViewById(R.id.sync_log_list);
 						SyncLogListAdapter logAdapter = new SyncLogListAdapter(me.ctx,slr.getLogs());
 						listView.setAdapter(logAdapter);
-						TxlAlertDialog.show(me.ctx, syncListLayout, "确定,取消", new DialogInvoker() {
+						listView.setOnItemClickListener(new OnItemClickListener() {
+
 							@Override
-							public void doInvoke(DialogInterface dialog, int btndex) {
+							public void onItemClick(AdapterView<?> parent,
+									View view, int position, long id) {
+								final SyncLog syncLog = slr.getLogs().get(position);
+								
+								new Thread( new Runnable() {
+									@Override
+									public void run() {
+										String body = "";
+										try {
+											Map<String,String> postParams = new HashMap<String,String>();
+											postParams.put("outUserId", String.valueOf(Account.getSingle().userId));
+											postParams.put("compCode",Account.getSingle().compCode);
+											postParams.put("syncId",syncLog.getSyncId());
+											/* fetchContactIds */
+											body = HttpClientUtil.httpPostUTF8(TxlConstants.SYNC_ACTION_PERSONAL_FETCH_CONTACTID_URL, postParams);
+											postParams.remove("syncId");
+											JSONObject jobj = new JSONObject(body);
+											int status = jobj.optInt("status");
+											if(status==1){
+												JSONArray array = jobj.optJSONArray("contactIds");
+												if(array!=null){
+													int totalCount = array.length();
+													for(int i=0,len=array.length();i<len;i++){
+														int contactId = array.getInt(i);
+														postParams.put("contactId", String.valueOf(contactId));
+														/* restore single contact */
+														body = HttpClientUtil.httpPostUTF8(TxlConstants.SYNC_ACTION_PERSONAL_RESTORE_URL, postParams);
+														final SyncContactResult scr = new Gson().fromJson(body,SyncContactResult.class);
+														int successCount = 0;
+														if(scr!=null){
+															status = scr.getStatus();
+															if(status == 1){
+																successCount++;
+																PhoneContact contact = scr.getContact();
+																log.info("name:"+contact.getName()
+																		+",customRingtome:"+contact.getCustomRingtone());
+																
+																
+																
+																
+																
+																
+																if(totalCount == successCount){
+																	me.ctx.runOnUiThread(new Runnable() {
+																		@Override
+																		public void run() {
+																			dealStatus(1);
+																		}
+																	});
+																}else{
+																	me.ctx.runOnUiThread(new Runnable() {
+																		@Override
+																		public void run() {
+																			dealStatus(-1);
+																		}
+																	});
+																}
+																 
+															}else{
+																me.dealFailStatus(status);
+															}
+														}
+													}
+												}
+												
+											}else{
+												me.dealFailStatus(status);
+											}
+											
+										}catch(Exception e){
+											me.dealException(e);
+										}
+									}
+								}).start();
 								
 							}
+							
 						});
+						this.ctx.runOnUiThread(new Runnable() {
+							
+							@Override
+							public void run() {
+								TxlAlertDialog.show(me.ctx, syncListLayout, "确定,取消", new DialogInvoker() {
+									@Override
+									public void doInvoke(DialogInterface dialog, int btndex) {
+										
+									}
+								});
+							}
+						});
+						
 					}
 					
 				}else{
@@ -142,13 +238,17 @@ public class PersonalCommDirSyncRestoreTask extends NetworkAsyncTask<Void,Void,I
 		}
 	}
 	
+	private void dealStatus(int status){
+		if(status == 1){
+			TxlToast.showShort(ctx, TxlConstants.SYNC_ACTION_RESTORE_SUCCESS_LABEL);
+		}else{
+			TxlToast.showShort(ctx, TxlConstants.SYNC_ACTION_RESTORE_FAIL_LABEL);
+		}
+	}
+	
 	@Override
 	protected void onPostExecute(Integer status) {
-		if(status == TxlConstants.SYNC_ACTION_BACKUP_PERSONAL_COMMDIR_SUCCESS){
-			TxlToast.showShort(ctx, TxlConstants.SYNC_ACTION_BACKUP_SUCCESS_LABEL);
-		}else if(status == TxlConstants.SYNC_ACTION_BACKUP_PERSONAL_COMMDIR_FAIL){
-			TxlToast.showShort(ctx, TxlConstants.SYNC_ACTION_BACKUP_FAIL_LABEL);
-		}
+		
 	}
 	private Handler handler = new Handler(this);
 	@Override
@@ -205,7 +305,14 @@ public class PersonalCommDirSyncRestoreTask extends NetworkAsyncTask<Void,Void,I
 				action = "恢复联系人";
 			}
 			holder.logAction.setText(action);
-			holder.logStatus.setText(log.getStatus()?"成功":"失败");
+			String status = null;
+			if(log.getStatus()==null){
+				status = "未知";
+			}else{
+				status =log.getStatus()?"成功":"失败" ;
+			}
+			
+			holder.logStatus.setText(status);
 			holder.syncCount.setText(String.valueOf(log.getBackupSuccessCount()));
 			return convertView;
 		}
