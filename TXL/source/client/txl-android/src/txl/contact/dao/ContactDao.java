@@ -1,6 +1,7 @@
 package txl.contact.dao;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -307,15 +308,21 @@ public class ContactDao {
         
         Cursor cur = context.getContentResolver().query(Phone.CONTENT_URI, projection, selection, null, Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
         cur.moveToFirst();
+        Set<Long> contactIdSet = new HashSet<Long>();
+        
         while(cur.getCount() > cur.getPosition()) {
             ContactVo contact = new ContactVo();
+            long contactId = cur.getLong(cur.getColumnIndex(Phone.CONTACT_ID));
+            if(contactIdSet.contains(contactId)){
+            	continue;
+            }
             List<String> phoneList = new ArrayList<String>();
             String number = cur.getString(cur.getColumnIndex(Phone.NUMBER));
             String name = cur.getString(cur.getColumnIndex(Phone.DISPLAY_NAME));
             String photo_id = cur.getString(cur.getColumnIndex(Phone.PHOTO_ID));
             String sortKey = cur.getString(cur.getColumnIndex("sort_key"));
         
-            Log.i("contacts>>>", "name:" + name + "number:" + number + "photo:"+photo_id + "sort_key" + sortKey);
+            log.info("name:" + name + "number:" + number + "photo:"+photo_id + "sort_key" + sortKey+",contactId:"+contactId);
             boolean show = true;
             if (isPinYin(condition) ) {
                 if(containCn(sortKey)) {
@@ -334,9 +341,11 @@ public class ContactDao {
                 contact.sortKey = sortKey;
                 contact.phone = number;
                 phoneList.add(number);
-                contact.phoneList = phoneList;          
+                contact.phoneList = phoneList; 
+                contact.contactId = contactId;
                 add2List(searchList,contact);
             }
+            contactIdSet.add(contactId);
             cur.moveToNext();
         }
         cur.close();

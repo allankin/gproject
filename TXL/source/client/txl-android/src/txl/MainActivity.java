@@ -95,6 +95,8 @@ public class MainActivity extends TabActivity
     
     private void preprocess(int tabIndex){
     	boolean loaded = TxlSharedPreferences.getBoolean(me, "loaded", false);
+    	// HS_TODO: 暂不适合用引导页
+    	loaded = true;
         if(loaded){
             final View view = LayoutInflater.from(this).inflate(R.layout.activity_main, null);
             setContentView(view);
