@@ -12,13 +12,11 @@ import txl.call.adapter.CallRecordAdapter;
 import txl.call.dao.CallRecordDao;
 import txl.call.po.CallRecord;
 import txl.common.ActionBoard;
-import txl.common.DialWindow;
-import txl.common.TxlAlertDialog;
 import txl.common.ActionBoard.ActionContact;
+import txl.common.DialWindow;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
-import txl.util.IntentUtil;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,7 +25,6 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -66,7 +63,7 @@ public class CallRecordActivity extends TxlActivity
         tv.setText("通话记录");
         callRecordListView = (ListView)findViewById(R.id.call_list);
         
-        CallRecordDao.getCallRecord(me,callRecordMap);
+        CallRecordDao.getCallRecord(me,callRecordMap,null);
         
         callRecordAdapter = new CallRecordAdapter(this,callRecordMap);
         callRecordListView.setAdapter(callRecordAdapter);
@@ -90,7 +87,14 @@ public class CallRecordActivity extends TxlActivity
         //int height = getWindowManager().getDefaultDisplay().getHeight();   
         dw = new DialWindow(this, width, LayoutParams.WRAP_CONTENT);
         dw.getContentView().setFocusableInTouchMode(true);
-        
+        dw.setPhoneNumberChangeListener(new DialWindow.PhoneNumberChangeListener() {
+			@Override
+			public void change(String phoneNumber) {
+				callRecordMap.clear();
+				CallRecordDao.getCallRecord(me,callRecordMap,phoneNumber);
+				callRecordAdapter.notifyDataSetChanged();
+			}
+		});
         
         Config.tabHost.getTabWidget().getChildTabViewAt(0).setOnTouchListener(new OnTouchListener() {
 			

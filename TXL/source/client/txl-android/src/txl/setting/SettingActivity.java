@@ -202,6 +202,8 @@ public class SettingActivity extends TxlActivity {
 			}
 		}); 
 		
+		TextView checkUpgradeTextView = (TextView)findViewById(R.id.setting_check_upgrade_text);
+		checkUpgradeTextView.setText(checkUpgradeTextView.getText()+"(V"+me.getString(R.string.apkVersionName)+")");
 		TableRow checkUpgradeTr = (TableRow)findViewById(R.id.setting_check_upgrade);
 		checkUpgradeTr.setOnClickListener(new OnClickListener() {
 			@Override
@@ -209,6 +211,8 @@ public class SettingActivity extends TxlActivity {
 				ResourceManager.checkUpgrade(me,false);
 			}
 		}); 
+		
+		 
 		
 		
 		
@@ -236,7 +240,7 @@ public class SettingActivity extends TxlActivity {
             
         });*/
 		
-		TestManage.test();
+		//TestManage.test();
         
 	}
 	@Override

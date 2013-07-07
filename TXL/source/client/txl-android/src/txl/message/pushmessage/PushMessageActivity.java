@@ -123,6 +123,7 @@ public class PushMessageActivity extends TxlActivity {
 								int position, long id) {
 							PushMsg pushMsg = pushMsgList.get(position);
 							String pushMsgUrl = pushMsg.pushMsgUrl;
+							log.info("pushMsgUrl:"+pushMsgUrl);
 							if(pushMsgUrl!=null && pushMsgUrl.trim().length()>0){
 								Intent intent = new Intent(me,ClassfiedPushMsgDetailActivity.class);
 								intent.putExtra(TxlConstants.INTENT_BUNDLE_PUSHMSG_TITLE, pushMsg.content);

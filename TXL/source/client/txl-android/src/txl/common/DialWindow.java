@@ -10,7 +10,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.AudioManager;
 import android.media.ToneGenerator;
 import android.provider.Settings;
+import android.text.Editable;
 import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -37,8 +39,15 @@ public class DialWindow extends PopupWindow {
 	private static final int DIAL_TONE_STREAM_TYPE = AudioManager.STREAM_MUSIC;
 	private boolean isShow;
 
-	
+	private PhoneNumberChangeListener phoneNumberChangeListener;
 
+	public PhoneNumberChangeListener getPhoneNumberChangeListener() {
+		return phoneNumberChangeListener;
+	}
+	public void setPhoneNumberChangeListener(
+			PhoneNumberChangeListener phoneNumberChangeListener) {
+		this.phoneNumberChangeListener = phoneNumberChangeListener;
+	}
 	public DialWindow(TxlActivity context, int width, int height) {
 		super(context);
 		this.context = context;
@@ -71,6 +80,26 @@ public class DialWindow extends PopupWindow {
             }
         });  
 		
+		phoneNumberView.addTextChangedListener(new TextWatcher() {
+			
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if(phoneNumberChangeListener!=null){
+					phoneNumberChangeListener.change(s.toString());
+				}
+			}
+			
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count,
+					int after) {
+				
+			}
+			
+			@Override
+			public void afterTextChanged(Editable s) {
+				
+			}
+		});
 		ImageView stretchBtnView = (ImageView) layout
 				.findViewById(R.id.dial_stretchBtn);
 		stretchBtnView.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +166,6 @@ public class DialWindow extends PopupWindow {
 		}
 
 	}
-	
 	@Override
 	public void showAtLocation(View parent, int gravity, int x, int y) {
 		if(!isShow){
@@ -278,5 +306,9 @@ public class DialWindow extends PopupWindow {
 		phoneNumberView.onKeyDown(keyCode, event);
 		context.getHandler().sendMessage(Tool.genMessage(TxlConstants.MSG_SEARCH_CALL_RECORD));
 		
+	}
+	
+	public interface PhoneNumberChangeListener{
+		public void change(String phoneNumber);
 	}
 }

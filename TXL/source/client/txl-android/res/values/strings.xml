@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="apkVersionCode">11</integer>
-    <string name="apkVersionName">2.6</string>
+    <integer name="apkVersionCode">13</integer>
+    <string name="apkVersionName">2.8</string>
+    <string name="packageName">txl.activity</string>
     <string name="app_name">单位通信录</string>
     <string name="hello_world">Hello world!</string>
     

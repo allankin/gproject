@@ -4,6 +4,7 @@
     android:layout_width="fill_parent" android:layout_height="wrap_content" 
     android:paddingBottom="18dp" 
     android:background="@color/white"
+    android:descendantFocusability="blocksDescendants"
     >  
     <!-- <ImageView android:id="@+id/contact_photo"  
         android:layout_width="40dip" android:layout_height="40dip" />  --> 
@@ -12,9 +13,9 @@
         android:layout_height="wrap_content"  
         android:layout_alignParentLeft="true" 
         android:layout_marginRight="40dp"
-        android:textIsSelectable="true"
         style="@style/txl_pushmessage_detail_word_style"
-        android:background="@drawable/bg_inbox_normal"
+        android:background="@drawable/bg_msg_inbox_item"
+        android:focusable="false"
         />
     <TextView
         android:id="@+id/pushmsg_send_content"
@@ -22,9 +23,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="40dp"
-        android:textIsSelectable="true"
         style="@style/txl_pushmessage_detail_word_style"
-        android:background="@drawable/bg_outbox_sms_normal"
+        android:background="@drawable/bg_msg_outbox_item"
+        android:focusable="false"
         />
      
      

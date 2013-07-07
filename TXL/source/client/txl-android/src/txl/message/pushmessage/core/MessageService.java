@@ -42,7 +42,6 @@ public class MessageService extends Service
         if(client!=null){
             client.stop();
         }
-        log.info("MessageService...onDestroy ");
         if(client.channel!=null){
             if(!client.channel.socket().isClosed()){
                 try
@@ -71,6 +70,18 @@ public class MessageService extends Service
             }
         }
         needReConnect = false;
+        
+        
+        MessageManager.setConnected(false);
+        SendMessageDealer.getSingle(null).stop();
+        ReceiveMessageDealer.getSingle().stop();
+        synchronized (SendMessageQueue.queue) {
+        	SendMessageQueue.queue.notifyAll();
+		}
+        synchronized (ReceiveMessageQueue.queue) {
+        	ReceiveMessageQueue.queue.notifyAll();
+        }
+        
         log.info("  MessageService  onDestroy ...");		
         super.onDestroy();
     }

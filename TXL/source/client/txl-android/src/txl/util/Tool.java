@@ -8,9 +8,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import txl.TxlActivity;
+import txl.activity.R;
 import txl.common.po.Account;
 import txl.config.Config;
 import txl.config.TxlConstants;
+import txl.log.TxLogger;
 import txl.message.pushmessage.core.MessageManager;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -20,9 +22,12 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Message;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 
 
@@ -32,7 +37,9 @@ import android.view.inputmethod.InputMethodManager;
  * 
  */
 public class Tool {
-
+	
+	public static TxLogger log = new TxLogger(Tool.class, TxlConstants.MODULE_ID_BASE);
+	
 	public static boolean isServiceRunning(Class<? extends Service> serviceClass, Context context) {
 		ActivityManager mActivityManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
 		List<RunningServiceInfo> serviceList = mActivityManager.getRunningServices(Integer.MAX_VALUE);
@@ -269,5 +276,18 @@ public class Tool {
     
     public static void hideSoftInputFromWindow(Activity act){
         ((InputMethodManager)act.getSystemService(android.content.Context.INPUT_METHOD_SERVICE)).hideSoftInputFromWindow(act.getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+    
+    public static PackageInfo getPackageInfo(Context ctx){
+    	List<PackageInfo> pkgInfos = ctx.getPackageManager().getInstalledPackages(PackageManager.GET_ACTIVITIES);
+        for(PackageInfo info : pkgInfos) {
+        	if(info.packageName.equals(ctx.getResources().getString(R.string.packageName))){
+        		log.info(info.packageName);
+        		return info;
+        	}
+           // tvStat.append(info.packageName + ":" + info.firstInstallTime);
+            //info.lastUpdateTime,最后更新时间
+        }
+        return null;
     }
 }

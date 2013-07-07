@@ -22,13 +22,17 @@ public class CallRecordDao
 {
     private static SimpleDateFormat sfd = new SimpleDateFormat("MM/dd HH:mm");
     
-    public static void getCallRecord(Context context,Map<Integer,CallRecord> callRecordMap)
+    public static void getCallRecord(Context context,Map<Integer,CallRecord> callRecordMap,String phoneNumber)
     {
         
         ContentResolver cr = context.getContentResolver();
+        String selection = null;
+        if(phoneNumber!=null){
+        	selection = CallLog.Calls.NUMBER+" like '%"+phoneNumber+"%' ";
+        }
         final Cursor cursor = cr.query(CallLog.Calls.CONTENT_URI, new String[]
                                        { CallLog.Calls.NUMBER, CallLog.Calls.CACHED_NAME, CallLog.Calls.TYPE,
-                                               CallLog.Calls.DATE,CallLog.Calls.DURATION }, null, null,
+                                               CallLog.Calls.DATE,CallLog.Calls.DURATION }, selection, null,
                                        CallLog.Calls.DEFAULT_SORT_ORDER);
         
         Map<String,Integer> phoneMap = new HashMap<String,Integer>();
