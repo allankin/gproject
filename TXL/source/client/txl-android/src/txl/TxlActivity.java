@@ -2,14 +2,15 @@ package txl;
 
 import txl.activity.R;
 import txl.call.CallRecordActivity;
+import txl.common.TxlAlertDialog;
 import txl.common.TxlToast;
+import txl.common.TxlAlertDialog.DialogInvoker;
 import txl.config.Config;
-import txl.config.TxlConstants;
 import txl.contact.ContactActivity;
-import txl.log.TxLogger;
 import txl.message.MessageActivity;
 import txl.setting.SettingActivity;
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,8 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -36,6 +39,23 @@ public abstract class TxlActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		
     }
+	
+	protected void renderHeader() {
+		View view = findViewById(R.id.btn_back);
+		if(view!=null){
+			view.setVisibility(View.VISIBLE);
+			view.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					boolean flag = TxlActivity.this.isTaskRoot();
+			        if(!flag){
+			        	TxlActivity.this.onBackPressed();
+			        }
+				}
+			});
+		}
+	}
+	
 	private long exitTime = 0;
 	public boolean onKeyUp(int keyCode, KeyEvent event)
     {
@@ -85,24 +105,38 @@ public abstract class TxlActivity extends Activity {
     {
 		Class clazz = this.getClass();    
 		if(clazz.isAssignableFrom(CallRecordActivity.class)||clazz.isAssignableFrom(ContactActivity.class)){
-			getMenuInflater().inflate(R.menu.menu_common, menu);
-    		int size = menu.size();
-    		for(int i=0;i<size;i++){
-    			MenuItem item = menu.getItem(i);
-    			if(item.getItemId() == R.id.menu_setting){
-    				item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
-						@Override
-						public boolean onMenuItemClick(MenuItem item) {
-							Config.tabHost.setCurrentTab(3);
-							return false;
-						}
-					});
-    			}
-    		}
+			this.initMenu(menu);
     	} 
         return true;
     }
 	
+	protected void initMenu(Menu menu){
+		getMenuInflater().inflate(R.menu.menu_common, menu);
+		int size = menu.size();
+		for(int i=0;i<size;i++){
+			MenuItem item = menu.getItem(i);
+			if(item.getItemId() == R.id.menu_quit){
+				item.setOnMenuItemClickListener(new OnMenuItemClickListener() {
+					@Override
+					public boolean onMenuItemClick(MenuItem item) {
+						//Config.tabHost.setCurrentTab(3);
+						TxlAlertDialog.show(TxlActivity.this, "确定退出吗?", "确定,取消", new DialogInvoker()
+		                {
+		                    @Override
+		                    public void doInvoke(DialogInterface dialog, int btndex)
+		                    {   
+		                        if(btndex == TxlAlertDialog.FIRST_BTN_INDEX){
+		                        	TxlActivity.this.finish();
+		                        	android.os.Process.killProcess(android.os.Process.myPid());
+		                        }
+		                    }
+		                });
+						return false;
+					}
+				});
+			}
+		}
+	}
 	
 	
 }

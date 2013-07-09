@@ -63,7 +63,7 @@ public class DepartmentTreeActivity extends TxlActivity
         }
          
         new DepartmentQueryTask(me).execute();
-
+        super.renderHeader();
     }
     
     private void loadDepartment(){

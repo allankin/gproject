@@ -150,6 +150,8 @@ private final TxLogger  log = new TxLogger(SyncSettingActivity.class, TxlConstan
 		if(syncShareToggle.isChecked()){
 			syncShareLayout.setBackgroundResource(R.drawable.bg_base_list_top);
 		}
+		
+		super.renderHeader();
 	
 	}
 	

@@ -64,13 +64,13 @@ public class SettingActivity extends TxlActivity {
 				TextView loginStatusView = (TextView)findViewById(R.id.setting_login_label);
 				if(loginStatusView.getText().equals("登陆")){
 					LoginDialog.getInstance().show(me);
-				}else if(loginStatusView.getText().equals("退出")){
-					TxlAlertDialog.show(me, "确定退出吗？", "确定,取消", new TxlAlertDialog.DialogInvoker(){
+				}else if(loginStatusView.getText().equals("退出登录")){
+					TxlAlertDialog.show(me, "确定退出登录吗？", "确定,取消", new TxlAlertDialog.DialogInvoker(){
 						
 						@Override
 						public void doInvoke(DialogInterface dialog, int btndex) {
 							if(btndex == TxlAlertDialog.FIRST_BTN_INDEX){
-								WebLoadingTipDialog.getInstance(me).show("正在退出..."); 
+								WebLoadingTipDialog.getInstance(me).show("正在退出登录..."); 
 								new Thread(new Runnable() {
 									public void run() {
 										try {
@@ -255,7 +255,7 @@ public class SettingActivity extends TxlActivity {
             	TextView loginStatusView = (TextView)findViewById(R.id.setting_login_label);
             	ImageView stateImage = (ImageView)findViewById(R.id.setting_state_image);
             	stateImage.setImageResource(R.drawable.state_online);
-            	loginStatusView.setText("退出");
+            	loginStatusView.setText("退出登录");
             }else if(msg.what == TxlConstants.MSG_LOGIN_OFFLINE_STATUS){
             	TextView loginStatusView = (TextView)findViewById(R.id.setting_login_label);
             	ImageView stateImage = (ImageView)findViewById(R.id.setting_state_image);

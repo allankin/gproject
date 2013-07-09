@@ -8,6 +8,8 @@ import java.util.Map;
 import txl.Handlable;
 import txl.TxlActivity;
 import txl.activity.R;
+import txl.common.TxlAlertDialog;
+import txl.common.TxlAlertDialog.DialogInvoker;
 import txl.config.Config;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
@@ -20,6 +22,7 @@ import txl.message.sms.adapter.SmsListAdapter;
 import txl.message.sms.dao.SmsDao;
 import txl.message.sms.po.SmsRecord;
 import txl.util.IntentUtil;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
@@ -84,7 +87,7 @@ public class MessageActivity extends TxlActivity implements Handlable {
     
     /************************************ PUSHMessage 模块变量  end ********************************************************/
     
-    
+    private RadioGroup messageType;
     private LinearLayout messageListViewPartsContainer;
     private Spinner messageTypeSpinner ;
     
@@ -128,7 +131,7 @@ public class MessageActivity extends TxlActivity implements Handlable {
         */
         messageListViewPartsContainer = (LinearLayout)findViewById(R.id.messageListViewPartsContainer);
         
-        RadioGroup messageType = (RadioGroup)findViewById(R.id.message_type);
+        messageType = (RadioGroup)findViewById(R.id.message_type);
         messageType.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -244,17 +247,31 @@ public class MessageActivity extends TxlActivity implements Handlable {
 			pushMsgListAdapter.notifyDataSetChanged();
 		}
 	}
+	
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu){
+		log.info("messageType.getCheckedRadioButtonId: "+messageType.getCheckedRadioButtonId());
+		menu.clear();
+		if(messageType.getCheckedRadioButtonId() == R.id.sms){
+			getMenuInflater().inflate(R.menu.menu_sms, menu);
+			int size = menu.size();
+			TxlMessageOnMenuItemClickListener listener = new TxlMessageOnMenuItemClickListener();
+			for(int i=0;i<size;i++){
+				MenuItem item = menu.getItem(i);
+				item.setOnMenuItemClickListener(listener);
+			}
+			
+		}else{
+			this.initMenu(menu);
+		}
+		
+		return true;
+	}
 	@Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
-		getMenuInflater().inflate(R.menu.menu_sms, menu);
-		int size = menu.size();
-		TxlMessageOnMenuItemClickListener listener = new TxlMessageOnMenuItemClickListener();
-		for(int i=0;i<size;i++){
-			MenuItem item = menu.getItem(i);
-			item.setOnMenuItemClickListener(listener);
-		}
-		 
+		
+		
         return true;
     }
 	
@@ -262,7 +279,6 @@ public class MessageActivity extends TxlActivity implements Handlable {
 
 		@Override
 		public boolean onMenuItemClick(MenuItem item) {
-			
 			if(item.getItemId() == R.id.menu_sms_all){
 				smsListAdapter.smsRecordMap = smsRecordMap;
 				smsListAdapter.notifyDataSetChanged();
@@ -272,9 +288,21 @@ public class MessageActivity extends TxlActivity implements Handlable {
 			}else if(item.getItemId() == R.id.menu_sms_draft){
 				smsListAdapter.smsRecordMap = smsDraftRecordMap;
 				smsListAdapter.notifyDataSetChanged();
-			}else if(item.getItemId() == R.id.menu_setting){
-				Config.tabHost.setCurrentTab(3);
+			}else if(item.getItemId() == R.id.menu_quit){
+				//Config.tabHost.setCurrentTab(3);
+				TxlAlertDialog.show(me, "确定退出吗?", "确定,取消", new DialogInvoker()
+                {
+                    @Override
+                    public void doInvoke(DialogInterface dialog, int btndex)
+                    {   
+                        if(btndex == TxlAlertDialog.FIRST_BTN_INDEX){
+                        	me.finish();
+                        	android.os.Process.killProcess(android.os.Process.myPid());
+                        }
+                    }
+                });
 			}
+			
 			return false;
 		}
 		
@@ -344,5 +372,6 @@ public class MessageActivity extends TxlActivity implements Handlable {
     public Handler getHandler()
     {
         return handler;
-    } 
+    }
+ 
 }

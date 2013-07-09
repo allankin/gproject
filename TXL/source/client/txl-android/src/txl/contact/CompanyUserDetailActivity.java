@@ -96,6 +96,8 @@ private final TxLogger  log = new TxLogger(CompanyUserDetailActivity.class, TxlC
 			    
 			}
 		}
+		
+		super.renderHeader();
 		 
 	}
 	

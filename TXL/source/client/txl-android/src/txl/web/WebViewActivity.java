@@ -47,7 +47,7 @@ public class WebViewActivity extends TxlActivity {
 				wv.loadUrl(url);
 			}
 		}
-		 
+		super.renderHeader(); 
 	}
 	
 	

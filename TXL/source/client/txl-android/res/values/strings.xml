@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <integer name="apkVersionCode">13</integer>
-    <string name="apkVersionName">2.8</string>
+    <integer name="apkVersionCode">14</integer>
+    <string name="apkVersionName">2.9</string>
     <string name="packageName">txl.activity</string>
     <string name="app_name">单位通信录</string>
     <string name="hello_world">Hello world!</string>
@@ -45,7 +45,7 @@
 	
 	
 	<string name="menu_setting">设置</string>
-	
+	<string name="menu_quit">退出</string>
 	<string name="menu_sms_all">所有</string>
 	<string name="menu_sms_unread">未读</string>
 	<string name="menu_sms_draft">草稿</string>

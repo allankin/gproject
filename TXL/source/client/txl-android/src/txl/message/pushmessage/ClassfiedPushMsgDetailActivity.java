@@ -44,7 +44,7 @@ public class ClassfiedPushMsgDetailActivity extends TxlActivity {
 				wv.loadUrl(url);
 			}
 		}
-		 
+		super.renderHeader(); 
 	}
 	
 	

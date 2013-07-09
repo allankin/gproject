@@ -86,6 +86,7 @@ private final TxLogger  log = new TxLogger(ShareUserActivity.class, TxlConstants
 			}
         	
 		});
+		super.renderHeader();
 		 
 	}
 	private void query(final int dirId){

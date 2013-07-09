@@ -3,13 +3,14 @@ package txl.call;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import txl.TxlActivity;
 import txl.activity.R;
 import txl.call.po.CallRecord;
 import txl.config.Config;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.CallLog;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-public class CallRecordDetailActivity extends Activity {
+public class CallRecordDetailActivity extends TxlActivity {
 	
 	
 	private Context                       mContext        = null;
@@ -66,6 +67,7 @@ public class CallRecordDetailActivity extends Activity {
 		     mListView.setAdapter(mAdapter);
 	    	 
 	     }
+	     super.renderHeader();
 	     
 	}
 	
@@ -154,6 +156,18 @@ public class CallRecordDetailActivity extends Activity {
         }
 
     }
+
+
+
+
+
+
+
+	@Override
+	public Handler getHandler() {
+		// TODO Auto-generated method stub
+		return null;
+	}
     
    
 	

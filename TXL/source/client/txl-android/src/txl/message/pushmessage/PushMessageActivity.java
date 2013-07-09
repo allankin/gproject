@@ -205,6 +205,8 @@ public class PushMessageActivity extends TxlActivity {
 		IntentFilter filter = new IntentFilter(
 				TxlConstants.ACTION_MESSAGE_RECEIVED);
 		me.registerReceiver(mr, filter);
+		
+		super.renderHeader();
 	}
 
 	private void onFocusChange(final EditText pushMsgInput, boolean hasFocus) {
