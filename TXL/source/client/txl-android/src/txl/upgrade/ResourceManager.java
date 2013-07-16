@@ -348,73 +348,82 @@ public class ResourceManager
                 String filePath = "";
                 try
                 {
+                    int hasDownloadSize = 0;
+                    
+                    String saveFile = Config.getInstance().getApkDirFileString(fileName);
+                    File apkFile = new File(saveFile);
+                    
+                    if (apkFile!=null && apkFile.exists())
+                    {
+                        apkFile.delete();
+                        /*
+                         * HS_TODO: 断点续传需要服务器支持
+                        FileInputStream fis = new FileInputStream(apkFile);
+                        hasDownloadSize = fis.available();
+                        log.info(fileName+" has downloaded size: "+hasDownloadSize);
+                        fis.close();
+                        */
+                    }
+                    
                 	log.info("begin connect  upgrade url  ...");
                     URL url = new URL(res.url);
                     url.getFile();
                     HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                     conn.connect();
-                    log.info("upgrade url connected .... ResponseCode: "+conn.getResponseCode());
-                    Tool.sendUpgradeMessage(ctx,TxlConstants.MSG_DOWNLOADING_RES_SHOW_PROCESSBAR);
                     if (conn.getResponseCode() == 200)
                     {
-
-                        final int fileSize = conn.getContentLength();//
-                        int hasDownloadSize = 0;
-                        
-                        String saveFile = Config.getInstance().getApkDirFileString(fileName);
-                        File apkFile = new File(saveFile);
-                        
-                        if (apkFile!=null && apkFile.exists())
+                        final int fileSize = conn.getContentLength(); 
+                        conn = (HttpURLConnection) url.openConnection();
+                        conn.setRequestProperty("Range", "bytes=" + hasDownloadSize + "-"+(fileSize-1));
+                        log.info("bytes="+hasDownloadSize + "-"+(fileSize-1));
+                        conn.connect();
+                        log.info("upgrade url connected .... ResponseCode: "+conn.getResponseCode());
+                        Tool.sendUpgradeMessage(ctx,TxlConstants.MSG_DOWNLOADING_RES_SHOW_PROCESSBAR);
+                        if (conn.getResponseCode() == 200 || conn.getResponseCode() == 206)
                         {
-                            FileInputStream fis = new FileInputStream(apkFile);
-                            hasDownloadSize = fis.available();
-                            fis.close();
-                        }
-
-                        if (hasDownloadSize < fileSize)
-                        {
-                            int byteSize = 10240;
-                            byte[] buffer = new byte[byteSize];
-                            int offset = 0;
-                            int startPos = hasDownloadSize > 0 ? hasDownloadSize - 1 : hasDownloadSize;
-
-                            if(Environment.getExternalStorageState().equals(  
-                                                                            Environment.MEDIA_MOUNTED)){
-                            	File file = new File(saveFile);
-                            	if(file.exists()){
-                            		file.delete();
-                            	}
-                                RandomAccessFile threadfile = new RandomAccessFile(saveFile, "rwd");
-                                threadfile.seek(startPos);
-                                InputStream inStream = new BufferedInputStream(url.openStream());
-                                int downFlag = 0;
-                                while ((offset = inStream.read(buffer)) != -1)
-                                {
-                                    hasDownloadSize += offset;
-                                    threadfile.write(buffer, 0, offset);
-                                    Thread.currentThread().sleep(50);
-                                    int progress = Math.round(hasDownloadSize/Float.valueOf(fileSize)*100);
-                                    Tool.sendUpgradeMessageWithObj(ctx,TxlConstants.MSG_DOWNLOADING_RES,progress+"%");
-                                    log.info("hasDownloadSize:"+hasDownloadSize);
-                                    /*int _downFlag = progress/10;
-                                    if(_downFlag>downFlag){
-                                    	Tool.sendUpgradeMessageWithObj(ctx,Config.DOWNLOADING_RES,progress+"%");
-                                    	downFlag = _downFlag;
-                                    }*/
-                                    
+                            if (hasDownloadSize < fileSize)
+                            {
+                                int byteSize = 10240;
+                                byte[] buffer = new byte[byteSize];
+                                int offset = 0;
+                                //int startPos = hasDownloadSize > 0 ? hasDownloadSize - 1 : hasDownloadSize;
+                                int startPos = hasDownloadSize;
+                                if(Environment.getExternalStorageState().equals(  
+                                                                                Environment.MEDIA_MOUNTED)){
+                                     
+                                    RandomAccessFile threadfile = new RandomAccessFile(saveFile, "rwd");
+                                    log.info(" file seek to position: "+startPos);
+                                    threadfile.seek(startPos);
+                                    InputStream inStream = new BufferedInputStream(url.openStream());
+                                    int downFlag = 0;
+                                    while ((offset = inStream.read(buffer)) != -1)
+                                    {
+                                        hasDownloadSize += offset;
+                                        threadfile.write(buffer, 0, offset);
+                                        Thread.currentThread().sleep(50);
+                                        int progress = Math.round(hasDownloadSize/Float.valueOf(fileSize)*100);
+                                        Tool.sendUpgradeMessageWithObj(ctx,TxlConstants.MSG_DOWNLOADING_RES,progress+"%");
+                                        log.info("hasDownloadSize:"+hasDownloadSize);
+                                        /*int _downFlag = progress/10;
+                                        if(_downFlag>downFlag){
+                                            Tool.sendUpgradeMessageWithObj(ctx,Config.DOWNLOADING_RES,progress+"%");
+                                            downFlag = _downFlag;
+                                        }*/
+                                        
+                                    }
+                                    threadfile.close();
+                                    inStream.close();
                                 }
-                                threadfile.close();
-                                inStream.close();
+                                
+
                             }
-                            
-
+                            if (hasDownloadSize >= fileSize)
+                            {
+                                filePath = saveFile;
+                            }
                         }
-                        if (hasDownloadSize >= fileSize)
-                        {
-                            filePath = saveFile;
-                        }
-
                     }
+                    
                     if(filePath.length()>0){
                     	Tool.sendUpgradeMessageWithObj(ctx,TxlConstants.MSG_DOWNLOADING_RES,"100%");
                     	if("apk".equals(res.type)){
