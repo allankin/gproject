@@ -12,6 +12,8 @@
            android:layout_width="match_parent"
            android:layout_height="fill_parent" 
            android:divider="@null"
+           android:transcriptMode="normal"
+           android:stackFromBottom="true"
            style="@style/txl_list"
            >
  

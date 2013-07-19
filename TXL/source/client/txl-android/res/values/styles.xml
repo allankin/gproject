@@ -168,8 +168,8 @@
     <style name="header_button_back" parent="@android:style/TextAppearance.Widget.Button">  
         <item name="android:textSize">20sp</item>  
         <item name="android:textColor">@color/header_button_text_color</item>  
-        <item name="android:layout_height">39.3dp</item>  
-        <item name="android:layout_width">60dp</item>  
+        <item name="android:layout_height">wrap_content</item>  
+        <item name="android:layout_width">wrap_content</item>  
         <item name="android:background">@drawable/bg_header_back</item>  
         <item name="android:text">返回</item>  
         <item name="android:layout_marginLeft">8dip</item>  
