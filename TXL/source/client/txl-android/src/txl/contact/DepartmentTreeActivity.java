@@ -5,13 +5,11 @@ import java.util.List;
 
 import txl.TxlActivity;
 import txl.activity.R;
-import txl.common.TxlToast;
 import txl.config.TxlConstants;
 import txl.contact.dao.CommDirDao;
 import txl.contact.po.Department;
 import txl.contact.task.DepartmentQueryTask;
 import txl.log.TxLogger;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +21,7 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,7 +40,7 @@ import android.widget.TextView;
 public class DepartmentTreeActivity extends TxlActivity
 {
     private final TxLogger log = new TxLogger(DepartmentTreeActivity.class, TxlConstants.MODULE_ID_CONTACT);
-    private ArrayList<Department> mPdfOutlinesCount = new ArrayList<Department>();
+    private ArrayList<Department> departs = new ArrayList<Department>();
     private TreeViewAdapter       treeViewAdapter   = null;
 
     private DepartmentTreeActivity              me                = this;
@@ -69,10 +68,21 @@ public class DepartmentTreeActivity extends TxlActivity
     private void loadDepartment(){
     	Department topDepart = CommDirDao.getSingle(me).getTopDepartmentTree();
     	if(topDepart!=null){
-    	    mPdfOutlinesCount.add(topDepart);
+    		int i =1 ;
+    		/*while(i<=3){
+    			departs.add(topDepart);
+    			ArrayList<Department> departs = topDepart.childList;
+    			if(departs.size()>0){
+    				for(Department depart:departs){
+    					departs.add(depart);
+    				}
+    			}
+    		}*/
+    		//departs.add(topDepart);
+    		foldDepart(0,topDepart);
     	}
         
-        treeViewAdapter = new TreeViewAdapter(this, R.layout.contact_department_tree_item, mPdfOutlinesCount);
+        treeViewAdapter = new TreeViewAdapter(this, R.layout.contact_department_tree_item, departs);
         ListView listView = (ListView) findViewById(R.id.department_tree_list);
         listView.setAdapter(treeViewAdapter);
         registerForContextMenu(listView);
@@ -84,19 +94,19 @@ public class DepartmentTreeActivity extends TxlActivity
             public void onItemClick(AdapterView<?> parent, View view, int position, long id)
             {
                 Log.i("TreeView", "position:" + position);
-                if (!mPdfOutlinesCount.get(position).mhasChild)
+                if (!departs.get(position).mhasChild)
                 {
                     return;
                 }
-                Department depart = mPdfOutlinesCount.get(position);
+                Department depart = departs.get(position);
                 if (depart.expanded)
                 {
                     depart.expanded = false;
                     ArrayList<Department> temp = new ArrayList<Department>();
 
-                    for (int i = position + 1; i < mPdfOutlinesCount.size(); i++)
+                    for (int i = position + 1; i < departs.size(); i++)
                     {
-                        Department _depart = mPdfOutlinesCount.get(i);
+                        Department _depart = departs.get(i);
                         if (depart.level >= _depart.level)
                         {
                             break;
@@ -104,7 +114,7 @@ public class DepartmentTreeActivity extends TxlActivity
                         temp.add(_depart);
                     }
 
-                    mPdfOutlinesCount.removeAll(temp);
+                    departs.removeAll(temp);
 
                 } else
                 {
@@ -116,7 +126,7 @@ public class DepartmentTreeActivity extends TxlActivity
                     {
                         element.level = nextLevel;
                         element.expanded = false;
-                        mPdfOutlinesCount.add(position + 1, element);
+                        departs.add(position + 1, element);
 
                     }
                 }
@@ -125,6 +135,21 @@ public class DepartmentTreeActivity extends TxlActivity
         });
     }
     
+    
+    public void foldDepart(int level,Department topDepart){
+    	ArrayList<Department> childs = topDepart.childList;
+    	topDepart.expanded = true;
+    	departs.add(topDepart);
+		if(childs.size()>0){
+			for(Department depart:childs){
+				if(depart!=null){
+					foldDepart(3,depart);
+				}
+			}
+		}else{
+			//departs.add(topDepart);
+		}
+    }
     public boolean onKeyUp(int keyCode, KeyEvent event)
     {
         
@@ -187,7 +212,9 @@ public class DepartmentTreeActivity extends TxlActivity
             }*/
 
             final Department depart = mfilelist.get(position);
-            holder.text.setOnLongClickListener(new OnLongClickListener()
+            
+            
+            /*holder.text.setOnLongClickListener(new OnLongClickListener()
             {
                 @Override
                 public boolean onLongClick(View v)
@@ -202,7 +229,19 @@ public class DepartmentTreeActivity extends TxlActivity
                         finish();
                         return false;
                 }
-            });
+            });*/
+            
+            holder.text.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					Intent intent = new Intent(me,ContactActivity.class);
+                    intent.putExtra(TxlConstants.INTENT_BUNDLE_DEPART, depart);
+                    setResult(TxlConstants.REQUEST_CODE_SELECT_DEPARTMENT, intent);
+                    log.info("onLongClick....  depId: "+depart.depId+", depName: "+depart.depName);
+                    finish();
+				}
+			});
+            
             Log.i("TreeView", "getView :  position: "+position);
             int level = depart.level;
             holder.icon.setPadding(25 * (level + 1), holder.icon.getPaddingTop(), 0, holder.icon.getPaddingBottom());
