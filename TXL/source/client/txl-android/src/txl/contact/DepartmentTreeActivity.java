@@ -245,7 +245,11 @@ public class DepartmentTreeActivity extends TxlActivity
             Log.i("TreeView", "getView :  position: "+position);
             int level = depart.level;
             holder.icon.setPadding(25 * (level + 1), holder.icon.getPaddingTop(), 0, holder.icon.getPaddingBottom());
-            holder.text.setText(depart.depName);
+            String text = depart.depName;
+            if(depart.employeeNum>0){
+            	text += "  ("+depart.employeeNum+")";
+            }
+            holder.text.setText(text);
             if (depart.mhasChild && (depart.expanded == false))
             {
                 holder.icon.setImageBitmap(mIconCollapse);

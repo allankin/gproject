@@ -284,7 +284,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 	 * @return
 	 */
 	public Department getTopDepartmentTree() {
-		String sql = "select dep_id,dep_name,dep_parent_id from txl_department where dep_parent_id=0 ";
+		String sql = "select dep_id,dep_name,dep_parent_id,employee_num from txl_department where dep_parent_id=0 ";
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		Cursor cursor = db.rawQuery(sql, null);
 		Department depart = null;
@@ -293,6 +293,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 			depart.depId = cursor.getInt(0);
 			depart.depName = cursor.getString(1);
 			depart.depParentId = cursor.getInt(2);
+			depart.employeeNum = cursor.getInt(3);
 			log.info(" top department,  depId : " + depart.depId
 					+ " ,  depName: " + depart.depName + ",   parent_id: "
 					+ depart.depParentId);
@@ -312,7 +313,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 	 */
 	public void recursiveTraversalSubDeparts(Department depart,
 			SQLiteDatabase db) {
-		String sql = "select dep_id,dep_name,dep_parent_id from txl_department where dep_parent_id="
+		String sql = "select dep_id,dep_name,dep_parent_id,employee_num from txl_department where dep_parent_id="
 				+ depart.depId;
 		Cursor cursor = db.rawQuery(sql, null);
 		// ArrayList<Department> departmentList = new ArrayList<Department>();
@@ -323,11 +324,13 @@ public class CommDirDao extends BaseDao implements CacheAble{
 				subDepart.depId = cursor.getInt(0);
 				subDepart.depName = cursor.getString(1);
 				subDepart.depParentId = cursor.getInt(2);
+				subDepart.employeeNum = cursor.getInt(3);
 				// departmentList.add(subDepart);
 				depart.addChild(subDepart);
 				log.info(" subDepart ,  depId : " + subDepart.depId
 						+ " ,  depName: " + subDepart.depName
-						+ ",   parent_id: " + subDepart.depParentId);
+						+ ",   parent_id: " + subDepart.depParentId
+						+ ",   employeeNum: " + subDepart.employeeNum);
 			}
 			// depart.childList= departmentList;
 			cursor.close();
@@ -350,6 +353,7 @@ public class CommDirDao extends BaseDao implements CacheAble{
 			cv.put("dep_id", depart.depId);
 			cv.put("dep_name", depart.depName);
 			cv.put("dep_parent_id", depart.depParentId);
+			cv.put("employee_num", depart.employeeNum);
 			cv.put("comp_id", depart.compId);
 			db.insert("txl_department", null, cv);
 		}

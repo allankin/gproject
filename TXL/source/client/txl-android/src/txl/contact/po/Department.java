@@ -18,6 +18,7 @@ public class Department implements Serializable
     public String depName;
     public int depParentId;
     public int compId;
+    public int employeeNum;
     
     
     

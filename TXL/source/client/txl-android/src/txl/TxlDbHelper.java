@@ -83,6 +83,7 @@ public class TxlDbHelper extends SQLiteOpenHelper
         db.execSQL("CREATE TABLE  txl_department (dep_id integer primary key," +
         		"dep_name  varchar(20)," +
         		"dep_parent_id  integer," +
+        		"employee_num integer, " +
         		"comp_id integer" +
         		")");
         

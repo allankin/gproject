@@ -46,6 +46,7 @@ public class DepartmentQueryTask extends NetworkAsyncTask<Void,Void,List<Departm
 						depart.depId = departJson.getInt("depId");
 						depart.depName = departJson.getString("depName");
 						depart.depParentId = departJson.getInt("depParentId");
+						depart.employeeNum = departJson.optInt("employeeNum");
 						departs.add(depart);
 					}
 					/*查询、同步 操作，均保存*/

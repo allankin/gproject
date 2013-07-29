@@ -164,7 +164,7 @@ public class TxlConstants
     public static String SYNC_ACTION_PERSONAL_FETCH_CONTACTID_URL = "http://"+TXLSHARE_HOST+":"+WEB_PORT+"/txlshare-manage/syncPhoneCommDir/fetchContactIds.txl";
     
     public static final String DB_NAME = "txl";
-    public static final int DB_VERSION = 12;
+    public static final int DB_VERSION = 13;
     
     
     public static final String INTENT_BUNDLE_HEADER_TITLE = "headerTitle";
