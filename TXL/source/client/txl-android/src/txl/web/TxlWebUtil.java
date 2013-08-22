@@ -13,7 +13,7 @@ public class TxlWebUtil {
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setLayoutAlgorithm(LayoutAlgorithm.NORMAL);
         // Set the nav dump for HTC
-        settings.setNavDump(true);
+        //settings.setNavDump(true);
         // Enable database
         settings.setDatabaseEnabled(true);
         String databasePath = ctx.getDir("database", Context.MODE_PRIVATE).getPath();

@@ -79,6 +79,9 @@
         
         <activity android:name="txl.web.WebViewActivity"/>
         
+        <activity android:name="txl.share.weixin.WeixinShareActivity"/>
+        
+        
         
         <service android:name="txl.message.pushmessage.core.MessageService">
 		   <intent-filter>

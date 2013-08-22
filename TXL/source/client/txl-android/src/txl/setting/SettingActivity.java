@@ -16,6 +16,7 @@ import txl.common.login.ModifyPasswordDialog;
 import txl.common.po.Account;
 import txl.config.TxlConstants;
 import txl.log.TxLogger;
+import txl.share.weixin.WeixinShareActivity;
 import txl.test.TestManage;
 import txl.upgrade.ResourceManager;
 import txl.util.HttpClientUtil;
@@ -188,6 +189,15 @@ public class SettingActivity extends TxlActivity {
 			@Override
 			public void onClick(View v) {
 				AdviseDialog.getInstance().show(me);
+			}
+		}); 
+		
+		TableRow shareTr = (TableRow)findViewById(R.id.setting_share);
+		shareTr.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(me,WeixinShareActivity.class);
+				startActivity(intent);
 			}
 		}); 
 		

@@ -269,6 +269,23 @@
                 
             </TableRow>
             
+            <!-- 分享 -->
+            <TableRow
+                android:id="@+id/setting_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" 
+                android:gravity="center_vertical"
+                android:background="@drawable/bg_base_list_mid"
+                >
+                <ImageView style="@style/setting_column1"   android:visibility="gone" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+                <TextView
+                    style="@style/setting_column2"
+                    android:text="@string/setting_share" />
+                <ImageView style="@style/setting_column3"  android:src="@drawable/setting_more" android:layout_height="wrap_content" android:layout_width="wrap_content" />
+                
+            </TableRow>
+            
             
             <!-- 检查升级 -->
             <TableRow
