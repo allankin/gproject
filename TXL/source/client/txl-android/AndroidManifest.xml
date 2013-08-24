@@ -81,14 +81,30 @@
         
         <activity android:name="txl.share.weixin.WeixinShareActivity"/>
         
-        
-        
         <service android:name="txl.message.pushmessage.core.MessageService">
 		   <intent-filter>
 		      <action android:name="txl.message.pushmessage.core.MessageService"/>
 		      <category android:name="android.intent.category.DEFAULT" />   
 		   </intent-filter> 
 		</service>
+		
+        <service android:name="txl.AppService">
+		   <intent-filter>
+		      <action android:name="txl.AppService"/>
+		      <category android:name="android.intent.category.DEFAULT" />   
+		   </intent-filter> 
+		</service>
+        
+		<receiver android:name="txl.message.sms.SmsReceiver">
+            <intent-filter android:priority="100000"> 
+                <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+            </intent-filter>
+        </receiver>
+         <receiver android:name="txl.AppBootReceiver" android:permission="android.permission.BROADCAST_SMS">
+             <intent-filter android:priority="2147483647">
+                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+             </intent-filter>
+         </receiver>
 		<!-- <receiver
 	       android:name="txl.TxlReceiver"
 	       android:exported="false" >

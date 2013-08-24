@@ -50,6 +50,9 @@ public class SplashActivity extends TxlActivity
     {
         super.onCreate(savedInstanceState);
         
+        CrashHandler crashHandler = CrashHandler.getInstance();  
+        crashHandler.init(getApplicationContext()); 
+        
         setContentView(R.layout.splashlanch);
         /*设置异常处理类*/
         //CrashHandler.getInstance().init(this);

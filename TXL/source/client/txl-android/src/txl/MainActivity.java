@@ -15,7 +15,10 @@ import txl.message.MessageActivity;
 import txl.message.pushmessage.PushMessageActivity;
 import txl.message.pushmessage.core.MessageManager;
 import txl.message.pushmessage.dao.PushMsgDao;
+import txl.message.sms.SmsReceiver;
 import txl.setting.SettingActivity;
+import txl.test.sidecom.Main;
+import txl.util.Tool;
 import txl.util.TxlSharedPreferences;
 import android.app.TabActivity;
 import android.content.Context;
@@ -28,6 +31,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -49,6 +53,7 @@ public class MainActivity extends TabActivity
     private BadgeView badge;
     
     private TxlReceiver txlReceiver;
+    private String TAG = MainActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -56,7 +61,17 @@ public class MainActivity extends TabActivity
         ConfigParser.init(me);
         log = new TxLogger(MainActivity.class, TxlConstants.MODULE_ID_SPLASHSCREEN);
         log.info("onCreate");
-
+        
+        AppSystem.init(this);
+        
+        boolean isAppServiceRunning = Tool.isServiceRunning(AppService.class, this);
+        Log.i(TAG, "isAppServiceRunning... :"+isAppServiceRunning);
+        /*appService判断是否启动*/
+        //if(!isAppServiceRunning){
+        	Intent appServiceIntent = new Intent(this,AppService.class);
+            startService(appServiceIntent);
+        //}
+        
         Intent intent = this.getIntent();
         if(intent!=null){
         	String action = intent.getStringExtra(TxlConstants.INTENT_BUNDLE_ACTION);

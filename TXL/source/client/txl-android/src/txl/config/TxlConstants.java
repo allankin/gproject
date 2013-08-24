@@ -295,5 +295,6 @@ public class TxlConstants
 	public static final String SYNC_ACTION_RESTORE_SUCCESS_LABEL = "恢复成功";
 	public static final String SYNC_ACTION_BACKUP_FAIL_LABEL = "备份失败";
 	public static final String SYNC_ACTION_RESTORE_FAIL_LABEL = "恢复失败";
+	
     
 }
